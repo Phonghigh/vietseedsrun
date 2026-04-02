@@ -126,17 +126,7 @@ const HeroSection = ({ stats }: HeroSectionProps) => {
             onClick={() => navigate('/dashboard')}
           >
             <Activity className="mr-2 h-5 w-5 text-primary" />
-            XEM DASHBOARD
-          </Button>
-
-          <Button
-            size="lg"
-            variant="outline"
-            className="font-display font-bold text-lg px-8 py-7 rounded-2xl border-white/5 bg-transparent hover:bg-white/5 transition-all duration-300 text-muted-foreground"
-            onClick={() => navigate('/leaderboard')}
-          >
-            <Trophy className="mr-2 h-5 w-5 text-accent" />
-            Bảng Xếp Hạng
+            XEM KẾT QUẢ
           </Button>
         </motion.div>
 
