@@ -1,39 +1,26 @@
 import { motion } from "framer-motion";
-import { Activity as ActivityIcon, MapPin, Flame, TrendingUp, ChevronUp, Loader2, RefreshCw } from "lucide-react";
+import { Activity as ActivityIcon, MapPin, Users, Trophy, Target, Loader2, Star, ChevronRight, TrendingUp } from "lucide-react";
 import { Progress } from "@/components/ui/progress";
-import { BarChart, Bar, XAxis, YAxis, ResponsiveContainer, Tooltip } from "recharts";
 import AppLayout from "@/components/layout/AppLayout";
-import { useMyProfile } from "@/hooks/useUser";
-import { useMyActivities, useSyncActivities } from "@/hooks/useActivities";
 import { useCampaignStats } from "@/hooks/useCampaign";
+import { useIndividualLeaderboard } from "@/hooks/useLeaderboard";
 import { Button } from "@/components/ui/button";
+import { Link } from "react-router-dom";
 
 const Dashboard = () => {
-  const { data: user, isLoading: isUserLoading } = useMyProfile();
-  const { data: activitiesData, isLoading: isActLoading } = useMyActivities(1, 5);
-  const { data: campaignStats } = useCampaignStats();
-  const { mutate: sync, isPending: isSyncing } = useSyncActivities();
+  const { data: campaignStats, isLoading: isCampaignLoading } = useCampaignStats();
+  const { data: leaderboard, isLoading: isLeaderboardLoading } = useIndividualLeaderboard(1, 10);
 
-  const currentKm = user?.totalDistance || 0;
+  const currentKm = campaignStats?.currentKm || 0;
   const targetKm = campaignStats?.targetKm || 10000;
   const progress = Math.round((currentKm / targetKm) * 100);
-  
-  // No weekly data from API yet
-  const weeklyActivity: any[] = [];
 
-  const statCards = [
-    { label: "Quãng đường", value: `${currentKm.toLocaleString()} km`, icon: MapPin, color: "text-primary" },
-    { label: "Hoạt động", value: user?.totalActivities || 0, icon: ActivityIcon, color: "text-accent" },
-    { label: "Hạng cá nhân", value: `#${user?.rank || "--"}`, icon: TrendingUp, color: "text-chart-blue" },
-    { label: "Hạng đội nhóm", value: `#${user?.teamRank || "--"}`, icon: Flame, color: "text-chart-purple" },
-  ];
-
-  if (isUserLoading) {
+  if (isCampaignLoading) {
     return (
       <AppLayout>
         <div className="flex flex-col items-center justify-center py-40 gap-4">
           <Loader2 className="h-10 w-10 animate-spin text-primary" />
-          <p className="text-muted-foreground animate-pulse">Đang tải dashboard của bạn...</p>
+          <p className="text-muted-foreground animate-pulse font-medium">Đang tải dữ liệu cộng đồng...</p>
         </div>
       </AppLayout>
     );
@@ -41,163 +28,213 @@ const Dashboard = () => {
 
   return (
     <AppLayout>
-      <div className="max-w-6xl mx-auto space-y-6">
-        {/* Strava Status */}
+      <div className="max-w-6xl mx-auto space-y-10 pb-20">
+        {/* Community Header */}
         <motion.div
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
           className="flex flex-col sm:flex-row sm:items-center justify-between gap-4"
         >
           <div>
-            <h1 className="font-display text-2xl font-bold text-foreground">Dashboard</h1>
-            <p className="text-muted-foreground text-sm">Chào mừng trở lại, {user?.name}</p>
+            <h1 className="font-display text-4xl font-black text-white tracking-tight">Dashboard Cộng Đồng</h1>
+            <p className="text-muted-foreground font-medium mt-1">Theo dõi nhịp đập của toàn thể chiến binh VietSeeds</p>
           </div>
-          <div className="flex items-center gap-3">
-            <Button 
-              variant="outline" 
-              size="sm" 
-              onClick={() => sync()} 
-              disabled={isSyncing}
-              className="rounded-full gap-2 border-primary/20 hover:border-primary/50"
-            >
-              <RefreshCw className={`h-4 w-4 ${isSyncing ? 'animate-spin' : ''}`} />
-              {isSyncing ? 'Đang đồng bộ...' : 'Đồng bộ Strava'}
-            </Button>
-            <div className="flex items-center gap-2 bg-accent/10 text-accent px-3 py-1.5 rounded-full text-sm font-medium">
-              <span className="h-2 w-2 rounded-full bg-accent animate-pulse-glow" />
-              Team: {user?.teamName || "Chưa có đội"}
-            </div>
+          <div className="flex items-center gap-2 px-4 py-2 rounded-2xl bg-primary/10 border border-primary/20">
+             <div className="h-2 w-2 rounded-full bg-primary animate-pulse" />
+             <span className="text-[10px] font-bold uppercase tracking-widest text-primary">Dữ liệu trực tiếp</span>
           </div>
         </motion.div>
 
-        {/* Stat Cards */}
-        <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
-          {statCards.map((s, i) => (
+        {/* Global Stats Cards */}
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-6">
+          {[
+            { label: "Tổng quãng đường", value: `${currentKm.toLocaleString()} km`, icon: MapPin, color: "text-primary", bg: "bg-primary/10" },
+            { label: "Người tham gia", value: campaignStats?.totalRunners || 0, icon: Users, color: "text-accent", bg: "bg-accent/10" },
+            { label: "Tổng hoạt động", value: campaignStats?.totalActivities || 0, icon: ActivityIcon, color: "text-blue-400", bg: "bg-blue-400/10" },
+            { label: "Mục tiêu chung", value: `${targetKm.toLocaleString()} km`, icon: Target, color: "text-purple-400", bg: "bg-purple-400/10" },
+          ].map((s, i) => (
             <motion.div
               key={s.label}
-              initial={{ opacity: 0, y: 15 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: i * 0.08 }}
-              className="glass-card rounded-xl p-5 stat-glow"
+              initial={{ opacity: 0, scale: 0.95 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ delay: i * 0.1 }}
+              className="glass-card rounded-[2rem] p-6 hover:translate-y-[-4px] transition-all duration-300 group shadow-xl"
             >
-              <div className="flex items-center justify-between mb-3">
-                <s.icon className={`h-5 w-5 ${s.color}`} />
-                <ChevronUp className="h-4 w-4 text-accent" />
+              <div className="flex items-center justify-between mb-6">
+                <div className={`p-3 rounded-2xl ${s.bg} ${s.color} shadow-sm group-hover:scale-110 transition-transform`}>
+                  <s.icon className="h-6 w-6" />
+                </div>
+                <Star className="h-4 w-4 text-white/10 group-hover:text-accent/30 transition-colors" />
               </div>
-              <div className="font-display text-2xl font-bold text-foreground">{s.value}</div>
-              <div className="text-sm text-muted-foreground">{s.label}</div>
+              <div className="font-display text-3xl font-black text-white tracking-tighter mb-1">{s.value}</div>
+              <div className="text-xs font-bold text-muted-foreground/60 uppercase tracking-widest">{s.label}</div>
             </motion.div>
           ))}
         </div>
 
-        {/* Challenge Progress */}
+        {/* Community Progress Section */}
         <motion.div
-          initial={{ opacity: 0, y: 15 }}
+          initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.3 }}
-          className="glass-card rounded-xl p-6"
+          transition={{ delay: 0.4 }}
+          className="glass-card rounded-[2.5rem] p-10 overflow-hidden relative border border-white/5 shadow-2xl"
         >
-          <div className="flex items-center justify-between mb-4">
-            <div>
-              <h2 className="font-display text-lg font-semibold text-foreground">Tiến độ cá nhân</h2>
-              <p className="text-sm text-muted-foreground">VietSeeds Run 2026</p>
+          <div className="absolute top-[-50%] right-[-10%] w-[500px] h-[500px] bg-primary/10 rounded-full blur-[120px] pointer-events-none" />
+          
+          <div className="flex flex-col md:flex-row md:items-center justify-between gap-8 relative z-10">
+            <div className="max-w-md">
+              <h2 className="font-display text-2xl font-black text-white tracking-tight mb-2">Tiến độ chiến dịch</h2>
+              <p className="text-muted-foreground font-medium leading-relaxed">
+                Mỗi bước chân của bạn đang góp phần vào mục tiêu chung <span className="text-primary font-bold">{targetKm.toLocaleString()} km</span> nhằm hỗ trợ sinh viên VietSeeds.
+              </p>
             </div>
-            <div className="font-display text-2xl font-bold text-primary">{progress}%</div>
+            
+            <div className="flex flex-col items-center md:items-end">
+                <div className="font-display text-7xl font-black text-primary leading-none tracking-tighter mb-2">{progress}%</div>
+                <div className="text-[10px] font-bold uppercase tracking-[0.2em] text-muted-foreground/50">Hoàn thành</div>
+            </div>
           </div>
-          <Progress value={progress} className="h-3 mb-3" />
-          <div className="flex justify-between text-xs text-muted-foreground">
-            <span>{currentKm.toLocaleString()} km</span>
-            <span>Mục tiêu: {targetKm.toLocaleString()} km</span>
-          </div>
-          <div className="flex gap-2 mt-4">
-            {[25, 50, 75, 100].map((m) => (
-              <div
-                key={m}
-                className={`flex-1 h-1.5 rounded-full ${progress >= m ? "gradient-hero" : "bg-muted"}`}
-              />
-            ))}
+
+          <div className="mt-10 relative z-10">
+            <Progress value={progress} className="h-4 mb-4 bg-white/5 [&>div]:bg-primary rounded-full" />
+            <div className="flex justify-between items-center text-xs font-bold tracking-wider">
+              <div className="flex items-center gap-2">
+                 <div className="h-2 w-2 rounded-full bg-primary" />
+                 <span className="text-muted-foreground">Đã đạt: <span className="text-white">{currentKm.toLocaleString()} km</span></span>
+              </div>
+              <div className="text-muted-foreground/50 italic">Mục tiêu: {targetKm.toLocaleString()} km</div>
+            </div>
           </div>
         </motion.div>
 
-        <div className="grid lg:grid-cols-2 gap-6">
-          {/* Weekly Chart */}
+        <div className="grid lg:grid-cols-3 gap-8">
+          {/* Top Runners Preview */}
           <motion.div
-            initial={{ opacity: 0, y: 15 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.4 }}
-            className="glass-card rounded-xl p-6"
+            initial={{ opacity: 0, x: -20 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ delay: 0.5 }}
+            className="lg:col-span-2 glass-card rounded-[2.5rem] p-8 shadow-2xl"
           >
-            <h2 className="font-display text-lg font-semibold text-foreground mb-4">Hoạt động trong tuần</h2>
-            {weeklyActivity.length > 0 ? (
-              <ResponsiveContainer width="100%" height={200}>
-                <BarChart data={weeklyActivity}>
-                  <XAxis dataKey="day" axisLine={false} tickLine={false} className="text-xs" />
-                  <YAxis axisLine={false} tickLine={false} className="text-xs" />
-                  <Tooltip
-                    contentStyle={{
-                      background: "hsl(var(--card))",
-                      border: "1px solid hsl(var(--border))",
-                      borderRadius: "0.5rem",
-                      fontSize: "0.875rem",
-                    }}
-                  />
-                  <Bar dataKey="km" fill="hsl(var(--primary))" radius={[6, 6, 0, 0]} />
-                </BarChart>
-              </ResponsiveContainer>
-            ) : (
-              <div className="h-[200px] flex items-center justify-center border border-dashed border-border rounded-lg">
-                <p className="text-sm text-muted-foreground italic">Dữ liệu biểu đồ đang được cập nhật...</p>
-              </div>
-            )}
+            <div className="flex items-center justify-between mb-8">
+                <div className="flex items-center gap-4">
+                  <div className="w-12 h-12 rounded-2xl bg-accent/20 flex items-center justify-center text-accent">
+                    <Trophy className="h-6 w-6" />
+                  </div>
+                  <h2 className="font-display text-xl font-black text-white tracking-tight">Thủ Lĩnh Đường Đua</h2>
+                </div>
+                <Button variant="ghost" size="sm" className="text-xs font-bold text-muted-foreground/60 hover:text-primary transition-colors hover:bg-transparent group" asChild>
+                    <Link to="/leaderboard">Xem toàn bộ <ChevronRight className="ml-1 h-4 w-4 group-hover:translate-x-1 transition-transform" /></Link>
+                </Button>
+            </div>
+            
+            <div className="space-y-3">
+                {isLeaderboardLoading ? (
+                    <div className="py-20 flex flex-col items-center gap-4">
+                        <Loader2 className="h-8 w-8 animate-spin text-primary/40" />
+                        <span className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground/40">Đang cập nhật bảng xếp hạng...</span>
+                    </div>
+                ) : leaderboard?.slice(0, 5).map((player, idx) => (
+                    <motion.div 
+                        key={idx} 
+                        whileHover={{ x: 6, backgroundColor: "rgba(255,255,255,0.05)" }}
+                        className="flex items-center justify-between p-4 rounded-2xl border border-white/5 transition-all duration-300 group/item"
+                    >
+                        <div className="flex items-center gap-5">
+                            <div className={`w-10 h-10 rounded-full flex items-center justify-center font-black text-sm border-2 ${idx === 0 ? 'border-accent/40 bg-accent/10 text-accent' : 'border-white/5 bg-black/20 text-white/30'}`}>
+                                {idx + 1}
+                            </div>
+                            <div className="w-12 h-12 rounded-2xl overflow-hidden border-2 border-white/5 p-0.5 bg-background">
+                                {player.avatar ? (
+                                    <img src={player.avatar} className="w-full h-full object-cover rounded-xl" />
+                                ) : (
+                                    <div className="w-full h-full bg-primary/10 flex items-center justify-center text-xs font-bold text-primary">
+                                        {player.name.substring(0,2).toUpperCase()}
+                                    </div>
+                                )}
+                            </div>
+                            <div>
+                                <div className="text-sm font-bold text-white group-hover/item:text-primary transition-colors">{player.name}</div>
+                                <div className="text-[10px] font-bold text-muted-foreground/40 uppercase tracking-widest">{player.activities} hoạt động</div>
+                            </div>
+                        </div>
+                        <div className="text-right">
+                            <div className="text-lg font-display font-black text-primary leading-none">{player.distance}</div>
+                            <div className="text-[10px] font-bold text-white/20 uppercase tracking-tighter">km</div>
+                        </div>
+                    </motion.div>
+                ))}
+            </div>
           </motion.div>
 
-          {/* Activity Feed */}
-          <motion.div
-            initial={{ opacity: 0, y: 15 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.5 }}
-            className="glass-card rounded-xl p-6"
-          >
-            <h2 className="font-display text-lg font-semibold text-foreground mb-4">Lịch sử hoạt động gần đây</h2>
-            <div className="space-y-3">
-              {isActLoading ? (
-                <div className="flex flex-col items-center py-10 gap-2">
-                  <Loader2 className="h-6 w-6 animate-spin text-muted-foreground" />
+          {/* Campaign Info / Rules Sidebar */}
+          <div className="space-y-8">
+            <motion.div
+                initial={{ opacity: 0, x: 20 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ delay: 0.6 }}
+                className="glass-card rounded-[2.5rem] p-8 relative overflow-hidden group shadow-xl"
+            >
+                <div className="absolute top-0 right-0 w-32 h-32 bg-primary/5 rounded-full blur-[80px]" />
+                <h3 className="font-display font-black text-white mb-4 uppercase tracking-[0.2em] text-[10px]">Sứ mệnh chiến dịch</h3>
+                <p className="text-sm text-muted-foreground/80 leading-relaxed font-medium">
+                    VietSeeds Run 2026 không chỉ là một giải chạy. Đây là hành trình kết nối những tâm hồn đồng điệu, lan tỏa năng lượng tích cực và xây dựng quỹ học bổng cho các sinh viên tài năng vượt khó.
+                </p>
+                <div className="mt-8 pt-8 border-t border-white/5 space-y-4">
+                    <div className="flex justify-between items-center text-xs font-bold tracking-wide">
+                        <span className="text-muted-foreground/50 uppercase">Bắt đầu</span>
+                        <span className="text-white bg-white/5 px-2 py-1 rounded-md">01/04/2026</span>
+                    </div>
+                    <div className="flex justify-between items-center text-xs font-bold tracking-wide">
+                        <span className="text-muted-foreground/50 uppercase">Kết thúc</span>
+                        <span className="text-white bg-white/5 px-2 py-1 rounded-md">30/04/2026</span>
+                    </div>
                 </div>
-              ) : activitiesData?.data.length === 0 ? (
-                <p className="text-center py-10 text-muted-foreground text-sm">Chưa có hoạt động nào được ghi nhận.</p>
-              ) : (
-                activitiesData?.data.map((a) => (
-                  <div key={a.activityId} className="flex items-start gap-3 p-3 rounded-xl hover:bg-white/5 transition-colors border border-transparent hover:border-white/10">
-                    <div className={`w-10 h-10 rounded-full flex items-center justify-center text-lg flex-shrink-0 bg-muted/50 border border-white/5`}>
-                      🏃
-                    </div>
-                    <div className="flex-1 min-w-0">
-                      <div className="flex items-center justify-between">
-                        <p className="text-sm font-semibold text-foreground truncate">{a.name}</p>
-                        <p className="text-xs font-bold text-primary">{a.distance} km</p>
-                      </div>
-                      <div className="flex items-center justify-between mt-1">
-                        <p className="text-xs text-muted-foreground">Pace: {a.pace} min/km</p>
-                        <span className={`text-[10px] px-2 py-0.5 rounded-full ${a.isValid ? 'bg-primary/20 text-primary-foreground' : 'bg-destructive/20 text-destructive'}`}>
-                          {a.isValid ? 'Hợp lệ' : 'Không hợp lệ'}
-                        </span>
-                      </div>
-                    </div>
-                  </div>
-                ))
-              )}
-            </div>
-            {activitiesData && activitiesData.data.length > 0 && (
-              <Button variant="ghost" size="sm" className="w-full mt-4 text-muted-foreground hover:text-foreground text-xs" asChild>
-                <a href="/profile">Xem tất cả lịch sử</a>
-              </Button>
-            )}
-          </motion.div>
+            </motion.div>
+
+            <motion.div
+                initial={{ opacity: 0, x: 20 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ delay: 0.7 }}
+                className="glass-card rounded-[2.5rem] p-8 shadow-xl"
+            >
+                <h3 className="font-display font-black text-white mb-6 text-sm flex items-center gap-3">
+                    <TrendingUp className="h-5 w-5 text-primary" /> Tiêu chuẩn hợp lệ
+                </h3>
+                <ul className="space-y-4">
+                    {[
+                        { text: "Môn thể thao: Chạy bộ (Run)", icon: ActivityIcon },
+                        { text: "Pace hợp lệ: 4:00 - 15:00 /km", icon: Zap },
+                        { text: "Khoảng cách tối thiểu: 1.0 km", icon: MapPin }
+                    ].map((rule, i) => (
+                        <li key={i} className="flex items-center gap-4 text-xs font-semibold text-muted-foreground/70">
+                            <div className="w-8 h-8 rounded-xl bg-white/5 flex items-center justify-center text-primary/40">
+                              <rule.icon className="h-4 w-4" />
+                            </div>
+                            {rule.text}
+                        </li>
+                    ))}
+                </ul>
+            </motion.div>
+          </div>
         </div>
       </div>
     </AppLayout>
   );
 };
+
+const Zap = ({ className }: { className?: string }) => (
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="2.5"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+    className={className}
+  >
+    <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z" />
+  </svg>
+);
 
 export default Dashboard;

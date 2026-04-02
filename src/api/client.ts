@@ -41,7 +41,7 @@ apiClient.interceptors.response.use(
       localStorage.removeItem('user');
 
       // Only redirect to landing if the user is on a protected/private page
-      const protectedPaths = ['/dashboard', '/profile'];
+      const protectedPaths = ['/profile'];
       const currentPath = window.location.pathname;
       
       if (protectedPaths.some(path => currentPath.startsWith(path))) {

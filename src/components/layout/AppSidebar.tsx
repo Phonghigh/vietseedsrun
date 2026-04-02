@@ -18,21 +18,12 @@ const navItems = [
   { title: "Leaderboard", url: "/leaderboard", icon: Trophy },
   { title: "Teams", url: "/teams", icon: Users },
   { title: "Challenges", url: "/challenges", icon: Target },
-  { title: "Profile", url: "/profile", icon: User },
 ];
 
 export function AppSidebar() {
   const { state } = useSidebar();
   const collapsed = state === "collapsed";
   const location = useLocation();
-  const token = localStorage.getItem('accessToken');
-
-  const filteredNavItems = navItems.filter((item) => {
-    if (!token && (item.url === "/dashboard" || item.url === "/profile")) {
-      return false;
-    }
-    return true;
-  });
 
   return (
     <Sidebar collapsible="icon">
@@ -51,7 +42,7 @@ export function AppSidebar() {
           <SidebarGroupLabel className="px-4 text-[10px] uppercase tracking-widest text-muted-foreground font-bold">Thực đơn</SidebarGroupLabel>
           <SidebarGroupContent>
             <SidebarMenu className="px-2 gap-1">
-              {filteredNavItems.map((item) => (
+              {navItems.map((item) => (
                 <SidebarMenuItem key={item.title}>
                   <SidebarMenuButton asChild>
                     <NavLink

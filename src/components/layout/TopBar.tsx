@@ -49,34 +49,6 @@ const TopBar = () => {
             </div>
           )}
         </div>
-
-        {token ? (
-          <div className="flex items-center gap-3">
-            <div className="text-right hidden sm:block">
-              <div className="text-sm font-semibold text-foreground">{user?.name}</div>
-              <div className="text-[10px] text-muted-foreground uppercase tracking-wider">{user?.teamName || "Chưa có đội"}</div>
-            </div>
-            <div className="w-8 h-8 rounded-full bg-primary/20 flex items-center justify-center text-xs font-bold text-primary overflow-hidden border border-primary/30">
-              {user?.avatar ? (
-                <img src={user.avatar} className="w-full h-full object-cover" onError={(e) => {
-                  (e.target as any).src = `https://ui-avatars.com/api/?name=${user.name}&background=random`;
-                }} />
-              ) : (
-                user?.name?.substring(0, 2).toUpperCase()
-              )}
-            </div>
-            <Button variant="ghost" size="icon" onClick={logout} title="Đăng xuất">
-              <LogOut className="h-4 w-4 text-muted-foreground" />
-            </Button>
-          </div>
-        ) : (
-          <Button 
-            className="gradient-hero !h-8 text-xs font-bold rounded-full px-4 border-0 shadow-lg hover:scale-105 transition-transform" 
-            onClick={handleLogin}
-          >
-            ĐĂNG NHẬP
-          </Button>
-        )}
       </div>
     </header>
   );

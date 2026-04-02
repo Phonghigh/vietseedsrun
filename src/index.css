@@ -6,51 +6,52 @@
 
 @layer base {
   :root {
-    --background: 150 20% 97%;
-    --foreground: 150 30% 8%;
+    /* Refined Dark Forest Background - Deeper and more neutral */
+    --background: 154 35% 4%;
+    --foreground: 154 15% 95%;
 
-    --card: 0 0% 100%;
-    --card-foreground: 150 30% 8%;
+    --card: 154 30% 7%;
+    --card-foreground: 154 15% 95%;
 
-    --popover: 0 0% 100%;
-    --popover-foreground: 150 30% 8%;
+    --popover: 154 30% 6%;
+    --popover-foreground: 154 15% 95%;
 
-    /* VietSeeds Green as primary */
-    --primary: 142 72% 35%;
+    /* Desaturated VietSeeds Green - More solid and premium */
+    --primary: 142 45% 32%;
     --primary-foreground: 0 0% 100%;
 
-    --secondary: 150 14% 92%;
-    --secondary-foreground: 150 25% 10%;
+    --secondary: 154 15% 12%;
+    --secondary-foreground: 154 15% 98%;
 
-    --muted: 150 14% 95%;
-    --muted-foreground: 150 10% 46%;
+    --muted: 154 15% 14%;
+    --muted-foreground: 154 10% 65%;
 
-    /* Warm coral/orange accent from banner */
-    --accent: 20 85% 58%;
+    /* Muted Warm Coral - Softened to avoid "chói" */
+    --accent: 20 65% 55%;
     --accent-foreground: 0 0% 100%;
 
-    --destructive: 0 84% 60%;
+    --destructive: 0 65% 50%;
     --destructive-foreground: 0 0% 100%;
 
-    --border: 150 13% 88%;
-    --input: 150 13% 88%;
-    --ring: 142 72% 35%;
+    --border: 154 15% 15%;
+    --input: 154 15% 15%;
+    --ring: 142 45% 32%;
 
-    --radius: 0.75rem;
+    --radius: 1rem;
 
-    --chart-green: 142 72% 35%;
-    --chart-orange: 20 85% 58%;
-    --chart-blue: 210 80% 55%;
-    --chart-lime: 90 60% 45%;
+    --chart-green: 142 45% 35%;
+    --chart-orange: 20 65% 55%;
+    --chart-blue: 210 55% 50%;
+    --chart-lime: 90 40% 45%;
 
-    --sidebar-background: 150 35% 10%;
-    --sidebar-foreground: 150 14% 85%;
-    --sidebar-primary: 142 72% 42%;
+    --sidebar-background: 154 30% 6%;
+    --sidebar-foreground: 154 10% 85%;
+    --sidebar-primary: 142 45% 35%;
     --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 150 25% 16%;
-    --sidebar-accent-foreground: 150 14% 85%;
-    --sidebar-border: 150 20% 18%;
-    --sidebar-ring: 142 72% 42%;
+    --sidebar-accent: 154 20% 12%;
+    --sidebar-accent-foreground: 154 10% 95%;
+    --sidebar-border: 154 20% 12%;
+    --sidebar-ring: 142 45% 35%;
 
     --font-display: 'Space Grotesk', sans-serif;
     --font-body: 'Inter', sans-serif;
@@ -63,105 +64,125 @@
   }
 
   body {
-    @apply bg-background text-foreground;
+    @apply bg-background text-foreground selection:bg-primary/30 selection:text-primary-foreground;
     font-family: var(--font-body);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
   }
 
   h1, h2, h3, h4, h5, h6 {
     font-family: var(--font-display);
+    @apply tracking-tight;
+  }
+
+  /* Smooth scrollbar */
+  ::-webkit-scrollbar {
+    width: 8px;
+  }
+  ::-webkit-scrollbar-track {
+    @apply bg-background;
+  }
+  ::-webkit-scrollbar-thumb {
+    @apply bg-white/10 rounded-full hover:bg-white/20 transition-colors;
   }
 }
 
 @layer utilities {
-  /* Hero gradient matching the banner: deep green → warm coral/peach */
+  /* Atmosphere-style Hero Gradient - Fused forest to deep sky */
   .gradient-hero {
-    background: linear-gradient(135deg, hsl(142, 72%, 35%) 0%, hsl(160, 60%, 40%) 40%, hsl(30, 80%, 58%) 100%);
+    background: linear-gradient(135deg, 
+      hsl(142, 45%, 32%) 0%, 
+      hsl(150, 40%, 25%) 40%, 
+      hsl(170, 45%, 28%) 100%
+    );
   }
 
-  /* Dark hero background: deep forest green */
+  /* Deep layered background - Very subtle depth */
   .gradient-dark {
-    background: linear-gradient(160deg, hsl(150, 40%, 8%) 0%, hsl(150, 35%, 13%) 50%, hsl(20, 30%, 14%) 100%);
+    background: radial-gradient(circle at 50% 0%, hsl(154, 30%, 12%) 0%, hsl(154, 35%, 4%) 100%);
   }
 
-  /* Banner-style warm gradient (peach/coral like background of image) */
+  /* Soft Banner Gradient - More "mịn" transition */
   .gradient-banner {
-    background: linear-gradient(135deg, hsl(150, 30%, 16%) 0%, hsl(142, 40%, 20%) 40%, hsl(25, 50%, 25%) 100%);
-  }
-
-  .gradient-card {
-    background: linear-gradient(135deg, hsl(0, 0%, 100%) 0%, hsl(150, 20%, 98%) 100%);
+    background: linear-gradient(135deg, 
+      hsla(154, 30%, 12%, 0.8) 0%, 
+      hsla(142, 35%, 15%, 0.9) 50%, 
+      hsla(25, 45%, 15%, 0.7) 100%
+    );
   }
 
   .glass-card {
-    @apply bg-card/80 backdrop-blur-sm border border-border/50 shadow-sm;
-  }
-
-  .glass-dark {
-    background: rgba(10, 30, 15, 0.6);
-    backdrop-filter: blur(12px);
-    border: 1px solid rgba(60, 180, 80, 0.15);
+    background: hsla(154, 30%, 7%, 0.4);
+    backdrop-filter: blur(20px);
+    border: 1px solid hsla(154, 15%, 100%, 0.05);
+    @apply shadow-2xl;
   }
 
   .stat-glow {
-    box-shadow: 0 0 30px -5px hsl(142, 72%, 35%, 0.2);
+    box-shadow: 0 20px 40px -15px rgba(0, 0, 0, 0.5), 0 0 20px -5px hsla(142, 45%, 32%, 0.1);
   }
 
   .green-glow {
-    box-shadow: 0 0 40px -8px hsl(142, 72%, 42%, 0.4);
+    box-shadow: 0 0 50px -10px hsla(142, 45%, 35%, 0.3);
   }
 
+  /* Desaturated Text Gradients for better harmony */
   .text-gradient-green {
-    background: linear-gradient(135deg, hsl(142, 72%, 50%) 0%, hsl(160, 65%, 55%) 100%);
+    background: linear-gradient(135deg, hsl(142, 45%, 70%) 0%, hsl(160, 40%, 75%) 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
   }
 
   .text-gradient-warm {
-    background: linear-gradient(135deg, hsl(35, 95%, 62%) 0%, hsl(20, 88%, 58%) 100%);
+    background: linear-gradient(135deg, hsl(35, 75%, 70%) 0%, hsl(20, 70%, 65%) 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
   }
 
+  /* Polished Animations */
   .animate-pulse-glow {
-    animation: pulse-glow 2s ease-in-out infinite;
+    animation: pulse-glow 3s ease-in-out infinite;
   }
 
   .animate-float {
-    animation: float 4s ease-in-out infinite;
-  }
-
-  .animate-run-bounce {
-    animation: run-bounce 0.6s ease-in-out infinite alternate;
+    animation: float 5s ease-in-out infinite;
   }
 
   @keyframes pulse-glow {
-    0%, 100% { opacity: 1; box-shadow: 0 0 8px hsl(142, 72%, 42%); }
-    50% { opacity: 0.7; box-shadow: 0 0 20px hsl(142, 72%, 55%); }
+    0%, 100% { 
+      opacity: 0.8; 
+      filter: drop-shadow(0 0 5px hsla(142, 45%, 35%, 0.4)); 
+    }
+    50% { 
+      opacity: 1; 
+      filter: drop-shadow(0 0 15px hsla(142, 45%, 55%, 0.6)); 
+    }
   }
 
   @keyframes float {
-    0%, 100% { transform: translateY(0px); }
-    50% { transform: translateY(-10px); }
+    0%, 100% { transform: translateY(0px) rotate(0deg); }
+    50% { transform: translateY(-12px) rotate(0.5deg); }
   }
 
-  @keyframes run-bounce {
-    from { transform: translateY(0px) rotate(-1deg); }
-    to { transform: translateY(-4px) rotate(1deg); }
-  }
-
-  @keyframes shimmer {
-    0% { background-position: -200% center; }
-    100% { background-position: 200% center; }
-  }
-
+  /* Smooth Shimmer - Less aggressive brightness */
   .shimmer-text {
-    background: linear-gradient(90deg, hsl(142, 72%, 50%) 25%, hsl(60, 90%, 75%) 50%, hsl(142, 72%, 50%) 75%);
+    background: linear-gradient(90deg, 
+      hsla(142, 45%, 65%, 1) 25%, 
+      hsla(60, 60%, 85%, 0.8) 50%, 
+      hsla(142, 45%, 65%, 1) 75%
+    );
     background-size: 200% auto;
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
-    animation: shimmer 3s linear infinite;
+    animation: shimmer 4s linear infinite;
+  }
+
+  /* Refined Glow Blobs */
+  .bg-glow-blob {
+    @apply pointer-events-none absolute rounded-full blur-[120px] opacity-20 filter;
+    background: radial-gradient(circle, var(--primary) 0%, transparent 70%);
   }
 }

@@ -23,6 +23,34 @@ export interface ActivitiesResponse {
 export const CHALLENGE_START = '2026-04-01T00:00:00Z';
 export const CHALLENGE_END = '2026-04-30T23:59:59Z';
 
+// Giới hạn Pace hợp lệ (4:00 - 15:00 min/km)
+export const PACE_MIN_SECONDS = 4 * 60; // 240s
+export const PACE_MAX_SECONDS = 15 * 60; // 900s
+
+/**
+ * Kiểm tra Pace có nằm trong khoảng hợp lệ không
+ * @param paceStr Chuỗi pace dạng "MM:SS"
+ */
+export const isPaceValid = (paceStr: string): boolean => {
+  if (!paceStr || !paceStr.includes(':')) return false;
+  
+  const [mins, secs] = paceStr.split(':').map(Number);
+  const totalSeconds = (mins * 60) + secs;
+  
+  return totalSeconds >= PACE_MIN_SECONDS && totalSeconds <= PACE_MAX_SECONDS;
+};
+
+/**
+ * Kiểm tra ngày có nằm trong thời gian giải chạy không
+ */
+export const isDateValid = (dateStr: string): boolean => {
+  const activityDate = new Date(dateStr).getTime();
+  const start = new Date(CHALLENGE_START).getTime();
+  const end = new Date(CHALLENGE_END).getTime();
+  
+  return activityDate >= start && activityDate <= end;
+};
+
 export const getMyActivities = async (page = 1, limit = 10): Promise<ActivitiesResponse> => {
   const response = await apiClient.get<ActivitiesResponse>('/activities/me', {
     params: { 
@@ -33,11 +61,9 @@ export const getMyActivities = async (page = 1, limit = 10): Promise<ActivitiesR
     }
   });
   
-  // Lọc thêm ở Frontend để đảm bảo tính chính xác tuyệt đối
+  // Áp dụng bộ lọc nghiêm ngặt (Strict Enforcer)
   const filteredData = response.data.data.filter(a => {
-    const activityDate = new Date(a.date).getTime();
-    return activityDate >= new Date(CHALLENGE_START).getTime() && 
-           activityDate <= new Date(CHALLENGE_END).getTime();
+    return isDateValid(a.date) && isPaceValid(a.pace);
   });
 
   return {
