@@ -2,9 +2,21 @@ import { motion } from "framer-motion";
 import { ArrowRight, Calendar, ChevronDown, MapPin, Users, Zap, Trophy } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useNavigate } from "react-router-dom";
+import { CampaignStats } from "@/api/campaignService";
+import { getStravaAuthUrl } from "@/hooks/useAuth";
 
-const HeroSection = () => {
+interface HeroSectionProps {
+  stats?: CampaignStats;
+}
+
+const HeroSection = ({ stats }: HeroSectionProps) => {
   const navigate = useNavigate();
+  const token = localStorage.getItem('accessToken');
+
+  const handleStravaLogin = () => {
+    window.location.href = getStravaAuthUrl();
+  };
+
   return (
     <section className="relative min-h-[calc(100vh-80px)] flex flex-col items-center justify-center overflow-hidden pt-20">
       {/* Dark green background */}
@@ -57,7 +69,7 @@ const HeroSection = () => {
         >
           <span className="h-2 w-2 rounded-full animate-pulse-glow" style={{ background: "hsl(142, 72%, 50%)" }} />
           <span className="text-sm font-semibold tracking-wide" style={{ color: "hsl(142, 72%, 65%)" }}>
-            🏃 Thử thách đang diễn ra · 01/04 – 30/04/2026
+            🏃 {stats ? `Đã có ${stats.totalRunners.toLocaleString()} người tham gia` : "Thử thách đang diễn ra"} · 01/04 – 30/04/2026
           </span>
         </motion.div>
 
@@ -123,15 +135,21 @@ const HeroSection = () => {
               className="gradient-hero border-0 text-white font-display font-bold text-lg px-10 py-6 rounded-2xl shadow-lg green-glow hover:scale-105 transition-transform duration-200"
             >
               <Zap className="mr-2 h-5 w-5" />
-              ĐĂNG KÝ NGAY · MIỄN PHÍ
+              ĐĂNG KÝ NGAY
               <ArrowRight className="ml-2 h-5 w-5" />
             </Button>
           </a>
-          <a
-            href="https://strava.app.link/zWjox1bNO1b"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
+
+          {token ? (
+            <Button
+              size="lg"
+              className="font-display font-semibold text-lg px-8 py-6 rounded-2xl border-2 hover:scale-105 transition-transform duration-200 bg-primary/10 border-primary/50 text-primary"
+              onClick={() => navigate('/dashboard')}
+            >
+              <Zap className="mr-2 h-5 w-5 fill-primary" />
+              VÀO DASHBOARD
+            </Button>
+          ) : (
             <Button
               size="lg"
               id="hero-strava-btn"
@@ -142,11 +160,13 @@ const HeroSection = () => {
                 color: "hsl(142, 72%, 65%)",
                 background: "hsl(142, 72%, 35%, 0.08)",
               }}
+              onClick={handleStravaLogin}
             >
               <Users className="mr-2 h-5 w-5" />
-              Tham gia Group Strava
+              KẾT NỐI STRAVA
             </Button>
-          </a>
+          )}
+
           <Button
             size="lg"
             variant="outline"
@@ -173,7 +193,7 @@ const HeroSection = () => {
           {[
             { icon: Calendar, text: "01/04 – 30/04/2026" },
             { icon: MapPin, text: "Toàn quốc" },
-            { icon: Users, text: "Tất cả mọi người" },
+            { icon: Users, text: stats ? `${stats.totalRunners.toLocaleString()} Vận động viên` : "Tất cả mọi người" },
           ].map((item, i) => (
             <div
               key={i}
@@ -199,7 +219,7 @@ const HeroSection = () => {
           className="grid grid-cols-3 gap-8 md:gap-16 w-full max-w-lg mx-auto"
         >
           {[
-            { value: "30 km", label: "Tối thiểu để nhận E-Certificate" },
+            { value: stats ? `${stats.currentKm.toLocaleString()} km` : "0 km", label: "Tổng quãng đường cộng đồng" },
             { value: "30 ngày", label: "Thời gian thử thách" },
             { value: "4'–15'", label: "Pace hợp lệ /km" },
           ].map((stat) => (

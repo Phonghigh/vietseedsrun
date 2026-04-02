@@ -10,6 +10,14 @@ export interface LeaderboardUser {
   trend: "up" | "down" | "same";
 }
 
+export interface LeaderboardTeam {
+  rank: number;
+  name: string;
+  avatar: string;
+  distance: number;
+  members: number;
+}
+
 export const getIndividualLeaderboard = async (page = 1, limit = 10): Promise<LeaderboardUser[]> => {
   try {
     const response = await apiClient.get<LeaderboardUser[]>('/leaderboard/individuals', {
@@ -20,7 +28,23 @@ export const getIndividualLeaderboard = async (page = 1, limit = 10): Promise<Le
     console.warn('API Error, falling back to Mock Leaderboard Data');
     return new Promise((resolve) => {
       setTimeout(() => {
-        resolve(leaderboardIndividual.slice((page - 1) * limit, page * limit));
+        resolve(leaderboardIndividual.slice((page - 1) * limit, (page - 1) * limit + limit) as LeaderboardUser[]);
+      }, 800);
+    });
+  }
+};
+
+export const getTeamLeaderboard = async (page = 1, limit = 10): Promise<LeaderboardTeam[]> => {
+  try {
+    const response = await apiClient.get<LeaderboardTeam[]>('/leaderboard/teams', {
+      params: { page, limit }
+    });
+    return response.data;
+  } catch (error) {
+    console.warn('API Error, falling back to Mock Team Leaderboard Data');
+    return new Promise((resolve) => {
+      setTimeout(() => {
+        resolve(leaderboardTeams.slice((page - 1) * limit, (page - 1) * limit + limit) as LeaderboardTeam[]);
       }, 800);
     });
   }
