@@ -34,10 +34,13 @@ apiClient.interceptors.response.use(
   (error) => {
     // Any status codes that falls outside the range of 2xx cause this function to trigger
     if (error.response?.status === 401) {
-      // 401 Unauthorized - Token might be expired
-      console.error('Unauthorized access. Please log in again.');
-      // Optionally trigger logout or refresh token logic
-      // e.g., localStorage.removeItem('accessToken'); window.location.href = '/login';
+      console.error('Session expired or unauthorized. Logging out...');
+      localStorage.removeItem('accessToken');
+      localStorage.removeItem('user');
+      // Only redirect if not already on landing
+      if (window.location.pathname !== '/') {
+        window.location.href = '/';
+      }
     }
     return Promise.reject(error);
   }
