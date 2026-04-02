@@ -95,7 +95,7 @@ export const LandingDashboardPreview = () => {
                 <div className="w-14 h-14 rounded-2xl bg-accent/20 text-accent flex items-center justify-center shadow-inner">
                   <Trophy className="h-7 w-7" />
                 </div>
-                <h3 className="font-display font-bold text-xl tracking-tight">Top Chiến Binh</h3>
+                <h3 className="font-display font-bold text-xl tracking-tight">Top Runner</h3>
               </div>
               <TrendingUp className="h-5 w-5 text-muted-foreground/40" />
             </div>
@@ -153,7 +153,7 @@ export const LandingDashboardPreview = () => {
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-6">
             {[
               { title: "Dashboard", desc: "Thống kê cộng đồng", icon: Activity, path: "/dashboard", color: "hsl(142, 45%, 50%)" },
-              { title: "BXH", desc: "Top Chiến binh", icon: Trophy, path: "/leaderboard", color: "hsl(25, 75%, 55%)" },
+              { title: "BXH", desc: "Top Runner", icon: Trophy, path: "/leaderboard", color: "hsl(25, 75%, 55%)" },
               { title: "Đội Nhóm", desc: "Gắn kết đồng đội", icon: UsersIcon, path: "/teams", color: "hsl(210, 55%, 55%)" },
               { title: "Thử Thách", desc: "Chinh phục nhiệm vụ", icon: Target, path: "/challenges", color: "hsl(0, 65%, 55%)" }
             ].map((link, i) => (
@@ -177,18 +177,10 @@ export const LandingDashboardPreview = () => {
 };
 
 const TargetIcon = ({ className }: { className?: string }) => (
-  <svg
-    xmlns="http://www.w3.org/2000/svg"
-    viewBox="0 0 24 24"
-    fill="none"
-    stroke="currentColor"
-    strokeWidth="2.5"
-    strokeLinecap="round"
-    strokeLinejoin="round"
-    className={className}
-  >
-    <circle cx="12" cy="12" r="10" />
-    <circle cx="12" cy="12" r="6" />
-    <circle cx="12" cy="12" r="2" />
-  </svg>
+  <img 
+    src="/favicon.ico" 
+    alt="Logo" 
+    className={className} 
+    style={{ filter: "brightness(0) invert(1)" }} 
+  />
 );

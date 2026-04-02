@@ -37,7 +37,7 @@ const Dashboard = () => {
         >
           <div>
             <h1 className="font-display text-4xl font-black text-white tracking-tight">Dashboard Cộng Đồng</h1>
-            <p className="text-muted-foreground font-medium mt-1">Theo dõi nhịp đập của toàn thể chiến binh VietSeeds</p>
+            <p className="text-muted-foreground font-medium mt-1">Theo dõi nhịp đập của toàn thể runner VietSeeds</p>
           </div>
           <div className="flex items-center gap-2 px-4 py-2 rounded-2xl bg-primary/10 border border-primary/20">
              <div className="h-2 w-2 rounded-full bg-primary animate-pulse" />
@@ -223,18 +223,12 @@ const Dashboard = () => {
 };
 
 const Zap = ({ className }: { className?: string }) => (
-  <svg
-    xmlns="http://www.w3.org/2000/svg"
-    viewBox="0 0 24 24"
-    fill="none"
-    stroke="currentColor"
-    strokeWidth="2.5"
-    strokeLinecap="round"
-    strokeLinejoin="round"
-    className={className}
-  >
-    <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z" />
-  </svg>
+  <img 
+    src="/favicon.ico" 
+    alt="Logo" 
+    className={className} 
+    style={{ filter: "brightness(0) invert(1)" }} 
+  />
 );
 
 export default Dashboard;
