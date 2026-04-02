@@ -1,10 +1,15 @@
 import { motion } from "framer-motion";
-import { Activity, MapPin, TrendingUp, Trophy } from "lucide-react";
+import { Link } from "react-router-dom";
+import { Activity, MapPin, TrendingUp, Trophy, Users as UsersIcon, Target, User as UserIcon, Loader2 } from "lucide-react";
 import { Progress } from "@/components/ui/progress";
-import { challengeGoal, leaderboardIndividual } from "@/lib/mockData";
+import { useCampaignStats } from "@/hooks/useCampaign";
+import { useIndividualLeaderboard } from "@/hooks/useLeaderboard";
 
 export const LandingDashboardPreview = () => {
-  const progress = Math.round((challengeGoal.currentKm / challengeGoal.targetKm) * 100);
+  const { data: campaignStats, isLoading: isCampaignLoading } = useCampaignStats();
+  const { data: leaderboard, isLoading: isLeaderboardLoading } = useIndividualLeaderboard(1, 4);
+
+  const progress = campaignStats ? Math.round((campaignStats.currentKm / campaignStats.targetKm) * 100) : 0;
 
   return (
     <div className="pt-28 pb-16 w-full flex-grow text-white">
@@ -50,12 +55,22 @@ export const LandingDashboardPreview = () => {
             <div className="mb-4 flex items-end justify-between">
               <div>
                 <div className="text-4xl font-display font-bold text-white mb-1">
-                  {challengeGoal.currentKm.toLocaleString()} <span className="text-lg text-white/50 font-medium">km</span>
+                  {isCampaignLoading ? (
+                    <div className="h-10 w-24 bg-white/20 animate-pulse rounded-md mt-1" />
+                  ) : (
+                    <>
+                      {campaignStats?.currentKm.toLocaleString()} <span className="text-lg text-white/50 font-medium">km</span>
+                    </>
+                  )}
                 </div>
               </div>
               <div className="text-right">
                 <div className="text-sm text-white/50 mb-1">Mục tiêu</div>
-                <div className="font-semibold text-white/90">{challengeGoal.targetKm.toLocaleString()} km</div>
+                {isCampaignLoading ? (
+                  <div className="h-6 w-16 bg-white/20 animate-pulse rounded-md ml-auto" />
+                ) : (
+                  <div className="font-semibold text-white/90">{campaignStats?.targetKm.toLocaleString()} km</div>
+                )}
               </div>
             </div>
 
@@ -84,29 +99,79 @@ export const LandingDashboardPreview = () => {
             </div>
 
             <div className="space-y-4 relative z-10">
-              {leaderboardIndividual.slice(0, 4).map((user, index) => (
-                <motion.div 
-                  key={user.name} 
-                  whileHover={{ scale: 1.02, x: 5 }}
-                  className="flex items-center justify-between p-4 rounded-xl bg-white/5 border border-white/10 hover:bg-white/10 transition-colors"
-                >
-                  <div className="flex items-center gap-4">
-                    <div className="w-10 h-10 rounded-full bg-black/40 flex items-center justify-center font-bold text-sm border-2 border-primary/30 text-white shadow-inner">
-                      {index + 1}
+              {isLeaderboardLoading ? (
+                // Skeleton Loader Array
+                [1, 2, 3, 4].map((i) => (
+                  <div key={i} className="flex items-center justify-between p-4 rounded-xl bg-white/5 border border-white/10">
+                    <div className="flex items-center gap-4">
+                      <div className="w-10 h-10 rounded-full bg-white/20 animate-pulse" />
+                      <div>
+                        <div className="h-4 w-24 bg-white/20 animate-pulse mb-2 rounded" />
+                        <div className="h-3 w-16 bg-white/10 animate-pulse rounded" />
+                      </div>
                     </div>
-                    <div>
-                      <div className="font-medium text-sm text-white/90">{user.name}</div>
-                      <div className="text-xs text-white/40">{user.activities} hoạt động</div>
+                    <div className="h-5 w-12 bg-white/20 animate-pulse rounded" />
+                  </div>
+                ))
+              ) : (
+                leaderboard?.map((user, index) => (
+                  <motion.div 
+                    key={user.name} 
+                    whileHover={{ scale: 1.02, x: 5 }}
+                    className="flex items-center justify-between p-4 rounded-xl bg-white/5 border border-white/10 hover:bg-white/10 transition-colors"
+                  >
+                    <div className="flex items-center gap-4">
+                      <div className="w-10 h-10 rounded-full bg-black/40 flex items-center justify-center font-bold text-sm border-2 border-primary/30 text-white shadow-inner">
+                        {index + 1}
+                      </div>
+                      <div>
+                        <div className="font-medium text-sm text-white/90">{user.name}</div>
+                        <div className="text-xs text-white/40">{user.activities} hoạt động</div>
+                      </div>
                     </div>
-                  </div>
-                  <div className="font-display font-bold text-primary text-lg tracking-wide">
-                    {user.distance} km
-                  </div>
-                </motion.div>
-              ))}
+                    <div className="font-display font-bold text-primary text-lg tracking-wide">
+                      {user.distance} km
+                    </div>
+                  </motion.div>
+                ))
+              )}
             </div>
           </motion.div>
         </div>
+
+        {/* Quick Links / Navigation to App Pages */}
+        <motion.div
+           initial={{ opacity: 0, y: 30 }}
+           animate={{ opacity: 1, y: 0 }}
+           transition={{ duration: 0.7, type: "spring", bounce: 0.4, delay: 0.3 }}
+           className="mt-12"
+        >
+          <div className="flex items-center gap-3 mb-6">
+            <h3 className="font-display font-semibold text-xl text-white">Khám phá tính năng</h3>
+            <div className="h-px bg-white/10 flex-grow" />
+          </div>
+          <div className="grid grid-cols-2 lg:grid-cols-5 gap-4">
+            {[
+              { title: "Dashboard", desc: "Cá nhân", icon: Activity, path: "/dashboard", color: "hsl(142, 72%, 45%)" },
+              { title: "Bảng Xếp Hạng", desc: "Top Runner", icon: Trophy, path: "/leaderboard", color: "hsl(35, 95%, 55%)" },
+              { title: "Đội Nhóm", desc: "Team", icon: UsersIcon, path: "/teams", color: "hsl(210, 80%, 55%)" },
+              { title: "Thử Thách", desc: "Nhiệm vụ", icon: Target, path: "/challenges", color: "hsl(0, 84%, 60%)" },
+              { title: "Hồ Sơ", desc: "Cài đặt & Lịch sử", icon: UserIcon, path: "/profile", color: "hsl(270, 60%, 60%)" }
+            ].map((link, i) => (
+              <Link to={link.path} key={link.title} className="block group">
+                <div className="border border-white/10 bg-black/20 backdrop-blur-xl p-5 rounded-2xl hover:bg-white/10 transition-all duration-300 relative overflow-hidden group-hover:-translate-y-1 shadow-lg">
+                  <div 
+                    className="absolute -right-4 -bottom-4 w-20 h-20 rounded-full blur-2xl opacity-20 group-hover:opacity-40 transition-opacity"
+                    style={{ background: link.color }}
+                  />
+                  <link.icon className="h-6 w-6 mb-3 relative z-10" style={{ color: link.color }} />
+                  <div className="font-semibold text-white text-sm relative z-10">{link.title}</div>
+                  <div className="text-xs text-white/50 relative z-10">{link.desc}</div>
+                </div>
+              </Link>
+            ))}
+          </div>
+        </motion.div>
       </div>
     </div>
   );
