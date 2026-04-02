@@ -1,4 +1,4 @@
-import { LayoutDashboard, Trophy, Users, Target, User, Activity } from "lucide-react";
+import { LayoutDashboard, Trophy, Users, Target, User, Activity, Flame } from "lucide-react";
 import { NavLink } from "@/components/NavLink";
 import { useLocation } from "react-router-dom";
 import {
@@ -29,12 +29,12 @@ export function AppSidebar() {
     <Sidebar collapsible="icon">
       <SidebarContent>
         {/* ... Logo Section ... */}
-        <div className="p-4 flex items-center gap-3">
-          <div className="w-9 h-9 rounded-lg gradient-hero flex items-center justify-center flex-shrink-0 border border-white/10 shadow-lg">
-            <Activity className="h-5 w-5 text-primary-foreground" />
-          </div>
+        <div className="p-5 flex items-center gap-3 border-b border-white/5 mb-2">
           {!collapsed && (
-            <span className="font-display font-bold text-lg text-sidebar-foreground">VietSeeds Run</span>
+            <span className="font-display font-bold text-xl text-sidebar-foreground tracking-tight">VietSeeds Run</span>
+          )}
+          {collapsed && (
+            <div className="w-8 h-8 rounded-lg gradient-hero flex items-center justify-center text-[10px] font-black text-white px-2">VSR</div>
           )}
         </div>
 

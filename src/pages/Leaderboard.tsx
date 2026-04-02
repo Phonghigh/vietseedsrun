@@ -120,7 +120,7 @@ const Leaderboard = () => {
             ) : (
               <>
                 <div className="grid grid-cols-3 gap-4 mb-6">
-                  {leaderboardTeams?.slice(0, 3).map((t, i) => (
+                  {leaderboardTeams?.filter(t => t.name !== "No Team").slice(0, 3).map((t, i) => (
                     <motion.div
                       key={t.name}
                       initial={{ opacity: 0, y: 20 }}
@@ -132,14 +132,14 @@ const Leaderboard = () => {
                         {t.avatar ? <span className="uppercase text-lg">{t.avatar}</span> : <Trophy className="h-5 w-5" />}
                       </div>
                       <div className="font-display font-semibold text-foreground truncate">{t.name}</div>
-                      <div className="text-primary font-display font-bold text-xl mt-1">{t.distance} km</div>
-                      <div className="text-xs text-muted-foreground">{t.members} thành viên</div>
+                      <div className="text-primary font-display font-bold text-xl mt-1">{t.totalDistance?.toFixed(1) || 0} km</div>
+                      <div className="text-xs text-muted-foreground">{t.memberCount} thành viên</div>
                     </motion.div>
                   ))}
                 </div>
 
                 <div className="glass-card rounded-xl overflow-hidden">
-                  {leaderboardTeams?.map((t, i) => (
+                  {leaderboardTeams?.filter(t => t.name !== "No Team").map((t, i) => (
                     <div
                       key={t.name}
                       className="flex items-center justify-between px-5 py-3.5 border-b border-border/50 hover:bg-muted/30 transition-colors"
@@ -151,10 +151,10 @@ const Leaderboard = () => {
                         </div>
                         <div>
                           <span className="font-medium text-foreground">{t.name}</span>
-                          <span className="text-xs text-muted-foreground ml-2">{t.members} thành viên</span>
+                          <span className="text-xs text-muted-foreground ml-2">{t.memberCount} thành viên</span>
                         </div>
                       </div>
-                      <span className="font-display font-semibold text-foreground">{t.distance} km</span>
+                      <span className="font-display font-semibold text-foreground">{t.totalDistance?.toFixed(1) || 0} km</span>
                     </div>
                   ))}
                 </div>

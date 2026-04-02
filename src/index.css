@@ -6,12 +6,12 @@
 
 @layer base {
   :root {
-    /* Refined Dark Forest Background - Deeper and more neutral */
-    --background: 154 35% 4%;
-    --foreground: 154 15% 95%;
+    /* Refined Dark Forest Background - Slightly lighter and more neutral */
+    --background: 154 30% 7%;
+    --foreground: 154 10% 98%;
 
-    --card: 154 30% 7%;
-    --card-foreground: 154 15% 95%;
+    --card: 154 25% 10%;
+    --card-foreground: 154 10% 98%;
 
     --popover: 154 30% 6%;
     --popover-foreground: 154 15% 95%;
@@ -23,8 +23,8 @@
     --secondary: 154 15% 12%;
     --secondary-foreground: 154 15% 98%;
 
-    --muted: 154 15% 14%;
-    --muted-foreground: 154 10% 65%;
+    --muted: 154 15% 16%;
+    --muted-foreground: 154 10% 80%;
 
     /* Muted Warm Coral - Softened to avoid "chói" */
     --accent: 20 65% 55%;
@@ -112,7 +112,7 @@
   }
 
   .glass-card {
-    background: hsla(154, 30%, 7%, 0.4);
+    background: hsla(154, 30%, 15%, 0.4);
     backdrop-filter: blur(20px);
     border: 1px solid hsla(154, 15%, 100%, 0.05);
     @apply shadow-2xl;

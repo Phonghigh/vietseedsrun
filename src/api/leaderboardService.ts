@@ -13,8 +13,9 @@ export interface LeaderboardTeam {
   rank: number;
   name: string;
   avatar: string;
-  distance: number;
-  members: number;
+  totalDistance: number;
+  memberCount: number;
+  teamId?: string;
 }
 
 const CHALLENGE_START = '2026-04-01T00:00:00Z';

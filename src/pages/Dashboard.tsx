@@ -67,7 +67,7 @@ const Dashboard = () => {
                 <Star className="h-4 w-4 text-white/10 group-hover:text-accent/30 transition-colors" />
               </div>
               <div className="font-display text-3xl font-black text-white tracking-tighter mb-1">{s.value}</div>
-              <div className="text-xs font-bold text-muted-foreground/60 uppercase tracking-widest">{s.label}</div>
+              <div className="text-xs font-bold text-muted-foreground/80 uppercase tracking-widest">{s.label}</div>
             </motion.div>
           ))}
         </div>
@@ -91,7 +91,7 @@ const Dashboard = () => {
             
             <div className="flex flex-col items-center md:items-end">
                 <div className="font-display text-7xl font-black text-primary leading-none tracking-tighter mb-2">{progress}%</div>
-                <div className="text-[10px] font-bold uppercase tracking-[0.2em] text-muted-foreground/50">Hoàn thành</div>
+                <div className="text-[10px] font-bold uppercase tracking-[0.2em] text-muted-foreground/70">Hoàn thành</div>
             </div>
           </div>
 
@@ -102,7 +102,7 @@ const Dashboard = () => {
                  <div className="h-2 w-2 rounded-full bg-primary" />
                  <span className="text-muted-foreground">Đã đạt: <span className="text-white">{currentKm.toLocaleString()} km</span></span>
               </div>
-              <div className="text-muted-foreground/50 italic">Mục tiêu: {targetKm.toLocaleString()} km</div>
+              <div className="text-muted-foreground/80 italic">Mục tiêu: {targetKm.toLocaleString()} km</div>
             </div>
           </div>
         </motion.div>
@@ -120,9 +120,9 @@ const Dashboard = () => {
                   <div className="w-12 h-12 rounded-2xl bg-accent/20 flex items-center justify-center text-accent">
                     <Trophy className="h-6 w-6" />
                   </div>
-                  <h2 className="font-display text-xl font-black text-white tracking-tight">Thủ Lĩnh Đường Đua</h2>
+                  <h2 className="font-display text-xl font-black text-white tracking-tight">Bảng Vàng Cá Nhân</h2>
                 </div>
-                <Button variant="ghost" size="sm" className="text-xs font-bold text-muted-foreground/60 hover:text-primary transition-colors hover:bg-transparent group" asChild>
+                <Button variant="ghost" size="sm" className="text-xs font-bold text-muted-foreground/80 hover:text-primary transition-colors hover:bg-transparent group" asChild>
                     <Link to="/leaderboard">Xem toàn bộ <ChevronRight className="ml-1 h-4 w-4 group-hover:translate-x-1 transition-transform" /></Link>
                 </Button>
             </div>
@@ -131,7 +131,7 @@ const Dashboard = () => {
                 {isLeaderboardLoading ? (
                     <div className="py-20 flex flex-col items-center gap-4">
                         <Loader2 className="h-8 w-8 animate-spin text-primary/40" />
-                        <span className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground/40">Đang cập nhật bảng xếp hạng...</span>
+                        <span className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground/70">Đang cập nhật bảng xếp hạng...</span>
                     </div>
                 ) : leaderboard?.slice(0, 5).map((player, idx) => (
                     <motion.div 
@@ -154,12 +154,12 @@ const Dashboard = () => {
                             </div>
                             <div>
                                 <div className="text-sm font-bold text-white group-hover/item:text-primary transition-colors">{player.name}</div>
-                                <div className="text-[10px] font-bold text-muted-foreground/40 uppercase tracking-widest">{player.activities} hoạt động</div>
+                                <div className="text-[10px] font-bold text-muted-foreground/70 uppercase tracking-widest">{player.activities} hoạt động</div>
                             </div>
                         </div>
                         <div className="text-right">
                             <div className="text-lg font-display font-black text-primary leading-none">{player.distance}</div>
-                            <div className="text-[10px] font-bold text-white/20 uppercase tracking-tighter">km</div>
+                            <div className="text-[10px] font-bold text-white/40 uppercase tracking-tighter">km</div>
                         </div>
                     </motion.div>
                 ))}
@@ -181,11 +181,11 @@ const Dashboard = () => {
                 </p>
                 <div className="mt-8 pt-8 border-t border-white/5 space-y-4">
                     <div className="flex justify-between items-center text-xs font-bold tracking-wide">
-                        <span className="text-muted-foreground/50 uppercase">Bắt đầu</span>
+                        <span className="text-muted-foreground/70 uppercase">Bắt đầu</span>
                         <span className="text-white bg-white/5 px-2 py-1 rounded-md">01/04/2026</span>
                     </div>
                     <div className="flex justify-between items-center text-xs font-bold tracking-wide">
-                        <span className="text-muted-foreground/50 uppercase">Kết thúc</span>
+                        <span className="text-muted-foreground/70 uppercase">Kết thúc</span>
                         <span className="text-white bg-white/5 px-2 py-1 rounded-md">30/04/2026</span>
                     </div>
                 </div>

@@ -1,119 +1,107 @@
 import { motion } from "framer-motion";
-import { Users, Plus, Copy, Trophy, Loader2 } from "lucide-react";
-import { Button } from "@/components/ui/button";
+import { Users, Trophy, Loader2, Star, TrendingUp } from "lucide-react";
 import AppLayout from "@/components/layout/AppLayout";
-import { useMyProfile } from "@/hooks/useUser";
 import { useTeamLeaderboard } from "@/hooks/useLeaderboard";
 
 const Teams = () => {
-  const { data: user, isLoading: isUserLoading } = useMyProfile();
-  const { data: teams, isLoading: isTeamsLoading } = useTeamLeaderboard();
+  const { data: teamsData, isLoading: isTeamsLoading } = useTeamLeaderboard(1, 50);
 
-  const myTeam = teams?.find(t => t.name === user?.teamName);
-
-  if (isUserLoading || isTeamsLoading) {
+  if (isTeamsLoading) {
     return (
       <AppLayout>
         <div className="flex flex-col items-center justify-center py-40 gap-4">
           <Loader2 className="h-10 w-10 animate-spin text-primary" />
-          <p className="text-muted-foreground animate-pulse">Đang tải thông tin đội...</p>
+          <p className="text-muted-foreground animate-pulse font-medium">Đang tải danh sách đội nhóm...</p>
         </div>
       </AppLayout>
     );
   }
 
+  // Filter out "No Team" as requested
+  const teams = teamsData?.filter(t => t.name !== "No Team") || [];
+
+  const totalTeams = teams.length;
+
   return (
     <AppLayout>
-      <div className="max-w-4xl mx-auto space-y-6">
-        <div className="flex items-center justify-between">
+      <div className="max-w-6xl mx-auto space-y-10 pb-20">
+        {/* Header Section */}
+        <motion.div
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="flex flex-col sm:flex-row sm:items-center justify-between gap-4"
+        >
           <div>
-            <h1 className="font-display text-2xl font-bold text-foreground">
-                {user?.teamName || "Chưa gia nhập đội"}
-            </h1>
-            <p className="text-muted-foreground text-sm">
-                Bảng điều khiển đội nhóm — {myTeam?.members || 0} thành viên
-            </p>
+            <h1 className="font-display text-4xl font-black text-white tracking-tight">Bảng Vàng Đội Nhóm</h1>
+            <p className="text-muted-foreground font-medium mt-1">Sức mạnh tập thể kiến tạo những bước chân hy vọng</p>
           </div>
-          <div className="flex gap-2">
-            <Button variant="outline" size="sm">
-              <Copy className="h-4 w-4 mr-1" /> Link mời
-            </Button>
-            <Button size="sm" className="gradient-hero border-0 text-primary-foreground">
-              <Plus className="h-4 w-4 mr-1" /> Tạo Đội
-            </Button>
+          <div className="flex items-center gap-2 px-4 py-2 rounded-2xl bg-accent/10 border border-accent/20">
+             <Trophy className="h-4 w-4 text-accent" />
+             <span className="text-[10px] font-bold uppercase tracking-widest text-accent">{totalTeams} Đội tham gia</span>
           </div>
-        </div>
+        </motion.div>
 
-        {/* Team Stats */}
-        <div className="grid grid-cols-2 lg:grid-cols-3 gap-4">
-          {[
-            { label: "Tổng quãng đường", value: `${myTeam?.distance || 0} km`, icon: Trophy },
-            { label: "Hạng của Đội", value: `#${myTeam?.rank || "--"}`, icon: Trophy },
-            { label: "Thành viên", value: myTeam?.members || 0, icon: Users },
-          ].map((s, i) => (
+        {/* Teams Grid */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {teams.map((team, idx) => (
             <motion.div
-              key={s.label}
-              initial={{ opacity: 0, y: 15 }}
+              key={team.name}
+              initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: i * 0.08 }}
-              className="glass-card rounded-xl p-5 text-center stat-glow"
+              transition={{ delay: 0.2 + idx * 0.05 }}
+              className="glass-card rounded-[2.5rem] p-8 hover:translate-y-[-6px] transition-all duration-300 relative overflow-hidden group shadow-xl"
             >
-              <div className="font-display text-2xl font-bold text-foreground">{s.value}</div>
-              <div className="text-sm text-muted-foreground">{s.label}</div>
+              {/* Rank Badge */}
+              <div className={`absolute top-6 right-8 w-10 h-10 rounded-full flex items-center justify-center font-black text-sm border-2 ${idx < 3 ? 'border-accent/40 bg-accent/10 text-accent' : 'border-white/5 bg-black/20 text-white/30'}`}>
+                {idx + 1}
+              </div>
+
+              <div className="flex flex-col items-center text-center space-y-4">
+                <div className="w-20 h-20 rounded-[2rem] gradient-hero p-1 shadow-lg group-hover:rotate-6 transition-transform duration-500">
+                  <div className="w-full h-full bg-background rounded-[1.8rem] flex items-center justify-center overflow-hidden">
+                    {team.avatar ? (
+                      <span className="text-3xl uppercase font-black text-primary">{team.avatar}</span>
+                    ) : (
+                      <Users className="h-10 w-10 text-primary/40" />
+                    )}
+                  </div>
+                </div>
+
+                <div>
+                  <h3 className="font-display text-xl font-black text-white group-hover:text-primary transition-colors">{team.name}</h3>
+                  <div className="flex items-center justify-center gap-2 mt-1">
+                    <Star className="h-3 w-3 text-accent" />
+                    <span className="text-[10px] font-bold text-muted-foreground/70 uppercase tracking-[0.2em]">{team.memberCount} thành viên</span>
+                  </div>
+                </div>
+
+                <div className="w-full pt-6 border-t border-white/5 grid grid-cols-2 gap-4">
+                  <div className="text-center">
+                    <div className="text-[10px] font-bold text-muted-foreground/80 uppercase tracking-widest mb-1">Quãng đường</div>
+                    <div className="font-display font-black text-white">{team.totalDistance?.toFixed(1) || 0} <span className="text-[8px] text-muted-foreground ml-0.5">km</span></div>
+                  </div>
+                  <div className="text-center">
+                    <div className="text-[10px] font-bold text-muted-foreground/80 uppercase tracking-widest mb-1">Xếp hạng</div>
+                    <div className="font-display font-black text-white">#{idx + 1}</div>
+                  </div>
+                </div>
+              </div>
             </motion.div>
           ))}
         </div>
 
-        <div className="grid lg:grid-cols-2 gap-6">
-          {/* Member List - Placeholder since API doesn't have it yet */}
-          <motion.div
-            initial={{ opacity: 0, y: 15 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.3 }}
-            className="glass-card rounded-xl p-6"
-          >
-            <h2 className="font-display text-lg font-semibold text-foreground mb-4 flex items-center gap-2">
-              <Users className="h-5 w-5 text-primary" /> Thành viên
-            </h2>
-            <div className="flex flex-col items-center justify-center py-20 text-center space-y-3">
-                <div className="w-12 h-12 rounded-full bg-muted flex items-center justify-center">
-                    <Users className="h-6 w-6 text-muted-foreground" />
-                </div>
-                <p className="text-sm text-muted-foreground">
-                    Tính năng xem chi tiết thành viên đội đang được phát triển.
-                </p>
+        {/* Empty State */}
+        {totalTeams === 0 && (
+          <div className="py-40 flex flex-col items-center justify-center text-center space-y-6">
+            <div className="w-20 h-20 rounded-full bg-white/5 flex items-center justify-center">
+              <Users className="h-10 w-10 text-muted-foreground/20" />
             </div>
-          </motion.div>
-
-          {/* Stats Summary */}
-          <motion.div
-            initial={{ opacity: 0, y: 15 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.4 }}
-            className="glass-card rounded-xl p-6"
-          >
-            <h2 className="font-display text-lg font-semibold text-foreground mb-4">Thông tin đội nhóm</h2>
-            <div className="space-y-4">
-                <div className="p-4 rounded-xl border border-border/50 bg-muted/10 space-y-2">
-                    <div className="flex justify-between text-sm">
-                        <span className="text-muted-foreground">Tên Đội:</span>
-                        <span className="font-bold">{user?.teamName || "--"}</span>
-                    </div>
-                    <div className="flex justify-between text-sm">
-                        <span className="text-muted-foreground">Xếp hạng:</span>
-                        <span className="font-bold">#{myTeam?.rank || "--"}</span>
-                    </div>
-                    <div className="flex justify-between text-sm">
-                        <span className="text-muted-foreground">Thành tích:</span>
-                        <span className="font-bold text-primary">{myTeam?.distance || 0} km</span>
-                    </div>
-                </div>
-                <p className="text-[10px] text-muted-foreground leading-relaxed">
-                    Thành tích của đội là tổng quãng đường hợp lệ của tất cả thành viên. Hãy khuyến khích đồng đội của bạn chạy đều đặn mỗi ngày!
-                </p>
+            <div className="space-y-2">
+              <h3 className="font-display text-2xl font-bold text-white">Chưa có đội nhóm nào</h3>
+              <p className="text-muted-foreground max-w-sm mx-auto">Danh sách đội nhóm sẽ được cập nhật liên tục dựa trên dữ liệu từ cộng đồng.</p>
             </div>
-          </motion.div>
-        </div>
+          </div>
+        )}
       </div>
     </AppLayout>
   );
