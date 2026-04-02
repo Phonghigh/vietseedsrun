@@ -1,7 +1,6 @@
 import { motion } from "framer-motion";
 import { Activity as ActivityIcon, MapPin, Flame, TrendingUp, ChevronUp, Loader2, RefreshCw } from "lucide-react";
 import { Progress } from "@/components/ui/progress";
-import { challengeGoal, weeklyActivity } from "@/lib/mockData";
 import { BarChart, Bar, XAxis, YAxis, ResponsiveContainer, Tooltip } from "recharts";
 import AppLayout from "@/components/layout/AppLayout";
 import { useMyProfile } from "@/hooks/useUser";
@@ -16,8 +15,11 @@ const Dashboard = () => {
   const { mutate: sync, isPending: isSyncing } = useSyncActivities();
 
   const currentKm = user?.totalDistance || 0;
-  const targetKm = campaignStats?.targetKm || challengeGoal.targetKm;
+  const targetKm = campaignStats?.targetKm || 10000;
   const progress = Math.round((currentKm / targetKm) * 100);
+  
+  // No weekly data from API yet
+  const weeklyActivity: any[] = [];
 
   const statCards = [
     { label: "Quãng đường", value: `${currentKm.toLocaleString()} km`, icon: MapPin, color: "text-primary" },
@@ -97,8 +99,8 @@ const Dashboard = () => {
         >
           <div className="flex items-center justify-between mb-4">
             <div>
-              <h2 className="font-display text-lg font-semibold text-foreground">Tiến độ cá nhân ({challengeGoal.name})</h2>
-              <p className="text-sm text-muted-foreground">{challengeGoal.daysRemaining} ngày còn lại</p>
+              <h2 className="font-display text-lg font-semibold text-foreground">Tiến độ cá nhân</h2>
+              <p className="text-sm text-muted-foreground">VietSeeds Run 2026</p>
             </div>
             <div className="font-display text-2xl font-bold text-primary">{progress}%</div>
           </div>
@@ -126,21 +128,27 @@ const Dashboard = () => {
             className="glass-card rounded-xl p-6"
           >
             <h2 className="font-display text-lg font-semibold text-foreground mb-4">Hoạt động trong tuần</h2>
-            <ResponsiveContainer width="100%" height={200}>
-              <BarChart data={weeklyActivity}>
-                <XAxis dataKey="day" axisLine={false} tickLine={false} className="text-xs" />
-                <YAxis axisLine={false} tickLine={false} className="text-xs" />
-                <Tooltip
-                  contentStyle={{
-                    background: "hsl(var(--card))",
-                    border: "1px solid hsl(var(--border))",
-                    borderRadius: "0.5rem",
-                    fontSize: "0.875rem",
-                  }}
-                />
-                <Bar dataKey="km" fill="hsl(var(--primary))" radius={[6, 6, 0, 0]} />
-              </BarChart>
-            </ResponsiveContainer>
+            {weeklyActivity.length > 0 ? (
+              <ResponsiveContainer width="100%" height={200}>
+                <BarChart data={weeklyActivity}>
+                  <XAxis dataKey="day" axisLine={false} tickLine={false} className="text-xs" />
+                  <YAxis axisLine={false} tickLine={false} className="text-xs" />
+                  <Tooltip
+                    contentStyle={{
+                      background: "hsl(var(--card))",
+                      border: "1px solid hsl(var(--border))",
+                      borderRadius: "0.5rem",
+                      fontSize: "0.875rem",
+                    }}
+                  />
+                  <Bar dataKey="km" fill="hsl(var(--primary))" radius={[6, 6, 0, 0]} />
+                </BarChart>
+              </ResponsiveContainer>
+            ) : (
+              <div className="h-[200px] flex items-center justify-center border border-dashed border-border rounded-lg">
+                <p className="text-sm text-muted-foreground italic">Dữ liệu biểu đồ đang được cập nhật...</p>
+              </div>
+            )}
           </motion.div>
 
           {/* Activity Feed */}

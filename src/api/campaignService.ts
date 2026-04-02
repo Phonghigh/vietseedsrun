@@ -1,5 +1,4 @@
 import { apiClient } from './client';
-import { challengeGoal } from '@/lib/mockData';
 
 export interface CampaignStats {
   targetKm: number;
@@ -8,21 +7,12 @@ export interface CampaignStats {
   totalActivities: number;
 }
 
+const CHALLENGE_START = '2026-04-01T00:00:00Z';
+const CHALLENGE_END = '2026-04-30T23:59:59Z';
+
 export const getCampaignStats = async (): Promise<CampaignStats> => {
-  try {
-    const response = await apiClient.get<CampaignStats>('/campaign/stats');
-    return response.data;
-  } catch (error) {
-    console.warn('API Error, falling back to Mock Campaign Data');
-    return new Promise((resolve) => {
-      setTimeout(() => {
-        resolve({
-          targetKm: challengeGoal.targetKm,
-          currentKm: challengeGoal.currentKm,
-          totalRunners: 1250,
-          totalActivities: 5430
-        });
-      }, 800);
-    });
-  }
+  const response = await apiClient.get<CampaignStats>('/campaign/stats', {
+    params: { startDate: CHALLENGE_START, endDate: CHALLENGE_END }
+  });
+  return response.data;
 };

@@ -1,118 +1,122 @@
 import { motion } from "framer-motion";
-import { Users, Plus, Copy } from "lucide-react";
+import { Users, Plus, Copy, Trophy, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { teamMembers, currentUser } from "@/lib/mockData";
-import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip } from "recharts";
 import AppLayout from "@/components/layout/AppLayout";
+import { useMyProfile } from "@/hooks/useUser";
+import { useTeamLeaderboard } from "@/hooks/useLeaderboard";
 
-const COLORS = [
-  "hsl(var(--primary))",
-  "hsl(var(--accent))",
-  "hsl(var(--chart-blue))",
-  "hsl(var(--chart-purple))",
-  "hsl(var(--chart-orange))",
-];
+const Teams = () => {
+  const { data: user, isLoading: isUserLoading } = useMyProfile();
+  const { data: teams, isLoading: isTeamsLoading } = useTeamLeaderboard();
 
-const contributionData = teamMembers.map((m) => ({ name: m.name, value: m.contribution }));
-const teamTotal = teamMembers.reduce((s, m) => s + m.distance, 0);
+  const myTeam = teams?.find(t => t.name === user?.teamName);
 
-const Teams = () => (
-  <AppLayout>
-    <div className="max-w-4xl mx-auto space-y-6">
-      <div className="flex items-center justify-between">
-        <div>
-          <h1 className="font-display text-2xl font-bold text-foreground">{currentUser.team}</h1>
-          <p className="text-muted-foreground text-sm">Team Dashboard — {teamMembers.length} members</p>
+  if (isUserLoading || isTeamsLoading) {
+    return (
+      <AppLayout>
+        <div className="flex flex-col items-center justify-center py-40 gap-4">
+          <Loader2 className="h-10 w-10 animate-spin text-primary" />
+          <p className="text-muted-foreground animate-pulse">Đang tải thông tin đội...</p>
         </div>
-        <div className="flex gap-2">
-          <Button variant="outline" size="sm">
-            <Copy className="h-4 w-4 mr-1" /> Invite Link
-          </Button>
-          <Button size="sm" className="gradient-hero border-0 text-primary-foreground">
-            <Plus className="h-4 w-4 mr-1" /> Create Team
-          </Button>
-        </div>
-      </div>
+      </AppLayout>
+    );
+  }
 
-      {/* Team Stats */}
-      <div className="grid grid-cols-3 gap-4">
-        {[
-          { label: "Total Distance", value: `${teamTotal} km` },
-          { label: "Team Rank", value: `#${currentUser.teamRank}` },
-          { label: "Members", value: teamMembers.length },
-        ].map((s, i) => (
+  return (
+    <AppLayout>
+      <div className="max-w-4xl mx-auto space-y-6">
+        <div className="flex items-center justify-between">
+          <div>
+            <h1 className="font-display text-2xl font-bold text-foreground">
+                {user?.teamName || "Chưa gia nhập đội"}
+            </h1>
+            <p className="text-muted-foreground text-sm">
+                Bảng điều khiển đội nhóm — {myTeam?.members || 0} thành viên
+            </p>
+          </div>
+          <div className="flex gap-2">
+            <Button variant="outline" size="sm">
+              <Copy className="h-4 w-4 mr-1" /> Link mời
+            </Button>
+            <Button size="sm" className="gradient-hero border-0 text-primary-foreground">
+              <Plus className="h-4 w-4 mr-1" /> Tạo Đội
+            </Button>
+          </div>
+        </div>
+
+        {/* Team Stats */}
+        <div className="grid grid-cols-2 lg:grid-cols-3 gap-4">
+          {[
+            { label: "Tổng quãng đường", value: `${myTeam?.distance || 0} km`, icon: Trophy },
+            { label: "Hạng của Đội", value: `#${myTeam?.rank || "--"}`, icon: Trophy },
+            { label: "Thành viên", value: myTeam?.members || 0, icon: Users },
+          ].map((s, i) => (
+            <motion.div
+              key={s.label}
+              initial={{ opacity: 0, y: 15 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: i * 0.08 }}
+              className="glass-card rounded-xl p-5 text-center stat-glow"
+            >
+              <div className="font-display text-2xl font-bold text-foreground">{s.value}</div>
+              <div className="text-sm text-muted-foreground">{s.label}</div>
+            </motion.div>
+          ))}
+        </div>
+
+        <div className="grid lg:grid-cols-2 gap-6">
+          {/* Member List - Placeholder since API doesn't have it yet */}
           <motion.div
-            key={s.label}
             initial={{ opacity: 0, y: 15 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: i * 0.08 }}
-            className="glass-card rounded-xl p-5 text-center"
+            transition={{ delay: 0.3 }}
+            className="glass-card rounded-xl p-6"
           >
-            <div className="font-display text-2xl font-bold text-foreground">{s.value}</div>
-            <div className="text-sm text-muted-foreground">{s.label}</div>
-          </motion.div>
-        ))}
-      </div>
-
-      <div className="grid lg:grid-cols-2 gap-6">
-        {/* Member Leaderboard */}
-        <motion.div
-          initial={{ opacity: 0, y: 15 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.3 }}
-          className="glass-card rounded-xl p-6"
-        >
-          <h2 className="font-display text-lg font-semibold text-foreground mb-4 flex items-center gap-2">
-            <Users className="h-5 w-5 text-primary" /> Members
-          </h2>
-          <div className="space-y-3">
-            {teamMembers
-              .sort((a, b) => b.distance - a.distance)
-              .map((m, i) => (
-                <div key={m.name} className="flex items-center justify-between p-2 rounded-lg hover:bg-muted/50 transition-colors">
-                  <div className="flex items-center gap-3">
-                    <span className="text-sm font-bold text-muted-foreground w-5">{i + 1}</span>
-                    <div className="w-8 h-8 rounded-full bg-muted flex items-center justify-center text-xs font-bold text-muted-foreground">
-                      {m.avatar}
-                    </div>
-                    <span className="text-sm font-medium text-foreground">{m.name}</span>
-                  </div>
-                  <span className="font-display font-semibold text-foreground text-sm">{m.distance} km</span>
+            <h2 className="font-display text-lg font-semibold text-foreground mb-4 flex items-center gap-2">
+              <Users className="h-5 w-5 text-primary" /> Thành viên
+            </h2>
+            <div className="flex flex-col items-center justify-center py-20 text-center space-y-3">
+                <div className="w-12 h-12 rounded-full bg-muted flex items-center justify-center">
+                    <Users className="h-6 w-6 text-muted-foreground" />
                 </div>
-              ))}
-          </div>
-        </motion.div>
+                <p className="text-sm text-muted-foreground">
+                    Tính năng xem chi tiết thành viên đội đang được phát triển.
+                </p>
+            </div>
+          </motion.div>
 
-        {/* Contribution Chart */}
-        <motion.div
-          initial={{ opacity: 0, y: 15 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.4 }}
-          className="glass-card rounded-xl p-6"
-        >
-          <h2 className="font-display text-lg font-semibold text-foreground mb-4">Contribution</h2>
-          <ResponsiveContainer width="100%" height={220}>
-            <PieChart>
-              <Pie data={contributionData} dataKey="value" nameKey="name" cx="50%" cy="50%" innerRadius={50} outerRadius={85} paddingAngle={3}>
-                {contributionData.map((_, i) => (
-                  <Cell key={i} fill={COLORS[i % COLORS.length]} />
-                ))}
-              </Pie>
-              <Tooltip />
-            </PieChart>
-          </ResponsiveContainer>
-          <div className="flex flex-wrap gap-3 mt-2 justify-center">
-            {teamMembers.map((m, i) => (
-              <div key={m.name} className="flex items-center gap-1.5 text-xs text-muted-foreground">
-                <div className="w-2.5 h-2.5 rounded-full" style={{ background: COLORS[i % COLORS.length] }} />
-                {m.name.split(" ")[0]}
-              </div>
-            ))}
-          </div>
-        </motion.div>
+          {/* Stats Summary */}
+          <motion.div
+            initial={{ opacity: 0, y: 15 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.4 }}
+            className="glass-card rounded-xl p-6"
+          >
+            <h2 className="font-display text-lg font-semibold text-foreground mb-4">Thông tin đội nhóm</h2>
+            <div className="space-y-4">
+                <div className="p-4 rounded-xl border border-border/50 bg-muted/10 space-y-2">
+                    <div className="flex justify-between text-sm">
+                        <span className="text-muted-foreground">Tên Đội:</span>
+                        <span className="font-bold">{user?.teamName || "--"}</span>
+                    </div>
+                    <div className="flex justify-between text-sm">
+                        <span className="text-muted-foreground">Xếp hạng:</span>
+                        <span className="font-bold">#{myTeam?.rank || "--"}</span>
+                    </div>
+                    <div className="flex justify-between text-sm">
+                        <span className="text-muted-foreground">Thành tích:</span>
+                        <span className="font-bold text-primary">{myTeam?.distance || 0} km</span>
+                    </div>
+                </div>
+                <p className="text-[10px] text-muted-foreground leading-relaxed">
+                    Thành tích của đội là tổng quãng đường hợp lệ của tất cả thành viên. Hãy khuyến khích đồng đội của bạn chạy đều đặn mỗi ngày!
+                </p>
+            </div>
+          </motion.div>
+        </div>
       </div>
-    </div>
-  </AppLayout>
-);
+    </AppLayout>
+  );
+};
 
 export default Teams;

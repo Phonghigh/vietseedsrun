@@ -34,11 +34,18 @@ apiClient.interceptors.response.use(
   (error) => {
     // Any status codes that falls outside the range of 2xx cause this function to trigger
     if (error.response?.status === 401) {
-      console.error('Session expired or unauthorized. Logging out...');
+      console.warn('Session unauthorized or expired for request to:', error.config?.url);
+      
+      // Clear potentially corrupt/invalid tokens
       localStorage.removeItem('accessToken');
       localStorage.removeItem('user');
-      // Only redirect if not already on landing
-      if (window.location.pathname !== '/') {
+
+      // Only redirect to landing if the user is on a protected/private page
+      const protectedPaths = ['/dashboard', '/profile'];
+      const currentPath = window.location.pathname;
+      
+      if (protectedPaths.some(path => currentPath.startsWith(path))) {
+        console.log('Redirecting to home from private page:', currentPath);
         window.location.href = '/';
       }
     }

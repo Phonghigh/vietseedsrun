@@ -1,14 +1,12 @@
 import { Bell, Search, LogOut } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { SidebarTrigger } from "@/components/ui/sidebar";
-import { useState, useEffect } from "react";
-import { notifications } from "@/lib/mockData";
+import { useState } from "react";
 import { getStravaAuthUrl, useAuth } from "@/hooks/useAuth";
 import { useMyProfile } from "@/hooks/useUser";
 
 const TopBar = () => {
   const [showNotifs, setShowNotifs] = useState(false);
-  const unread = notifications.filter((n) => !n.read).length;
   const token = localStorage.getItem('accessToken');
   const { logout } = useAuth();
   const { data: user } = useMyProfile();
@@ -40,25 +38,14 @@ const TopBar = () => {
             onClick={() => setShowNotifs(!showNotifs)}
           >
             <Bell className="h-5 w-5 text-muted-foreground" />
-            {unread > 0 && (
-              <span className="absolute -top-0.5 -right-0.5 w-4 h-4 rounded-full gradient-hero text-[10px] font-bold text-primary-foreground flex items-center justify-center">
-                {unread}
-              </span>
-            )}
           </Button>
 
           {showNotifs && (
             <div className="absolute right-0 top-12 w-80 bg-card border border-border rounded-xl shadow-lg z-50 p-2">
-              <div className="font-display font-semibold text-sm px-3 py-2 text-foreground">Thông báo</div>
-              {notifications.map((n) => (
-                <div
-                  key={n.id}
-                  className={`px-3 py-2.5 rounded-lg text-sm ${!n.read ? "bg-primary/5" : ""} hover:bg-muted transition-colors`}
-                >
-                  <div className="text-foreground">{n.text}</div>
-                  <div className="text-xs text-muted-foreground mt-0.5">{n.time}</div>
-                </div>
-              ))}
+              <div className="font-display font-semibold text-sm px-3 py-2 text-foreground border-b border-border mb-2">Thông báo</div>
+              <div className="px-3 py-10 text-center text-xs text-muted-foreground italic">
+                Bạn chưa có thông báo nào mới.
+              </div>
             </div>
           )}
         </div>
@@ -67,10 +54,16 @@ const TopBar = () => {
           <div className="flex items-center gap-3">
             <div className="text-right hidden sm:block">
               <div className="text-sm font-semibold text-foreground">{user?.name}</div>
-              <div className="text-[10px] text-muted-foreground uppercase tracking-wider">{user?.teamName}</div>
+              <div className="text-[10px] text-muted-foreground uppercase tracking-wider">{user?.teamName || "Chưa có đội"}</div>
             </div>
             <div className="w-8 h-8 rounded-full bg-primary/20 flex items-center justify-center text-xs font-bold text-primary overflow-hidden border border-primary/30">
-              {user?.avatar ? <img src={user.avatar} className="w-full h-full object-cover" /> : user?.name.substring(0, 2).toUpperCase()}
+              {user?.avatar ? (
+                <img src={user.avatar} className="w-full h-full object-cover" onError={(e) => {
+                  (e.target as any).src = `https://ui-avatars.com/api/?name=${user.name}&background=random`;
+                }} />
+              ) : (
+                user?.name?.substring(0, 2).toUpperCase()
+              )}
             </div>
             <Button variant="ghost" size="icon" onClick={logout} title="Đăng xuất">
               <LogOut className="h-4 w-4 text-muted-foreground" />
@@ -78,7 +71,7 @@ const TopBar = () => {
           </div>
         ) : (
           <Button 
-            className="gradient-hero !h-8 text-xs font-bold rounded-full px-4 border-0" 
+            className="gradient-hero !h-8 text-xs font-bold rounded-full px-4 border-0 shadow-lg hover:scale-105 transition-transform" 
             onClick={handleLogin}
           >
             ĐĂNG NHẬP
