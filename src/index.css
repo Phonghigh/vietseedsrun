@@ -1,54 +1,56 @@
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700;800&family=Inter:wght@400;500;600&family=Bebas+Neue&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600&display=swap');
-
 @layer base {
   :root {
-    --background: 220 20% 97%;
-    --foreground: 220 25% 10%;
+    --background: 150 20% 97%;
+    --foreground: 150 30% 8%;
 
     --card: 0 0% 100%;
-    --card-foreground: 220 25% 10%;
+    --card-foreground: 150 30% 8%;
 
     --popover: 0 0% 100%;
-    --popover-foreground: 220 25% 10%;
+    --popover-foreground: 150 30% 8%;
 
-    --primary: 16 90% 54%;
+    /* VietSeeds Green as primary */
+    --primary: 142 72% 35%;
     --primary-foreground: 0 0% 100%;
 
-    --secondary: 220 14% 92%;
-    --secondary-foreground: 220 25% 10%;
+    --secondary: 150 14% 92%;
+    --secondary-foreground: 150 25% 10%;
 
-    --muted: 220 14% 95%;
-    --muted-foreground: 220 10% 46%;
+    --muted: 150 14% 95%;
+    --muted-foreground: 150 10% 46%;
 
-    --accent: 160 60% 45%;
+    /* Warm coral/orange accent from banner */
+    --accent: 20 85% 58%;
     --accent-foreground: 0 0% 100%;
 
     --destructive: 0 84% 60%;
     --destructive-foreground: 0 0% 100%;
 
-    --border: 220 13% 90%;
-    --input: 220 13% 90%;
-    --ring: 16 90% 54%;
+    --border: 150 13% 88%;
+    --input: 150 13% 88%;
+    --ring: 142 72% 35%;
 
     --radius: 0.75rem;
 
-    --chart-orange: 16 90% 54%;
-    --chart-green: 160 60% 45%;
+    --chart-green: 142 72% 35%;
+    --chart-orange: 20 85% 58%;
     --chart-blue: 210 80% 55%;
-    --chart-purple: 270 60% 55%;
+    --chart-lime: 90 60% 45%;
 
-    --sidebar-background: 220 25% 10%;
-    --sidebar-foreground: 220 14% 85%;
-    --sidebar-primary: 16 90% 54%;
+    --sidebar-background: 150 35% 10%;
+    --sidebar-foreground: 150 14% 85%;
+    --sidebar-primary: 142 72% 42%;
     --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 220 20% 16%;
-    --sidebar-accent-foreground: 220 14% 85%;
-    --sidebar-border: 220 20% 18%;
-    --sidebar-ring: 16 90% 54%;
+    --sidebar-accent: 150 25% 16%;
+    --sidebar-accent-foreground: 150 14% 85%;
+    --sidebar-border: 150 20% 18%;
+    --sidebar-ring: 142 72% 42%;
 
     --font-display: 'Space Grotesk', sans-serif;
     --font-body: 'Inter', sans-serif;
@@ -71,23 +73,95 @@
 }
 
 @layer utilities {
+  /* Hero gradient matching the banner: deep green → warm coral/peach */
   .gradient-hero {
-    background: linear-gradient(135deg, hsl(16, 90%, 54%) 0%, hsl(30, 95%, 58%) 50%, hsl(45, 90%, 55%) 100%);
+    background: linear-gradient(135deg, hsl(142, 72%, 35%) 0%, hsl(160, 60%, 40%) 40%, hsl(30, 80%, 58%) 100%);
   }
 
+  /* Dark hero background: deep forest green */
   .gradient-dark {
-    background: linear-gradient(180deg, hsl(220, 25%, 8%) 0%, hsl(220, 25%, 14%) 100%);
+    background: linear-gradient(160deg, hsl(150, 40%, 8%) 0%, hsl(150, 35%, 13%) 50%, hsl(20, 30%, 14%) 100%);
+  }
+
+  /* Banner-style warm gradient (peach/coral like background of image) */
+  .gradient-banner {
+    background: linear-gradient(135deg, hsl(150, 30%, 16%) 0%, hsl(142, 40%, 20%) 40%, hsl(25, 50%, 25%) 100%);
   }
 
   .gradient-card {
-    background: linear-gradient(135deg, hsl(0, 0%, 100%) 0%, hsl(220, 20%, 98%) 100%);
+    background: linear-gradient(135deg, hsl(0, 0%, 100%) 0%, hsl(150, 20%, 98%) 100%);
   }
 
   .glass-card {
     @apply bg-card/80 backdrop-blur-sm border border-border/50 shadow-sm;
   }
 
+  .glass-dark {
+    background: rgba(10, 30, 15, 0.6);
+    backdrop-filter: blur(12px);
+    border: 1px solid rgba(60, 180, 80, 0.15);
+  }
+
   .stat-glow {
-    box-shadow: 0 0 30px -5px hsl(16, 90%, 54%, 0.15);
+    box-shadow: 0 0 30px -5px hsl(142, 72%, 35%, 0.2);
+  }
+
+  .green-glow {
+    box-shadow: 0 0 40px -8px hsl(142, 72%, 42%, 0.4);
+  }
+
+  .text-gradient-green {
+    background: linear-gradient(135deg, hsl(142, 72%, 50%) 0%, hsl(160, 65%, 55%) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .text-gradient-warm {
+    background: linear-gradient(135deg, hsl(35, 95%, 62%) 0%, hsl(20, 88%, 58%) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .animate-pulse-glow {
+    animation: pulse-glow 2s ease-in-out infinite;
+  }
+
+  .animate-float {
+    animation: float 4s ease-in-out infinite;
+  }
+
+  .animate-run-bounce {
+    animation: run-bounce 0.6s ease-in-out infinite alternate;
+  }
+
+  @keyframes pulse-glow {
+    0%, 100% { opacity: 1; box-shadow: 0 0 8px hsl(142, 72%, 42%); }
+    50% { opacity: 0.7; box-shadow: 0 0 20px hsl(142, 72%, 55%); }
+  }
+
+  @keyframes float {
+    0%, 100% { transform: translateY(0px); }
+    50% { transform: translateY(-10px); }
+  }
+
+  @keyframes run-bounce {
+    from { transform: translateY(0px) rotate(-1deg); }
+    to { transform: translateY(-4px) rotate(1deg); }
+  }
+
+  @keyframes shimmer {
+    0% { background-position: -200% center; }
+    100% { background-position: 200% center; }
+  }
+
+  .shimmer-text {
+    background: linear-gradient(90deg, hsl(142, 72%, 50%) 25%, hsl(60, 90%, 75%) 50%, hsl(142, 72%, 50%) 75%);
+    background-size: 200% auto;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    animation: shimmer 3s linear infinite;
   }
 }
