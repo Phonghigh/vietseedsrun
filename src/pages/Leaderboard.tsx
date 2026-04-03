@@ -15,8 +15,8 @@ const medalColors = ["gradient-hero", "bg-muted-foreground/60", "bg-chart-orange
 
 const Leaderboard = () => {
   const [filter, setFilter] = useState("all");
-  const { data: leaderboardIndividual, isLoading: isIndLoading } = useIndividualLeaderboard();
-  const { data: leaderboardTeams, isLoading: isTeamLoading } = useTeamLeaderboard();
+  const { data: leaderboardIndividual, isLoading: isIndLoading } = useIndividualLeaderboard(1, 50);
+  const { data: leaderboardTeams, isLoading: isTeamLoading } = useTeamLeaderboard(1, 50);
 
   return (
     <AppLayout>

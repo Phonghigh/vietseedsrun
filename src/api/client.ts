@@ -13,6 +13,19 @@ export const apiClient = axios.create({
 // Request Interceptor
 apiClient.interceptors.request.use(
   (config) => {
+    // Add cache-busting parameter to GET requests
+    if (config.method?.toLowerCase() === 'get') {
+      config.params = {
+        ...config.params,
+        _t: Date.now(),
+      };
+    }
+
+    // Headers to bypass server-side caching
+    config.headers['Cache-Control'] = 'no-cache';
+    config.headers['Pragma'] = 'no-cache';
+    config.headers['Expires'] = '0';
+
     // Attempt to get token from localStorage
     const token = localStorage.getItem('accessToken');
     if (token && config.headers) {

@@ -39,10 +39,7 @@ const Dashboard = () => {
             <h1 className="font-display text-4xl font-black text-white tracking-tight">Dashboard Cộng Đồng</h1>
             <p className="text-muted-foreground font-medium mt-1">Theo dõi nhịp đập của toàn thể runner VietSeeds</p>
           </div>
-          <div className="flex items-center gap-2 px-4 py-2 rounded-2xl bg-primary/10 border border-primary/20">
-             <div className="h-2 w-2 rounded-full bg-primary animate-pulse" />
-             <span className="text-[10px] font-bold uppercase tracking-widest text-primary">Dữ liệu trực tiếp</span>
-          </div>
+
         </motion.div>
 
         {/* Global Stats Cards */}
@@ -58,16 +55,13 @@ const Dashboard = () => {
               initial={{ opacity: 0, scale: 0.95 }}
               animate={{ opacity: 1, scale: 1 }}
               transition={{ delay: i * 0.1 }}
-              className="glass-card rounded-[2rem] p-6 hover:translate-y-[-4px] transition-all duration-300 group shadow-xl"
+              className="glass-card rounded-[2.5rem] p-8 hover:translate-y-[-4px] transition-all duration-300 group shadow-xl flex flex-col items-center text-center"
             >
-              <div className="flex items-center justify-between mb-6">
-                <div className={`p-3 rounded-2xl ${s.bg} ${s.color} shadow-sm group-hover:scale-110 transition-transform`}>
-                  <s.icon className="h-6 w-6" />
-                </div>
-                <Star className="h-4 w-4 text-white/10 group-hover:text-accent/30 transition-colors" />
+              <div className={`p-4 rounded-2xl ${s.bg} ${s.color} shadow-sm group-hover:scale-110 transition-transform mb-6`}>
+                <s.icon className="h-7 w-7" />
               </div>
               <div className="font-display text-3xl font-black text-white tracking-tighter mb-1">{s.value}</div>
-              <div className="text-xs font-bold text-muted-foreground/80 uppercase tracking-widest">{s.label}</div>
+              <div className="text-[10px] font-bold text-muted-foreground/60 uppercase tracking-[0.2em]">{s.label}</div>
             </motion.div>
           ))}
         </div>
