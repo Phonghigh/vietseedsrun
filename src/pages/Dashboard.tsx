@@ -127,35 +127,36 @@ const Dashboard = () => {
                         <Loader2 className="h-8 w-8 animate-spin text-primary/40" />
                         <span className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground/70">Đang cập nhật bảng xếp hạng...</span>
                     </div>
-                ) : leaderboard?.slice(0, 5).map((player, idx) => (
-                    <motion.div 
-                        key={idx} 
-                        whileHover={{ x: 6, backgroundColor: "rgba(255,255,255,0.05)" }}
-                        className="flex items-center justify-between p-4 rounded-2xl border border-white/5 transition-all duration-300 group/item"
-                    >
-                        <div className="flex items-center gap-5">
-                            <div className={`w-10 h-10 rounded-full flex items-center justify-center font-black text-sm border-2 ${idx === 0 ? 'border-accent/40 bg-accent/10 text-accent' : 'border-white/5 bg-black/20 text-white/30'}`}>
-                                {idx + 1}
+                ) : (Array.isArray(leaderboard) ? leaderboard : []).slice(0, 5).map((player, idx) => (
+                    <Link to={`/athlete/${player._id}`} key={player._id} className="block">
+                        <motion.div 
+                            whileHover={{ x: 6, backgroundColor: "rgba(255,255,255,0.05)" }}
+                            className="flex items-center justify-between p-4 rounded-2xl border border-white/5 transition-all duration-300 group/item"
+                        >
+                            <div className="flex items-center gap-5">
+                                <div className={`w-10 h-10 rounded-full flex items-center justify-center font-black text-sm border-2 ${idx === 0 ? 'border-accent/40 bg-accent/10 text-accent' : 'border-white/5 bg-black/20 text-white/30'}`}>
+                                    {idx + 1}
+                                </div>
+                                <div className="w-12 h-12 rounded-2xl overflow-hidden border-2 border-white/5 p-0.5 bg-background">
+                                    {player.avatar ? (
+                                        <img src={player.avatar} className="w-full h-full object-cover rounded-xl" />
+                                    ) : (
+                                        <div className="w-full h-full bg-primary/10 flex items-center justify-center text-xs font-bold text-primary">
+                                            {player.name.substring(0,2).toUpperCase()}
+                                        </div>
+                                    )}
+                                </div>
+                                <div>
+                                    <div className="text-sm font-bold text-white group-hover/item:text-primary transition-colors">{player.name}</div>
+                                    <div className="text-[10px] font-bold text-muted-foreground/70 uppercase tracking-widest">{player.activities} hoạt động</div>
+                                </div>
                             </div>
-                            <div className="w-12 h-12 rounded-2xl overflow-hidden border-2 border-white/5 p-0.5 bg-background">
-                                {player.avatar ? (
-                                    <img src={player.avatar} className="w-full h-full object-cover rounded-xl" />
-                                ) : (
-                                    <div className="w-full h-full bg-primary/10 flex items-center justify-center text-xs font-bold text-primary">
-                                        {player.name.substring(0,2).toUpperCase()}
-                                    </div>
-                                )}
+                            <div className="text-right">
+                                <div className="text-lg font-display font-black text-primary leading-none">{player.distance}</div>
+                                <div className="text-[10px] font-bold text-white/40 uppercase tracking-tighter">km</div>
                             </div>
-                            <div>
-                                <div className="text-sm font-bold text-white group-hover/item:text-primary transition-colors">{player.name}</div>
-                                <div className="text-[10px] font-bold text-muted-foreground/70 uppercase tracking-widest">{player.activities} hoạt động</div>
-                            </div>
-                        </div>
-                        <div className="text-right">
-                            <div className="text-lg font-display font-black text-primary leading-none">{player.distance}</div>
-                            <div className="text-[10px] font-bold text-white/40 uppercase tracking-tighter">km</div>
-                        </div>
-                    </motion.div>
+                        </motion.div>
+                    </Link>
                 ))}
             </div>
           </motion.div>

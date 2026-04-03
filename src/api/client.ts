@@ -1,7 +1,7 @@
 import axios from 'axios';
 
-// Base URL: Use .env file or fallback to localhost during development
-const baseURL = import.meta.env.VITE_API_URL || 'http://localhost:3000/api/v1';
+// Base URL: Use .env file or fallback to Vercel production API
+const baseURL = import.meta.env.VITE_API_URL || 'https://strava-integration-api.vercel.app/api/v1';
 
 export const apiClient = axios.create({
   baseURL,

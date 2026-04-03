@@ -61,15 +61,20 @@ export const getMyActivities = async (page = 1, limit = 10): Promise<ActivitiesR
     }
   });
   
-  // Áp dụng bộ lọc nghiêm ngặt (Strict Enforcer)
-  const filteredData = response.data.data.filter(a => {
-    return isDateValid(a.date) && isPaceValid(a.pace);
-  });
+  return response.data;
+};
 
-  return {
-    ...response.data,
-    data: filteredData
-  };
+export const getAthleteActivities = async (athleteId: string, page = 1, limit = 10): Promise<ActivitiesResponse> => {
+  const response = await apiClient.get<ActivitiesResponse>(`/activities/athlete/${athleteId}`, {
+    params: { 
+      page, 
+      limit,
+      startDate: CHALLENGE_START,
+      endDate: CHALLENGE_END
+    }
+  });
+  
+  return response.data;
 };
 
 export const syncActivities = async (): Promise<void> => {
