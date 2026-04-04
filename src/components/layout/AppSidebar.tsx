@@ -29,7 +29,7 @@ export function AppSidebar() {
     <Sidebar collapsible="icon">
       <SidebarContent>
         {/* ... Logo Section ... */}
-        <div className="p-5 flex items-center gap-3 border-b border-white/5 mb-2">
+        <div className="p-5 flex items-center gap-3 border-b border-sidebar-border mb-2">
           {!collapsed && (
             <span className="font-display font-bold text-xl text-sidebar-foreground tracking-tight">VietSeeds Run</span>
           )}
@@ -49,7 +49,7 @@ export function AppSidebar() {
                       to={item.url}
                       end
                       className="hover:bg-sidebar-accent/50 rounded-lg px-3 py-2 text-sm transition-all"
-                      activeClassName="bg-primary/20 text-primary font-bold shadow-sm"
+                      activeClassName="bg-primary/10 text-primary font-bold shadow-sm"
                     >
                       <item.icon className="mr-2 h-4 w-4" />
                       {!collapsed && <span>{item.title}</span>}

@@ -35,7 +35,7 @@ const ActivityFeed = () => {
         </div>
         <div>
           <h3 className="font-display text-lg font-black text-foreground uppercase tracking-tight">Hoạt động trực tiếp</h3>
-          <p className="text-[10px] text-muted-foreground/60 font-bold uppercase tracking-[0.2em]">Cập nhật thời gian thực từ cộng đồng</p>
+          <p className="text-[10px] text-muted-foreground font-bold uppercase tracking-[0.2em]">Cập nhật thời gian thực từ cộng đồng</p>
         </div>
         <div className="ml-auto flex items-center gap-2 px-3 py-1.5 rounded-full bg-green-400/10 border border-green-400/20">
           <span className="w-2 h-2 rounded-full bg-green-400 animate-pulse" />
@@ -77,16 +77,16 @@ const ActivityFeed = () => {
               <div className="flex-1 min-w-0">
                 <p className="text-sm font-bold text-foreground/90 leading-tight">
                   <span className="group-hover:text-primary transition-colors cursor-pointer">{item.userName}</span>{" "}
-                  <span className="text-muted-foreground font-medium text-[10px] uppercase tracking-wider mx-1 italic opacity-60">vừa chạy</span>{" "}
+                  <span className="text-muted-foreground font-medium text-[10px] uppercase tracking-wider mx-1 italic opacity-80">vừa chạy</span>{" "}
                   <span className="text-primary font-black text-lg whitespace-nowrap">{item.distance.toLocaleString()} <span className="text-[10px]">km</span></span>
                 </p>
-                <div className="flex items-center gap-4 mt-1.5 opacity-60">
-                  <div className="flex items-center gap-1 text-[10px] font-black text-muted-foreground/50 uppercase tracking-widest">
-                    <MapPin className="h-3 w-3 text-primary/40" />
+                <div className="flex items-center gap-4 mt-1.5 grayscale-[0.5]">
+                  <div className="flex items-center gap-1 text-[10px] font-black text-muted-foreground uppercase tracking-widest">
+                    <MapPin className="h-3 w-3 text-primary" />
                     {item.location}
                   </div>
-                  <div className="w-1 h-1 rounded-full bg-muted-foreground/20" />
-                  <div className="flex items-center gap-1 text-[10px] font-black text-primary/60 uppercase tracking-widest">
+                  <div className="w-1 h-1 rounded-full bg-muted-foreground/40" />
+                  <div className="flex items-center gap-1 text-[10px] font-black text-primary uppercase tracking-widest">
                     <Clock className="h-3 w-3" />
                     {formatDistanceToNow(new Date(item.createdAt), { addSuffix: true, locale: vi })}
                   </div>

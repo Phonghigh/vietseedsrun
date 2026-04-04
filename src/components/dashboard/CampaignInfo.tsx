@@ -12,17 +12,17 @@ const CampaignInfo = () => {
       >
         <div className="absolute top-0 right-0 w-32 h-32 bg-primary/5 rounded-full blur-[80px]" />
         <h3 className="font-display font-black text-foreground mb-4 uppercase tracking-[0.2em] text-[10px]">Sứ mệnh chiến dịch</h3>
-        <p className="text-sm text-muted-foreground/80 leading-relaxed font-medium">
+        <p className="text-sm text-foreground/80 leading-relaxed font-semibold">
           VietSeeds Run 2026 không chỉ là một giải chạy. Đây là hành trình kết nối những tâm hồn đồng điệu, lan tỏa năng lượng tích cực và xây dựng quỹ học bổng cho các sinh viên tài năng vượt khó.
         </p>
         <div className="mt-8 pt-8 border-t border-border/30 space-y-4">
           <div className="flex justify-between items-center text-xs font-bold tracking-wide">
-            <span className="text-muted-foreground/70 uppercase">Bắt đầu</span>
-            <span className="text-foreground bg-muted/30 px-2 py-1 rounded-md">01/04/2026</span>
+            <span className="text-muted-foreground uppercase">Bắt đầu</span>
+            <span className="text-foreground bg-secondary/50 px-3 py-1.5 rounded-full ring-1 ring-primary/10 shadow-sm font-black whitespace-nowrap">01/04/2026</span>
           </div>
           <div className="flex justify-between items-center text-xs font-bold tracking-wide">
-            <span className="text-muted-foreground/70 uppercase">Kết thúc</span>
-            <span className="text-foreground bg-muted/30 px-2 py-1 rounded-md">30/04/2026</span>
+            <span className="text-muted-foreground uppercase">Kết thúc</span>
+            <span className="text-foreground bg-secondary/50 px-3 py-1.5 rounded-full ring-1 ring-primary/10 shadow-sm font-black whitespace-nowrap">30/04/2026</span>
           </div>
         </div>
       </motion.div>
@@ -42,9 +42,9 @@ const CampaignInfo = () => {
             { text: "Pace hợp lệ: 4:00 - 15:00 /km", icon: MapPin },
             { text: "Khoảng cách tối thiểu: 1.0 km", icon: MapPin }
           ].map((rule, i) => (
-            <li key={i} className="flex items-center gap-4 text-xs font-semibold text-muted-foreground/70">
-              <div className="w-8 h-8 rounded-xl bg-muted/30 flex items-center justify-center text-primary/40">
-                <rule.icon className="h-4 w-4" />
+            <li key={i} className="flex items-center gap-4 text-xs font-bold text-muted-foreground">
+              <div className="w-10 h-10 rounded-xl bg-secondary flex items-center justify-center text-primary shadow-sm border border-primary/10">
+                <rule.icon className="h-5 w-5" />
               </div>
               {rule.text}
             </li>
