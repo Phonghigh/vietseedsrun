@@ -39,7 +39,7 @@ export function AppSidebar() {
         </div>
 
         <SidebarGroup>
-          <SidebarGroupLabel className="px-4 text-[10px] uppercase tracking-widest text-muted-foreground font-bold">Thực đơn</SidebarGroupLabel>
+          <SidebarGroupLabel className="px-4 text-[10px] uppercase tracking-widest text-muted-foreground font-bold">MENU</SidebarGroupLabel>
           <SidebarGroupContent>
             <SidebarMenu className="px-2 gap-1">
               {navItems.map((item) => (

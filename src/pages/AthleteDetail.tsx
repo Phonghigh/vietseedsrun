@@ -96,7 +96,7 @@ const AthleteDetail = () => {
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
           {[
             { label: "Tổng tích lũy", value: `${stats?.totalDistanceKm?.toFixed(1) || 0} km`, icon: MapPin, color: "text-primary" },
-            { label: "Tổng số bài chạy", value: stats?.activityCount || 0, icon: ActivityIcon, color: "text-accent" },
+            { label: "Tổng số hoạt động", value: stats?.activityCount || 0, icon: ActivityIcon, color: "text-accent" },
             { label: "Vị trí bảng vàng", value: "ĐANG CẬP NHẬT", icon: Trophy, color: "text-blue-400" },
           ].map((s, i) => (
             <motion.div
@@ -132,44 +132,45 @@ const AthleteDetail = () => {
               </div>
             ) : (
               <div className="divide-y divide-white/5">
-                {activities.map((activity, idx) => (
+                {activities.map((activity, i) => (
                   <motion.div 
                     key={activity.id}
-                    initial={{ opacity: 0, x: -10 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    transition={{ delay: 0.4 + idx * 0.05 }}
-                    className="p-6 md:p-8 flex flex-col sm:flex-row sm:items-center justify-between gap-6 hover:bg-white/[0.02] transition-colors group"
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    transition={{ delay: i * 0.05 }}
+                    className="flex items-center justify-between px-8 py-6 border-b border-white/5 hover:bg-white/[0.03] transition-all group"
                   >
                     <div className="flex items-center gap-6">
-                        <div className="w-14 h-14 rounded-2xl bg-white/5 flex items-center justify-center text-primary border border-white/10 group-hover:scale-110 transition-transform">
-                          <Zap className="h-6 w-6" />
+                      <div className="w-14 h-14 rounded-2xl bg-white/5 flex items-center justify-center text-primary border border-white/10 group-hover:scale-110 transition-transform shadow-lg relative overflow-hidden">
+                        <div className="absolute inset-0 bg-primary/5 opacity-0 group-hover:opacity-100 transition-opacity" />
+                        <ActivityIcon className="h-6 w-6 relative z-10" />
+                      </div>
+                      <div>
+                        <div className="font-bold text-white group-hover:text-primary transition-colors text-base mb-1">{activity.name}</div>
+                        <div className="flex items-center gap-3 text-[10px] font-bold text-white/20 uppercase tracking-widest">
+                          <span className="flex items-center gap-1.5"><Calendar className="h-3 w-3" /> {format(new Date(activity.date), "dd/MM/yyyy", { locale: vi })}</span>
+                          <span className="w-1 h-1 rounded-full bg-white/10" />
+                          <span className="flex items-center gap-1.5"><MapPin className="h-3 w-3" /> {activity.location || "Việt Nam"}</span>
                         </div>
-                        <div>
-                          <div className="text-lg font-bold text-white mb-1 group-hover:text-primary transition-colors">{activity.name}</div>
-                          <div className="flex flex-wrap items-center gap-x-4 gap-y-2 text-xs font-bold text-white/30 uppercase tracking-wider">
-                            <span className="flex items-center gap-1.5"><Calendar className="h-3 w-3" /> {format(new Date(activity.date), "dd MMMM yyyy", { locale: vi })}</span>
-                            <span className="flex items-center gap-1.5"><MapPin className="h-3 w-3 text-accent" /> {activity.location}</span>
-                          </div>
-                        </div>
+                      </div>
                     </div>
 
-                    <div className="flex items-center justify-between sm:justify-end gap-6 md:gap-12">
-                        <div className="text-right">
-                          <div className="text-2xl font-black text-white leading-none mb-1">{activity.pace}</div>
-                          <div className="text-[10px] font-bold text-white/30 uppercase tracking-widest">phút/km</div>
+                    <div className="flex items-center gap-2 bg-white/5 px-8 py-3 rounded-3xl border border-white/5 w-[24rem] flex-shrink-0 justify-between">
+                      <div className="text-center min-w-[5rem]">
+                        <div className="font-display font-black text-white text-xl leading-none">{activity.distanceKm.toFixed(1)}</div>
+                        <div className="text-[9px] font-bold text-white/20 uppercase tracking-wider mt-1 text-center">km</div>
+                      </div>
+                      <div className="text-center min-w-[4rem]">
+                        <div className="font-display font-black text-primary text-xl leading-none">{activity.pace || "0:00"}</div>
+                        <div className="text-[9px] font-bold text-white/20 uppercase tracking-wider mt-1 text-center">pace/km</div>
+                      </div>
+                      <div className="text-center min-w-[6rem] flex flex-col items-center">
+                        <div className="flex items-center gap-1.5 text-accent bg-accent/10 px-2.5 py-1 rounded-full border border-accent/20">
+                          <CheckCircle2 className="h-3 w-3" />
+                          <span className="text-[9px] font-black uppercase tracking-wider whitespace-nowrap">Hợp lệ</span>
                         </div>
-
-                        <div className="text-right min-w-[4rem]">
-                          <div className="text-2xl font-black text-primary leading-none mb-1">{activity.distanceKm.toFixed(2)}</div>
-                          <div className="text-[10px] font-bold text-white/30 uppercase tracking-widest">km</div>
-                        </div>
-                        
-                        <div className="flex flex-col items-end">
-                            <div className="flex items-center gap-2 text-accent bg-accent/10 px-3 py-1.5 rounded-xl border border-accent/20">
-                                <CheckCircle2 className="h-4 w-4" />
-                                <span className="text-[10px] font-black uppercase tracking-wider">Hợp lệ</span>
-                            </div>
-                        </div>
+                        <div className="text-[9px] font-bold text-white/20 uppercase tracking-wider mt-1 text-center">trạng thái</div>
+                      </div>
                     </div>
                   </motion.div>
                 ))}

@@ -7,10 +7,16 @@ import { useIndividualLeaderboard, useTeamLeaderboard } from "@/hooks/useLeaderb
 
 import { Link } from "react-router-dom";
 
-const TrendIcon = ({ trend }: { trend: string }) => {
-  if (trend === "up") return <TrendingUp className="h-4 w-4 text-accent" />;
-  if (trend === "down") return <TrendingDown className="h-4 w-4 text-destructive" />;
-  return <Minus className="h-4 w-4 text-muted-foreground" />;
+const TrendIcon = ({ trend }: { trend: number }) => {
+  if (trend > 0) {
+    return (
+      <div className="flex items-center gap-1 text-[10px] font-black text-accent bg-accent/10 px-2 py-0.5 rounded-full border border-accent/20">
+        <TrendingUp className="h-3 w-3" />
+        <span>+{trend.toFixed(1)}</span>
+      </div>
+    );
+  }
+  return <Minus className="h-4 w-4 text-muted-foreground/30" />;
 };
 
 const medalColors = ["gradient-hero", "bg-muted-foreground/60", "bg-chart-orange/60"];
@@ -20,8 +26,8 @@ const Leaderboard = () => {
   const [page, setPage] = useState(1);
   const [limit, setLimit] = useState(20);
   
-  const { data: leaderboardIndividual, isLoading: isIndLoading } = useIndividualLeaderboard(page, limit === -1 ? 1000 : limit);
-  const { data: leaderboardTeams, isLoading: isTeamLoading } = useTeamLeaderboard(page, limit === -1 ? 1000 : limit);
+  const { data: leaderboardIndividual, isLoading: isIndLoading } = useIndividualLeaderboard(page, limit === -1 ? 1000 : limit, filter);
+  const { data: leaderboardTeams, isLoading: isTeamLoading } = useTeamLeaderboard(page, limit === -1 ? 1000 : limit, filter);
 
   const handleLimitChange = (newLimit: number) => {
     setLimit(newLimit);
@@ -79,9 +85,14 @@ const Leaderboard = () => {
                         <div className={`w-14 h-14 rounded-2xl ${medalColors[i]} flex items-center justify-center mx-auto mb-4 text-white shadow-lg relative z-10`}>
                           {i === 0 ? <Trophy className="h-6 w-6" /> : <Medal className="h-6 w-6" />}
                         </div>
-                        <div className="font-display font-bold text-white truncate relative z-10">{u.name}</div>
+                        <div className="font-display font-bold text-white truncate relative z-10">
+                          {u.name.replace(/-/g, ' ').replace(/\s+/g, ' ').trim()}
+                        </div>
                         <div className="text-primary font-display text-2xl font-black mt-1 relative z-10">{u.distance} <span className="text-[10px] text-white/30 uppercase">km</span></div>
-                        <div className="text-[10px] font-bold text-white/20 uppercase tracking-widest mt-1 relative z-10">{u.activities} hoạt động</div>
+                        <div className="flex items-center justify-center gap-2 mt-1 relative z-10">
+                          <span className="text-[10px] font-bold text-white/20 uppercase tracking-widest">{(u.activities || (u as any).activitiesCount || 0)} hoạt động</span>
+                          <span className="text-[10px] font-black text-accent uppercase tracking-widest">{u.pace || "0:00"} <span className="opacity-40">pace</span></span>
+                        </div>
                       </motion.div>
                     </Link>
                   ))}
@@ -112,7 +123,7 @@ const Leaderboard = () => {
                       disabled={page === 1}
                       className="px-4 py-1.5 rounded-xl bg-white/5 border border-white/10 text-[10px] font-bold text-white hover:bg-white/10 disabled:opacity-20 transition-all"
                     >
-                      TRƯỚC
+                      Trước
                     </button>
                     <div className="px-3 py-1.5 rounded-xl bg-primary/10 border border-primary/20 text-[10px] font-black text-primary min-w-[2.5rem] text-center">
                       {page}
@@ -122,7 +133,7 @@ const Leaderboard = () => {
                       disabled={(Array.isArray(leaderboardIndividual) ? leaderboardIndividual : []).length < (limit === -1 ? 1000 : limit)}
                       className="px-4 py-1.5 rounded-xl bg-white/5 border border-white/10 text-[10px] font-bold text-white hover:bg-white/10 disabled:opacity-20 transition-all"
                     >
-                      TIẾP THEO
+                      Sau
                     </button>
                   </div>
                 </div>
@@ -136,8 +147,14 @@ const Leaderboard = () => {
                       <motion.div
                         initial={{ opacity: 0 }}
                         animate={{ opacity: 1 }}
-                        transition={{ delay: i * 0.04 }}
-                        className="flex items-center justify-between px-8 py-5 border-b border-white/5 hover:bg-white/[0.03] transition-all group"
+                        whileHover={{ x: 10, backgroundColor: "rgba(255, 255, 255, 0.03)" }}
+                        whileTap={{ scale: 0.995 }}
+                        transition={{ 
+                          opacity: { delay: i * 0.04 },
+                          x: { type: "spring", stiffness: 400, damping: 25 },
+                          backgroundColor: { duration: 0.2 }
+                        }}
+                        className="flex items-center justify-between px-8 py-5 border-b border-white/5 bg-transparent transition-colors group cursor-pointer"
                       >
                         <div className="flex items-center gap-6">
                           <span className="font-display font-black text-white/20 w-8 text-right text-lg group-hover:text-primary transition-colors">
@@ -153,17 +170,26 @@ const Leaderboard = () => {
                             )}
                           </div>
                           <div>
-                            <div className="font-bold text-white group-hover:text-primary transition-colors">{u.name}</div>
-                            <div className="text-[10px] font-bold text-white/20 uppercase tracking-widest leading-none mt-1">{u.activities} hoạt động</div>
+                            <div className="font-bold text-white group-hover:text-primary transition-colors text-base">
+                              {u.name.replace(/-/g, ' ').replace(/\s+/g, ' ').trim()}
+                            </div>
                           </div>
                         </div>
-                        <div className="flex items-center gap-8">
-                          <div className="text-right">
-                            <div className="font-display font-black text-white text-xl leading-none">{u.distance}</div>
-                            <div className="text-[10px] font-bold text-white/20 uppercase tracking-tighter mt-1 text-right">km</div>
+                        <div className="flex items-center gap-2 bg-white/5 px-8 py-3 rounded-3xl border border-white/5 w-[26rem] flex-shrink-0 justify-between relative z-10 transition-colors">
+                          <div className="text-center min-w-[6rem]">
+                            <div className="text-[11px] font-black text-white/40 uppercase tracking-tight">{(u.activitiesCount || 0)} hoạt động</div>
                           </div>
-                          <div className="w-10 flex justify-center">
+                          <div className="text-center min-w-[4rem]">
+                            <div className="font-display font-black text-white text-xl leading-none">{u.distance}</div>
+                            <div className="text-[9px] font-bold text-white/20 uppercase tracking-wider mt-1 text-center">km</div>
+                          </div>
+                          <div className="text-center min-w-[4rem]">
+                            <div className="font-display font-black text-primary text-xl leading-none">{u.pace || "0:00"}</div>
+                            <div className="text-[9px] font-bold text-white/20 uppercase tracking-wider mt-1 text-center">pace</div>
+                          </div>
+                          <div className="text-center min-w-[6rem] flex flex-col items-center">
                             <TrendIcon trend={u.trend} />
+                            <div className="text-[9px] font-bold text-white/20 uppercase tracking-wider mt-1 text-center">24h</div>
                           </div>
                         </div>
                       </motion.div>
@@ -227,7 +253,7 @@ const Leaderboard = () => {
                       disabled={page === 1}
                       className="px-4 py-1.5 rounded-xl bg-white/5 border border-white/10 text-[10px] font-bold text-white hover:bg-white/10 disabled:opacity-20 transition-all"
                     >
-                      TRƯỚC
+                      Trước
                     </button>
                     <div className="px-3 py-1.5 rounded-xl bg-primary/10 border border-primary/20 text-[10px] font-black text-primary min-w-[2.5rem] text-center">
                       {page}
@@ -237,7 +263,7 @@ const Leaderboard = () => {
                       disabled={(Array.isArray(leaderboardTeams) ? leaderboardTeams : []).length < (limit === -1 ? 1000 : limit)}
                       className="px-4 py-1.5 rounded-xl bg-white/5 border border-white/10 text-[10px] font-bold text-white hover:bg-white/10 disabled:opacity-20 transition-all"
                     >
-                      TIẾP THEO
+                      Sau
                     </button>
                   </div>
                 </div>

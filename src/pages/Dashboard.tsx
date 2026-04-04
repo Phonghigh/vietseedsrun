@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import { Activity as ActivityIcon, MapPin, Users, Trophy, Target, Loader2, Star, ChevronRight, TrendingUp } from "lucide-react";
+import { Activity as ActivityIcon, MapPin, Users, Trophy, Target, Loader2, Star, ChevronRight, TrendingUp, Zap } from "lucide-react";
 import { Progress } from "@/components/ui/progress";
 import AppLayout from "@/components/layout/AppLayout";
 import { useCampaignStats } from "@/hooks/useCampaign";
@@ -79,7 +79,7 @@ const Dashboard = () => {
             <div className="max-w-md">
               <h2 className="font-display text-2xl font-black text-white tracking-tight mb-2">Tiến độ chiến dịch</h2>
               <p className="text-muted-foreground font-medium leading-relaxed">
-                Mỗi bước chân của bạn đang góp phần vào mục tiêu chung <span className="text-primary font-bold">{targetKm.toLocaleString()} km</span> nhằm hỗ trợ sinh viên VietSeeds.
+                Mỗi bước chân của bạn đang góp phần vào mục tiêu chung <span className="text-primary font-bold">{targetKm.toLocaleString()} km</span>.
               </p>
             </div>
             
@@ -114,7 +114,7 @@ const Dashboard = () => {
                   <div className="w-12 h-12 rounded-2xl bg-accent/20 flex items-center justify-center text-accent">
                     <Trophy className="h-6 w-6" />
                   </div>
-                  <h2 className="font-display text-xl font-black text-white tracking-tight">Bảng Vàng Cá Nhân</h2>
+                  <h2 className="font-display text-xl font-black text-white tracking-tight">Bảng Vàng Thành Tích</h2>
                 </div>
                 <Button variant="ghost" size="sm" className="text-xs font-bold text-muted-foreground/80 hover:text-primary transition-colors hover:bg-transparent group" asChild>
                     <Link to="/leaderboard">Xem toàn bộ <ChevronRight className="ml-1 h-4 w-4 group-hover:translate-x-1 transition-transform" /></Link>
@@ -128,10 +128,13 @@ const Dashboard = () => {
                         <span className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground/70">Đang cập nhật bảng xếp hạng...</span>
                     </div>
                 ) : (Array.isArray(leaderboard) ? leaderboard : []).slice(0, 5).map((player, idx) => (
-                    <Link to={`/athlete/${player._id}`} key={player._id} className="block">
-                        <motion.div 
-                            whileHover={{ x: 6, backgroundColor: "rgba(255,255,255,0.05)" }}
-                            className="flex items-center justify-between p-4 rounded-2xl border border-white/5 transition-all duration-300 group/item"
+                    <Link to={`/athlete/${player.userId || player._id}`} key={player.userId || player._id} className="block">
+                        <motion.div
+                            key={player.userId || player._id}
+                            whileHover={{ scale: 1.01, x: 8, backgroundColor: "rgba(255, 255, 255, 0.08)", borderColor: "rgba(255, 255, 255, 0.1)" }}
+                            whileTap={{ scale: 0.98 }}
+                            transition={{ type: "spring", stiffness: 400, damping: 25 }}
+                            className="flex items-center justify-between p-4 rounded-2xl bg-white/5 border border-white/5 transition-colors group/item"
                         >
                             <div className="flex items-center gap-5">
                                 <div className={`w-10 h-10 rounded-full flex items-center justify-center font-black text-sm border-2 ${idx === 0 ? 'border-accent/40 bg-accent/10 text-accent' : 'border-white/5 bg-black/20 text-white/30'}`}>
@@ -148,12 +151,18 @@ const Dashboard = () => {
                                 </div>
                                 <div>
                                     <div className="text-sm font-bold text-white group-hover/item:text-primary transition-colors">{player.name}</div>
-                                    <div className="text-[10px] font-bold text-muted-foreground/70 uppercase tracking-widest">{player.activities} hoạt động</div>
                                 </div>
                             </div>
-                            <div className="text-right">
-                                <div className="text-lg font-display font-black text-primary leading-none">{player.distance}</div>
-                                <div className="text-[10px] font-bold text-white/40 uppercase tracking-tighter">km</div>
+                            <div className="flex items-center gap-2 bg-white/5 px-4 py-2 rounded-2xl border border-white/5 min-w-[9rem] justify-between">
+                                <div className="text-center">
+                                    <div className="text-[10px] font-bold text-white/40 tracking-tight">
+                                        {(player.activities || (player as any).activitiesCount || 0)} hoạt động
+                                    </div>
+                                </div>
+                                <div className="text-right">
+                                    <div className="text-base font-display font-black text-primary leading-none">{player.distance}</div>
+                                    <div className="text-[8px] font-bold text-white/20 uppercase tracking-tighter mt-0.5 text-right">km</div>
+                                </div>
                             </div>
                         </motion.div>
                     </Link>
@@ -172,7 +181,7 @@ const Dashboard = () => {
                 <div className="absolute top-0 right-0 w-32 h-32 bg-primary/5 rounded-full blur-[80px]" />
                 <h3 className="font-display font-black text-white mb-4 uppercase tracking-[0.2em] text-[10px]">Sứ mệnh chiến dịch</h3>
                 <p className="text-sm text-muted-foreground/80 leading-relaxed font-medium">
-                    VietSeeds Run 2026 không chỉ là một giải chạy. Đây là hành trình kết nối những tâm hồn đồng điệu, lan tỏa năng lượng tích cực và xây dựng quỹ học bổng cho các sinh viên tài năng vượt khó.
+                    VietSeeds Run 2026 không chỉ là một giải chạy. Đây là hành trình kết nối những tâm hồn đồng điệu, lan tỏa năng lượng tích cực.
                 </p>
                 <div className="mt-8 pt-8 border-t border-white/5 space-y-4">
                     <div className="flex justify-between items-center text-xs font-bold tracking-wide">
@@ -216,14 +225,5 @@ const Dashboard = () => {
     </AppLayout>
   );
 };
-
-const Zap = ({ className }: { className?: string }) => (
-  <img 
-    src="/favicon.ico" 
-    alt="Logo" 
-    className={className} 
-    style={{ filter: "brightness(0) invert(1)" }} 
-  />
-);
 
 export default Dashboard;

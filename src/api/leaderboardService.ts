@@ -9,7 +9,8 @@ export interface LeaderboardUser {
   avatar: string;
   distance: number;
   activities: number;
-  trend: "up" | "down" | "same";
+  pace: string;
+  trend: number;
 }
 
 export interface LeaderboardTeam {
@@ -52,18 +53,32 @@ export interface AthleteDetailResponse {
 const CHALLENGE_START = '2026-04-01T00:00:00Z';
 const CHALLENGE_END = '2026-04-30T23:59:59Z';
 
-export const getIndividualLeaderboard = async (page = 1, limit = 10): Promise<LeaderboardUser[]> => {
+export const getIndividualLeaderboard = async (page = 1, limit = 10, timeframe = 'all'): Promise<LeaderboardUser[]> => {
+  const params: any = { page, limit, timeframe };
+  
+  if (timeframe === 'all') {
+    params.startDate = CHALLENGE_START;
+    params.endDate = CHALLENGE_END;
+  }
+
   const response = await apiClient.get<any>('/leaderboard/individuals', {
-    params: { page, limit, startDate: CHALLENGE_START, endDate: CHALLENGE_END }
+    params: params
   });
   // Handle both raw array and paginated object structure { data: [], total: ... }
   const data = Array.isArray(response.data) ? response.data : (response.data?.data || []);
   return data;
 };
 
-export const getTeamLeaderboard = async (page = 1, limit = 10): Promise<LeaderboardTeam[]> => {
+export const getTeamLeaderboard = async (page = 1, limit = 10, timeframe = 'all'): Promise<LeaderboardTeam[]> => {
+  const params: any = { page, limit, timeframe };
+  
+  if (timeframe === 'all') {
+    params.startDate = CHALLENGE_START;
+    params.endDate = CHALLENGE_END;
+  }
+
   const response = await apiClient.get<any>('/leaderboard/teams', {
-    params: { page, limit, startDate: CHALLENGE_START, endDate: CHALLENGE_END }
+    params: params
   });
   return Array.isArray(response.data) ? response.data : (response.data?.data || []);
 };
