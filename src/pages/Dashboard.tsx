@@ -1,18 +1,19 @@
 import { motion } from "framer-motion";
-import { Loader2 } from "lucide-react";
+import { Loader2, ArrowRight } from "lucide-react";
+import { Link } from "react-router-dom";
 import AppLayout from "@/components/layout/AppLayout";
 import { useCampaignStats } from "@/hooks/useCampaign";
 import { useIndividualLeaderboard } from "@/hooks/useLeaderboard";
 import CommunityHero from "@/components/dashboard/CommunityHero";
 import VietnamJourney from "@/components/dashboard/VietnamJourney";
+import VietnamHeatmapCard from "@/components/dashboard/VietnamHeatmapCard";
 import ActivityFeed from "@/components/dashboard/ActivityFeed";
-import NextMilestone from "@/components/dashboard/NextMilestone";
-import TopRunnersPreview from "@/components/dashboard/TopRunnersPreview";
 import CampaignInfo from "@/components/dashboard/CampaignInfo";
+import ActivityTrend from "@/components/dashboard/ActivityTrend";
 
 const Dashboard = () => {
   const { data: campaignStats, isLoading: isCampaignLoading } = useCampaignStats();
-  const { data: leaderboard, isLoading: isLeaderboardLoading } = useIndividualLeaderboard(1, 10);
+  const { data: leaderboard, isLoading: isLeaderboardLoading } = useIndividualLeaderboard(1, 5);
 
   const currentKm = campaignStats?.currentKm || 0;
   const targetKm = campaignStats?.targetKm || 10000;
@@ -32,50 +33,91 @@ const Dashboard = () => {
 
   return (
     <AppLayout>
-      <div className="max-w-6xl mx-auto space-y-10 pb-20">
+      <div className="max-w-[1400px] mx-auto space-y-20 pb-24">
         {/* Page Title */}
         <motion.div
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
+          className="px-4 xl:px-0"
         >
-          <h1 className="font-display text-4xl font-black text-foreground tracking-tight">Dashboard Cộng Đồng</h1>
-          <p className="text-muted-foreground font-medium mt-1">Theo dõi nhịp đập của toàn thể runner VietSeeds</p>
+          <h1 className="font-display text-4xl font-black text-foreground tracking-tight lg:text-5xl">Dashboard Cộng Đồng</h1>
+          <p className="text-muted-foreground font-medium mt-2 text-lg">Theo dõi nhịp đập của toàn thể runner VietSeeds</p>
         </motion.div>
 
-        {/* 1. Hero — storytelling stats */}
-        <CommunityHero
-          currentKm={currentKm}
-          targetKm={targetKm}
-          totalRunners={totalRunners}
-          totalActivities={totalActivities}
-        />
+        {/* 1. HERO - Stat Bar */}
+        <div className="px-4 xl:px-0">
+          <CommunityHero
+            currentKm={currentKm}
+            targetKm={targetKm}
+            totalRunners={totalRunners}
+            totalActivities={totalActivities}
+          />
+        </div>
 
-        {/* 2. Vietnam Journey Map */}
-        <VietnamJourney currentKm={currentKm} />
+        {/* 2. JOURNEY MAP (Progress Focus) */}
+        <div className="px-4 xl:px-0">
+          <VietnamJourney currentKm={currentKm} />
+        </div>
 
-        {/* 3. Bottom grid: Leaderboard + Feed + Milestone + Info */}
-        <div className="grid lg:grid-cols-3 gap-8">
-          {/* Left: Leaderboard */}
-          <div className="lg:col-span-2">
-            <TopRunnersPreview
-              runners={leaderboard || []}
-              isLoading={isLeaderboardLoading}
-            />
+        {/* 3. HEATMAP SECTION */}
+        <div className="px-4 xl:px-0">
+          <VietnamHeatmapCard />
+        </div>
+
+        {/* 4. ACTIVITY & LEADERBOARD GRID */}
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 px-4 xl:px-0">
+          {/* LEFT: Activity Feed (8/12) */}
+          <div className="lg:col-span-8">
+            <ActivityFeed />
           </div>
 
-          {/* Right: Milestone + Feed + Info */}
-          <div className="space-y-8">
-            <NextMilestone currentKm={currentKm} />
-            <ActivityFeed
-              runners={leaderboard || []}
-              isLoading={isLeaderboardLoading}
-            />
+          {/* RIGHT: Compact Leaderboard (4/12) */}
+          <div className="lg:col-span-4 space-y-8">
+            <div className="glass-card rounded-[2.5rem] p-8 border border-white/5 shadow-xl">
+              <div className="flex items-center justify-between mb-8">
+                <h3 className="font-display text-xl font-black text-foreground uppercase tracking-tight">Top Runner</h3>
+                <Link to="/leaderboard" className="text-xs font-bold text-primary flex items-center gap-1 hover:underline">
+                  Xem tất cả <ArrowRight className="h-3 w-3" />
+                </Link>
+              </div>
+              
+              {isLeaderboardLoading ? (
+                <div className="space-y-4">
+                  {[...Array(5)].map((_, i) => (
+                    <div key={i} className="h-14 rounded-2xl bg-muted/20 animate-pulse" />
+                  ))}
+                </div>
+              ) : (
+                <div className="space-y-4">
+                  {leaderboard?.map((runner, i) => (
+                    <div key={runner.userId} className="flex items-center gap-4 group">
+                      <div className="w-8 font-display font-black text-muted-foreground/30 text-lg italic tracking-widest">#{i+1}</div>
+                      <div className="w-10 h-10 rounded-xl overflow-hidden bg-muted flex-shrink-0 border border-white/5">
+                        <img src={runner.avatar} alt="" className="w-full h-full object-cover" />
+                      </div>
+                      <div className="flex-1 min-w-0">
+                        <div className="text-sm font-bold truncate group-hover:text-primary transition-colors uppercase tracking-tight">{runner.name}</div>
+                        <div className="text-[10px] font-bold text-muted-foreground/50 uppercase tracking-widest">{runner.distance.toLocaleString()} km</div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+            
             <CampaignInfo />
           </div>
+        </div>
+
+        {/* 5. TREND CHART */}
+        <div className="px-4 xl:px-0">
+          <ActivityTrend />
         </div>
       </div>
     </AppLayout>
   );
 };
+
+export default Dashboard;
 
 export default Dashboard;

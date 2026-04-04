@@ -1,70 +1,96 @@
-import { motion } from "framer-motion";
-import { Activity as ActivityIcon } from "lucide-react";
-import type { LeaderboardUser } from "@/api/leaderboardService";
+import { useState, useEffect } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import { Activity as ActivityIcon, MapPin, Clock } from "lucide-react";
+import { getRecentActivities, type RecentActivity } from "@/api/activityService";
+import { formatDistanceToNow } from "date-fns";
+import { vi } from "date-fns/locale";
 
-interface ActivityFeedProps {
-  runners: LeaderboardUser[];
-  isLoading: boolean;
-}
+const ActivityFeed = () => {
+  const [activities, setActivities] = useState<RecentActivity[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
 
-const ActivityFeed = ({ runners, isLoading }: ActivityFeedProps) => {
-  // Derive "feed" from leaderboard — simulate recent activities
-  const feedItems = runners.slice(0, 8).map((r, i) => ({
-    id: r._id || r.userId || String(i),
-    name: r.name,
-    avatar: r.avatar,
-    distance: r.distance,
-    activities: r.activities,
-  }));
+  useEffect(() => {
+    const fetchActivities = async () => {
+      try {
+        const data = await getRecentActivities(20);
+        setActivities(data);
+      } catch (error) {
+        console.error("Failed to fetch recent activities:", error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchActivities();
+    // Optional: add polling every 30s
+    const interval = setInterval(fetchActivities, 30000);
+    return () => clearInterval(interval);
+  }, []);
 
   return (
-    <div className="glass-card rounded-[2.5rem] p-8 shadow-xl">
-      <div className="flex items-center gap-3 mb-6">
-        <div className="w-10 h-10 rounded-xl bg-green-400/10 flex items-center justify-center text-green-400">
-          <ActivityIcon className="h-5 w-5" />
+    <div className="glass-card rounded-[2.5rem] p-8 shadow-xl border border-primary/10 h-full flex flex-col min-h-[600px]">
+      <div className="flex items-center gap-3 mb-8">
+        <div className="w-12 h-12 rounded-2xl bg-green-400/10 flex items-center justify-center text-green-400">
+          <ActivityIcon className="h-6 w-6" />
         </div>
         <div>
-          <h3 className="font-display text-sm font-black text-foreground">Hoạt động gần đây</h3>
-          <p className="text-[10px] text-muted-foreground/60 font-medium">Cập nhật từ cộng đồng</p>
+          <h3 className="font-display text-lg font-black text-foreground uppercase tracking-tight">Hoạt động trực tiếp</h3>
+          <p className="text-[10px] text-muted-foreground/60 font-bold uppercase tracking-[0.2em]">Cập nhật thời gian thực từ cộng đồng</p>
         </div>
-        <div className="ml-auto flex items-center gap-1.5">
+        <div className="ml-auto flex items-center gap-2 px-3 py-1.5 rounded-full bg-green-400/10 border border-green-400/20">
           <span className="w-2 h-2 rounded-full bg-green-400 animate-pulse" />
-          <span className="text-[10px] font-bold text-green-400/70 uppercase tracking-wider">Live</span>
+          <span className="text-[10px] font-black text-green-400 uppercase tracking-widest">LIVE</span>
         </div>
       </div>
 
       {isLoading ? (
-        <div className="space-y-3">
-          {[...Array(4)].map((_, i) => (
-            <div key={i} className="h-14 rounded-xl bg-muted/30 animate-pulse" />
+        <div className="space-y-4">
+          {[...Array(6)].map((_, i) => (
+            <div key={i} className="h-20 rounded-2xl bg-muted/30 animate-pulse" />
           ))}
         </div>
       ) : (
-        <div className="space-y-2">
-          {feedItems.map((item, i) => (
+        <div className="flex-1 overflow-y-auto pr-2 custom-scrollbar space-y-4">
+          {activities.map((item, i) => (
             <motion.div
               key={item.id}
               initial={{ opacity: 0, x: -10 }}
               animate={{ opacity: 1, x: 0 }}
-              transition={{ delay: i * 0.05 }}
-              className="flex items-center gap-3 p-3 rounded-xl hover:bg-muted/20 transition-colors"
+              transition={{ delay: i * 0.03 }}
+              className="group flex items-center gap-4 p-4 rounded-2xl border border-border/20 hover:border-primary/20 hover:bg-primary/5 transition-all duration-300"
             >
-              <div className="w-8 h-8 rounded-lg overflow-hidden flex-shrink-0 bg-muted/30">
-                {item.avatar ? (
-                  <img src={item.avatar} className="w-full h-full object-cover" alt="" />
-                ) : (
-                  <div className="w-full h-full flex items-center justify-center text-[10px] font-bold text-primary">
-                    {item.name.substring(0, 2).toUpperCase()}
-                  </div>
-                )}
+              <div className="relative">
+                <div className="w-14 h-14 rounded-2xl overflow-hidden flex-shrink-0 bg-muted/30 border border-border/30">
+                  {item.userAvatar ? (
+                    <img src={item.userAvatar} className="w-full h-full object-cover transition-transform group-hover:scale-110" alt="" />
+                  ) : (
+                    <div className="w-full h-full flex items-center justify-center text-sm font-black text-primary">
+                      {item.userName.substring(0, 2).toUpperCase()}
+                    </div>
+                  )}
+                </div>
+                <div className="absolute -bottom-1 -right-1 w-5 h-5 rounded-full bg-green-400 border-2 border-background flex items-center justify-center">
+                   <ActivityIcon className="h-3 w-3 text-white" />
+                </div>
               </div>
+
               <div className="flex-1 min-w-0">
-                <p className="text-xs font-semibold text-foreground/90 truncate">
-                  <span className="text-foreground font-bold">{item.name}</span>{" "}
-                  <span className="text-muted-foreground">đã chạy</span>{" "}
-                  <span className="text-primary font-bold">{item.distance} km</span>
+                <p className="text-sm font-bold text-foreground/90 leading-snug">
+                  <span className="group-hover:text-primary transition-colors cursor-pointer">{item.userName}</span>{" "}
+                  <span className="text-muted-foreground font-medium text-xs">vừa hoàn thành</span>{" "}
+                  <span className="text-primary font-black text-lg block">{item.distance.toLocaleString()} km</span>
                 </p>
-                <p className="text-[10px] text-muted-foreground/50">{item.activities} hoạt động trong chiến dịch</p>
+                <div className="flex items-center gap-4 mt-2">
+                  <div className="flex items-center gap-1 text-[10px] font-black text-muted-foreground/50 uppercase tracking-widest">
+                    <MapPin className="h-3 w-3 text-primary/40" />
+                    {item.location}
+                  </div>
+                  <div className="w-1 h-1 rounded-full bg-muted-foreground/20" />
+                  <div className="flex items-center gap-1 text-[10px] font-black text-primary/60 uppercase tracking-widest">
+                    <Clock className="h-3 w-3" />
+                    {formatDistanceToNow(new Date(item.createdAt), { addSuffix: true, locale: vi })}
+                  </div>
+                </div>
               </div>
             </motion.div>
           ))}

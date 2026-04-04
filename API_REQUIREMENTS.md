@@ -52,6 +52,18 @@ Cung cấp số liệu tổng quan hiển thị ở Landing Page và Dashboard.
   }
   ```
 
+### 2.2 Lấy dữ liệu biểu đồ xu hướng hoạt động (Trend)
+- **Endpoint:** `GET /api/v1/campaign/trend`
+- **Mô tả:** Trả về danh sách quãng đường đã chạy theo từng ngày từ khi bắt đầu chiến dịch đến hiện tại.
+- **Response (200 OK):**
+  ```json
+  [
+    { "date": "01/04", "km": 45.2 },
+    { "date": "02/04", "km": 82.1 },
+    { "date": "03/04", "km": 156.4 }
+  ]
+  ```
+
 ---
 
 ## 3. Hoạt Động Chạy (Activities)
@@ -132,6 +144,39 @@ Quản lý các bản ghi chạy bộ đồng bộ từ Strava.
 ### 5.3 Chi tiết Đội nhóm
 - **Endpoint:** `GET /api/v1/teams/:teamId`
 - **Mô tả:** Lấy thông tin nội bộ team (Số lượng thành viên, danh sách member xếp hạng theo quãng đường, tổng km của team do ai đóng góp).
+
+---
+
+### 2.3 Lấy dữ liệu Heatmap theo địa phương
+- **Endpoint:** `GET /api/v1/campaign/heatmap`
+- **Mô tả:** Trả về danh sách thống kê số lượng thành viên và số lượng hoạt động theo từng tỉnh/thành phố để vẽ bản đồ nhiệt.
+- **Response (200 OK):**
+  ```json
+  [
+    { "province": "Hồ Chí Minh", "members": 500, "activities": 1200 },
+    { "province": "Hà Nội", "members": 350, "activities": 850 },
+    { "province": "Đà Nẵng", "members": 120, "activities": 300 }
+  ]
+  ```
+
+---
+
+### 3.4 Lấy danh sách hoạt động mới nhất (Live Feed)
+- **Endpoint:** `GET /api/v1/activities/recent?limit=20`
+- **Mô tả:** Trả về các hoạt động vừa mới diễn ra của toàn bộ cộng đồng để hiển thị trong Live Feed.
+- **Response (200 OK):**
+  ```json
+  [
+    {
+      "id": "act_1",
+      "userName": "Đỗ Thanh Huyền",
+      "userAvatar": "https://...",
+      "distance": 37.49,
+      "location": "Hà Nội",
+      "createdAt": "2026-04-04T10:00:00Z"
+    }
+  ]
+  ```
 
 ---
 

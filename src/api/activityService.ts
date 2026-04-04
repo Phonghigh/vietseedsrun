@@ -51,6 +51,15 @@ export const isDateValid = (dateStr: string): boolean => {
   return activityDate >= start && activityDate <= end;
 };
 
+export interface RecentActivity {
+  id: string;
+  userName: string;
+  userAvatar: string;
+  distance: number;
+  location: string;
+  createdAt: string;
+}
+
 export const getMyActivities = async (page = 1, limit = 10): Promise<ActivitiesResponse> => {
   const response = await apiClient.get<ActivitiesResponse>('/activities/me', {
     params: { 
@@ -74,6 +83,13 @@ export const getAthleteActivities = async (athleteId: string, page = 1, limit = 
     }
   });
   
+  return response.data;
+};
+
+export const getRecentActivities = async (limit = 20): Promise<RecentActivity[]> => {
+  const response = await apiClient.get<RecentActivity[]>('/activities/recent', {
+    params: { limit }
+  });
   return response.data;
 };
 
