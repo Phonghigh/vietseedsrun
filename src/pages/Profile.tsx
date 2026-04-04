@@ -139,7 +139,7 @@ const Profile = () => {
                   <div className="flex items-center gap-3">
                     <div className="text-lg">🏃</div>
                     <div>
-                      <div className="text-sm font-medium text-foreground">{a.name} — {a.distance} km</div>
+                      <div className="text-sm font-medium text-foreground">{a.name} - {a.distance} km</div>
                       <div className="text-xs text-muted-foreground">
                         {new Date(a.date).toLocaleDateString('vi-VN')} • Pace: {a.pace} min/km
                       </div>

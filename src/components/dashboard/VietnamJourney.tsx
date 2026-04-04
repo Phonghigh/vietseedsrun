@@ -61,7 +61,7 @@ const VietnamJourney = ({ currentKm }: VietnamJourneyProps) => {
             <span className="bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">{currentCity.name}</span>
           </h2>
           <p className="text-muted-foreground font-medium mt-6 leading-relaxed text-lg max-w-2xl border-l-2 border-primary/20 pl-6">
-            {currentKm.toLocaleString()} km đã được chinh phục — tương đương hành trình từ <span className="text-emerald-400 font-semibold">Cà Mau</span> đến <span className="text-emerald-400 font-semibold">{currentCity.name}</span>.
+            {currentKm.toLocaleString()} km đã được chinh phục - tương đương hành trình từ <span className="text-emerald-400 font-semibold">Cà Mau</span> đến <span className="text-emerald-400 font-semibold">{currentCity.name}</span>.
           </p>
         </div>
 

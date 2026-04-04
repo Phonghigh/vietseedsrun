@@ -109,7 +109,7 @@ const FeaturesSection = () => (
             <span className="text-gradient-green">3 bước đơn giản</span>
           </h2>
           <p className="text-lg max-w-xl mx-auto" style={{ color: "hsl(150, 14%, 60%)" }}>
-            Bất kể bạn là runner chuyên nghiệp hay mới bắt đầu — VietSeeds Run chào đón tất cả!
+            Bất kể bạn là runner chuyên nghiệp hay mới bắt đầu - VietSeeds Run chào đón tất cả!
           </p>
         </motion.div>
 
@@ -194,7 +194,7 @@ const FeaturesSection = () => (
             <span className="text-gradient-warm">tham gia?</span>
           </h2>
           <p className="text-lg max-w-xl mx-auto" style={{ color: "hsl(150, 14%, 60%)" }}>
-            Run to Grow — Mỗi km bạn chạy là một thông điệp ý nghĩa lan tỏa khắp Việt Nam.
+            Run to Grow - Mỗi km bạn chạy là một thông điệp ý nghĩa lan tỏa khắp Việt Nam.
           </p>
         </motion.div>
 

@@ -9,7 +9,7 @@ interface CommunityHeroProps {
 }
 
 const getStoryline = (km: number): string => {
-  if (km < 300) return "Hành trình vừa bắt đầu — mỗi bước chân đều có ý nghĩa.";
+  if (km < 300) return "Hành trình vừa bắt đầu - mỗi bước chân đều có ý nghĩa.";
   if (km < 700) return `tương đương từ TP.HCM đến Nha Trang!`;
   if (km < 1200) return `tương đương từ TP.HCM đến Đà Nẵng!`;
   if (km < 1800) return `tương đương từ TP.HCM đến Vinh!`;
@@ -28,7 +28,7 @@ const CommunityHero = ({ currentKm, targetKm, totalRunners, totalActivities }: C
       <div className="absolute top-0 right-0 w-64 h-32 bg-primary/5 rounded-full blur-[60px] pointer-events-none" />
 
       <div className="flex flex-col md:flex-row items-center justify-between gap-6 relative z-10">
-        {/* Total Distance — The Big One */}
+        {/* Total Distance - The Big One */}
         <div className="flex items-center gap-6 border-r border-border/30 pr-8 last:border-0 h-full">
            <div className="w-14 h-14 rounded-2xl bg-primary/10 flex items-center justify-center text-primary-light flex-shrink-0">
              <Flame className="h-7 w-7" />

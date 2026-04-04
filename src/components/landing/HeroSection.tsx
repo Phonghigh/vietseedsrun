@@ -79,7 +79,7 @@ const HeroSection = ({ stats }: HeroSectionProps) => {
             <span className="shimmer-text">RUN 2026</span>
           </h1>
           <div className="font-display text-lg md:text-xl font-bold tracking-[0.5em] uppercase mt-6 text-primary/80">
-            — RUN TO GROW —
+            - RUN TO GROW -
           </div>
         </motion.div>
 
@@ -90,7 +90,7 @@ const HeroSection = ({ stats }: HeroSectionProps) => {
           transition={{ duration: 0.7, delay: 0.25 }}
           className="text-lg md:text-xl max-w-2xl mx-auto mt-8 mb-12 leading-relaxed text-muted-foreground/90 font-medium"
         >
-          Hành trình vạn dặm bắt đầu từ một bước chân. Chúng ta không chạy đua với nhau —{" "}
+          Hành trình vạn dặm bắt đầu từ một bước chân. Chúng ta không chạy đua với nhau -{" "}
           <span className="text-primary/90 font-bold underline underline-offset-8 decoration-primary/30">
             chúng ta chạy cùng nhau
           </span>{" "}
