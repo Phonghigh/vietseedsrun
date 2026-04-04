@@ -1,29 +1,47 @@
 import { useState, useMemo } from "react";
-import { motion, AnimatePresence } from "framer-motion";
-import { Users, Activity, ChevronRight, Globe, Info } from "lucide-react";
+import { motion } from "framer-motion";
+import { Users, Activity, ChevronRight, Globe, Info, Maximize2, Award, Zap } from "lucide-react";
+import { MapContainer, TileLayer, GeoJSON, Tooltip, ZoomControl } from "react-leaflet";
+import L from "leaflet";
+import "leaflet/dist/leaflet.css";
+import { scaleThreshold } from "d3-scale";
 import { useCampaignHeatmap } from "@/hooks/useCampaign";
+import vietnamGeoData from "./vietnam-provinces.json";
 
-interface ProvinceData {
-  province: string;
-  members: number;
-  activities: number;
-  x: number;
-  y: number;
-}
+// Fix Leaflet marker icon issue
+import icon from "leaflet/dist/images/marker-icon.png";
+import iconShadow from "leaflet/dist/images/marker-shadow.png";
 
-const PROVINCE_COORDINATES: Record<string, { x: number; y: number }> = {
-  "Hà Nội": { x: 135, y: 100 },
-  "Hải Phòng": { x: 155, y: 115 },
-  "Thanh Hóa": { x: 130, y: 145 },
-  "Vinh": { x: 155, y: 175 },
-  "Đà Nẵng": { x: 185, y: 260 },
-  "Huế": { x: 175, y: 240 },
-  "Bình Định": { x: 195, y: 320 },
-  "Nha Trang": { x: 200, y: 350 },
-  "Hồ Chí Minh": { x: 165, y: 440 },
-  "Bình Dương": { x: 155, y: 425 },
-  "Cần Thơ": { x: 140, y: 470 },
-  "Đồng Nai": { x: 175, y: 430 },
+let DefaultIcon = L.icon({
+  iconUrl: icon,
+  shadowUrl: iconShadow,
+  iconSize: [25, 41],
+  iconAnchor: [12, 41],
+});
+L.Marker.prototype.options.icon = DefaultIcon;
+
+/**
+ * HIGH-CONTRAST COLOR SCALE
+ * Level 0: #1a1a1a (Dark Gray/Inactive) - used for 0 or missing data
+ * Level 1-10: Light variant
+ * ...
+ * Level 50+: Neon/Highlight variant
+ */
+const SCALE_RANGES = [0, 1, 10, 30, 50];
+const MEMBER_COLORS = ["#1a1a1a", "#064e3b", "#10b981", "#059669", "#34d399"];
+const ACTIVITY_COLORS = ["#1a1a1a", "#431407", "#f97316", "#ea580c", "#fb923c"];
+
+const normalizeName = (name: string) => {
+  if (!name) return "";
+  return name
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .toLowerCase()
+    .replace(/tp\.\s*/i, "")
+    .replace(/thanh pho\s*/i, "")
+    .replace(/tinh\s*/i, "")
+    .replace(/city/i, "")
+    .trim();
 };
 
 const VietnamHeatmapCard = () => {
@@ -31,46 +49,149 @@ const VietnamHeatmapCard = () => {
   const [hoveredProvince, setHoveredProvince] = useState<string | null>(null);
   const { data: heatmapData, isLoading } = useCampaignHeatmap();
 
-  // Integrated data with coordinates
+  // Metrics calculation
+  const totals = useMemo(() => {
+    if (!heatmapData) return { members: 0, activities: 0 };
+    return heatmapData.reduce(
+      (acc, d) => ({
+        members: acc.members + d.members,
+        activities: acc.activities + d.activities,
+      }),
+      { members: 0, activities: 0 }
+    );
+  }, [heatmapData]);
+
+  const colorScale = useMemo(() => {
+    return scaleThreshold<number, string>()
+      .domain(SCALE_RANGES)
+      .range(activeTab === "members" ? MEMBER_COLORS : ACTIVITY_COLORS);
+  }, [activeTab]);
+
   const displayData = useMemo(() => {
     if (!heatmapData) return [];
-    return heatmapData.map(item => ({
-      ...item,
-      ...(PROVINCE_COORDINATES[item.province] || { x: 150, y: 250 }) // Fallback
-    })).sort((a, b) => (activeTab === "members" ? b.members - a.members : b.activities - a.activities));
+    return [...heatmapData].sort((a, b) => 
+      activeTab === "members" ? b.members - a.members : b.activities - a.activities
+    );
   }, [heatmapData, activeTab]);
 
-  const maxVal = useMemo(() => {
-    if (displayData.length === 0) return 1;
-    return Math.max(...displayData.map(d => activeTab === "members" ? d.members : d.activities));
-  }, [displayData, activeTab]);
+  // Identify Top 3 for special map highlighting
+  const topProvinces = useMemo(() => {
+    return displayData.slice(0, 3).map(p => p.province);
+  }, [displayData]);
+
+  const getProvinceData = (provinceName: string) => {
+    const normGeoName = normalizeName(provinceName);
+    return heatmapData?.find(d => 
+      normalizeName(d.province) === normGeoName || 
+      d.province.toLowerCase().includes(normGeoName) ||
+      normGeoName.includes(normalizeName(d.province))
+    );
+  };
+
+  const getProvinceStyle = (feature: any) => {
+    const provinceName = feature.properties.Name;
+    const curData = getProvinceData(provinceName);
+    const val = curData ? (activeTab === "members" ? curData.members : curData.activities) : 0;
+    
+    const isHovered = hoveredProvince === (curData?.province || provinceName);
+    const isTop3 = topProvinces.includes(curData?.province || "");
+    const rankIndex = curData ? displayData.findIndex(d => d.province === curData.province) : -1;
+
+    return {
+      fillColor: colorScale(val),
+      weight: isHovered ? 2.5 : (isTop3 ? 1.5 : 0.8),
+      opacity: isHovered ? 1 : 0.6,
+      color: isHovered ? "white" : (isTop3 ? (activeTab === "members" ? "#10b981" : "#f97316") : "rgba(255,255,255,0.1)"),
+      fillOpacity: isHovered ? 0.95 : (val === 0 ? 0.4 : 0.75),
+      dashArray: isTop3 && !isHovered ? "3" : "",
+    };
+  };
+
+  const onEachFeature = (feature: any, layer: any) => {
+    const provinceName = feature.properties.Name;
+    const curData = getProvinceData(provinceName);
+    const provinceFullName = curData?.province || provinceName;
+    
+    // Detailed stats for tooltip
+    const val = curData ? (activeTab === "members" ? curData.members : curData.activities) : 0;
+    const totalVal = activeTab === "members" ? totals.members : totals.activities;
+    const percentage = totalVal > 0 ? ((val / totalVal) * 100).toFixed(1) : "0";
+    const rank = curData ? displayData.findIndex(d => d.province === curData.province) + 1 : "---";
+
+    layer.on({
+      mouseover: (e: any) => {
+        setHoveredProvince(provinceFullName);
+        const l = e.target;
+        l.setStyle({
+          weight: 2.5,
+          color: "white",
+          fillOpacity: 0.95,
+        });
+        l.bringToFront();
+      },
+      mouseout: (e: any) => {
+        setHoveredProvince(null);
+        e.target.setStyle(getProvinceStyle(feature));
+      },
+    });
+
+    layer.bindTooltip(`
+      <div class="bg-[#0b0f19]/95 backdrop-blur-xl p-5 rounded-[2rem] border border-white/10 text-white min-w-[220px] shadow-2xl ring-1 ring-white/5">
+        <div class="flex items-center justify-between gap-3 mb-4">
+          <div class="text-[10px] font-black uppercase tracking-widest text-[#10b981]">${provinceFullName}</div>
+          ${rank <= 3 ? `<div class="bg-[#10b981]/20 text-[#10b981] px-2 py-0.5 rounded-full text-[8px] font-black">TOP ${rank}</div>` : ""}
+        </div>
+        
+        <div class="space-y-3">
+          <div class="flex items-center justify-between gap-6">
+            <span class="text-[11px] font-medium text-white/40 uppercase tracking-wider">Chỉ số ${activeTab === 'members' ? 'TV' : 'KM'}</span>
+            <span class="text-base font-black text-white">${val.toLocaleString()}</span>
+          </div>
+          <div class="flex items-center justify-between gap-6 pb-2 border-b border-white/5">
+            <span class="text-[11px] font-medium text-white/40 uppercase tracking-wider">Tỷ lệ toàn quốc</span>
+            <span class="text-[11px] font-black text-[#10b981]">${percentage}%</span>
+          </div>
+          <div class="flex items-center justify-between gap-6 pt-1">
+            <span class="text-[11px] font-medium text-white/40 uppercase tracking-wider">Thứ hạng</span>
+            <span class="text-[11px] font-black text-white">#${rank}</span>
+          </div>
+        </div>
+      </div>
+    `, { sticky: true, opacity: 1, direction: "top", className: 'custom-leaflet-tooltip' });
+  };
 
   return (
-    <div className="glass-card rounded-[3rem] p-10 shadow-2xl relative overflow-hidden border border-white/5 min-h-[600px] flex flex-col">
-      <div className="absolute top-[-10%] right-[-5%] w-[400px] h-[400px] bg-primary/5 rounded-full blur-[100px] pointer-events-none" />
+    <div className="glass-card rounded-[3rem] p-10 shadow-2xl relative overflow-hidden border border-white/5 min-h-[900px] flex flex-col">
+      <div className="absolute top-[-10%] right-[-5%] w-[400px] h-[400px] bg-primary/10 rounded-full blur-[120px] pointer-events-none" />
       
-      {/* Header with Tabs */}
-      <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-6 mb-12 relative z-10">
+      {/* Header with EXPLICIT MESSAGING */}
+      <div className="flex flex-col md:flex-row justify-between items-start md:items-end gap-6 mb-16 relative z-20">
         <div>
-          <div className="text-xs font-bold uppercase tracking-[0.3em] text-primary mb-3 flex items-center gap-2">
-            <Globe className="h-4 w-4" /> Bản đồ nhiệt cộng đồng
+          <div className="text-xs font-bold uppercase tracking-[0.4em] text-primary mb-4 flex items-center gap-3">
+             <div className="w-2 h-2 rounded-full bg-primary animate-pulse" />
+             <Globe className="h-4 w-4" /> Hệ thống bản đồ thực địa
           </div>
-          <h2 className="font-display text-4xl font-black text-foreground tracking-tight">Sức nóng lan tỏa</h2>
+          <h2 className="font-display text-4xl md:text-5xl font-black text-foreground tracking-tight leading-none uppercase mb-2">Phân bổ tham gia</h2>
+          <p className="text-muted-foreground/60 text-sm font-medium tracking-wide uppercase">
+            {activeTab === "members" 
+              ? "Bản đồ mật độ thành viên đăng ký thành công theo 63 tỉnh thành" 
+              : "Bản đồ nhiệt tổng hợp hoạt động thể thao (Km) trên toàn quốc"}
+          </p>
         </div>
 
-        <div className="flex bg-muted/20 p-1.5 rounded-2xl border border-white/5 backdrop-blur-md">
+        <div className="flex bg-white/5 p-2 rounded-[2rem] border border-white/10 backdrop-blur-2xl shadow-2xl overflow-hidden">
           <button
             onClick={() => setActiveTab("members")}
-            className={`flex items-center gap-2 px-6 py-3 rounded-xl transition-all duration-500 font-bold text-xs uppercase tracking-widest ${
-              activeTab === "members" ? "bg-primary text-primary-foreground shadow-lg shadow-primary/20" : "text-muted-foreground hover:bg-white/5"
+            className={`flex items-center gap-3 px-8 py-3.5 rounded-full transition-all duration-500 font-bold text-xs uppercase tracking-widest ${
+              activeTab === "members" ? "bg-primary text-primary-foreground shadow-[0_0_30px_rgba(16,185,129,0.4)]" : "text-muted-foreground hover:bg-white/5"
             }`}
           >
             <Users className="h-4 w-4" /> Thành viên
           </button>
           <button
             onClick={() => setActiveTab("activities")}
-            className={`flex items-center gap-2 px-6 py-3 rounded-xl transition-all duration-500 font-bold text-xs uppercase tracking-widest ${
-              activeTab === "activities" ? "bg-accent text-accent-foreground shadow-lg shadow-accent/20" : "text-muted-foreground hover:bg-white/5"
+            className={`flex items-center gap-3 px-8 py-3.5 rounded-full transition-all duration-500 font-bold text-xs uppercase tracking-widest ${
+              activeTab === "activities" ? "bg-accent text-accent-foreground shadow-[0_0_30px_rgba(255,107,53,0.4)]" : "text-muted-foreground hover:bg-white/5"
             }`}
           >
             <Activity className="h-4 w-4" /> Hoạt động
@@ -78,93 +199,98 @@ const VietnamHeatmapCard = () => {
         </div>
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 flex-1">
-        {/* Left: Interactive Map */}
-        <div className="lg:col-span-7 bg-muted/5 rounded-[3rem] p-8 border border-white/5 relative overflow-hidden flex items-center justify-center">
-           <div className="absolute inset-0 opacity-[0.03]" style={{ backgroundImage: "radial-gradient(circle at 2px 2px, white 1px, transparent 0)", backgroundSize: "30px 30px" }} />
-           
-           <svg viewBox="100 50 150 460" className="h-[450px] w-auto transition-transform duration-700 hover:scale-[1.02]">
-             {/* Simplified Vietnam Outline */}
-             <path 
-                d="M135,80 L155,95 L165,115 L155,145 L145,170 L160,200 L175,230 L185,260 L195,300 L205,340 L200,380 L180,410 L160,440 L140,470 L130,480" 
-                fill="none" 
-                stroke="white" 
-                strokeWidth="1" 
-                strokeDasharray="4 4" 
-                opacity="0.1" 
-             />
-             
-             {displayData.map((item, i) => {
-               const val = activeTab === "members" ? item.members : item.activities;
-               const intensity = Math.max(0.2, val / maxVal);
-               const color = activeTab === "members" ? `hsla(var(--primary), ${intensity})` : `hsla(var(--accent), ${intensity})`;
-               const isHovered = hoveredProvince === item.province;
-               
-               return (
-                 <g key={item.province} className="group cursor-help" onMouseEnter={() => setHoveredProvince(item.province)} onMouseLeave={() => setHoveredProvince(null)}>
-                   <motion.circle 
-                     cx={item.x} cy={item.y} 
-                     r={8} 
-                     fill={color}
-                     initial={{ scale: 0 }}
-                     animate={{ scale: [1, 1.1, 1] }}
-                     whileHover={{ scale: 1.5 }}
-                     transition={{ repeat: Infinity, duration: 3, delay: i * 0.1 }}
-                   />
-                   <motion.circle 
-                     cx={item.x} cy={item.y} 
-                     r={intensity * 25 + 5} 
-                     fill={color}
-                     opacity="0.3"
-                     className="blur-[8px]"
-                   />
-                   
-                   {/* Tooltip Popup inside SVG */}
-                   <AnimatePresence>
-                    {isHovered && (
-                      <motion.g initial={{ opacity: 0, y: 5 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: 5 }} className="pointer-events-none">
-                        <foreignObject x={item.x - 40} y={item.y - 50} width="80" height="40">
-                          <div className={`rounded-lg px-2 py-1 text-center shadow-2xl border border-white/10 backdrop-blur-md ${activeTab === 'members' ? 'bg-primary text-primary-foreground' : 'bg-accent text-accent-foreground'}`}>
-                            <div className="text-[10px] font-black leading-none">{val.toLocaleString()}</div>
-                            <div className="text-[6px] font-bold uppercase tracking-widest mt-1 opacity-70">
-                              {activeTab === 'members' ? 'Thành viên' : 'Hoạt động'}
-                            </div>
-                          </div>
-                        </foreignObject>
-                      </motion.g>
-                    )}
-                   </AnimatePresence>
-                   
-                   {i < 3 && intensity > 0.5 && (
-                     <text x={item.x + 12} y={item.y + 4} fill="white" fontSize="9" fontWeight="900" opacity="0.6" className="font-display tracking-widest uppercase italic">
-                       {item.province}
-                     </text>
-                   )}
-                 </g>
-               );
-             })}
-           </svg>
-           
-           <div className="absolute bottom-8 right-8 bg-background/40 backdrop-blur-md p-4 rounded-2xl border border-white/5">
-              <div className="text-[9px] font-black text-muted-foreground uppercase tracking-widest mb-2 flex items-center gap-2">
-                <Info className="h-3 w-3" /> Mức độ sôi động
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-16 flex-1 relative z-10">
+        {/* Left: THE LEAFLET MAP */}
+        <div className="lg:col-span-7 bg-black/20 rounded-[4rem] border border-white/5 relative overflow-hidden group/map flex flex-col pt-0 min-h-[650px]">
+           <MapContainer 
+              center={[16.0, 108.0]} 
+              zoom={6} 
+              zoomControl={false}
+              className="w-full h-full z-10 rounded-[4rem]"
+              style={{ background: '#0b0f19' }}
+           >
+              <TileLayer
+                url="https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png"
+                attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OSM</a> &copy; <a href="https://carto.com/attributions">CARTO</a>'
+              />
+              <ZoomControl position="topright" />
+              
+              {/* Choropleth Layer */}
+              {!isLoading && (
+                <GeoJSON 
+                  key={activeTab} // Force re-render on tab switch
+                  data={vietnamGeoData as any} 
+                  style={getProvinceStyle}
+                  onEachFeature={onEachFeature}
+                />
+              )}
+
+              {/* National Islands (Data Connected) */}
+              <div className="leaflet-overlay-pane">
+                 {/* Hoang Sa - Linked to Da Nang */}
+                 <svg className="absolute" style={{ left: '65%', top: '35%' }}>
+                    <circle r="8" fill={colorScale(heatmapData?.find(d => normalizeName(d.province) === 'da nang')?.members || 0)} fillOpacity="1" stroke="white" strokeWidth="2" />
+                 </svg>
+                 {/* Truong Sa - Linked to Khanh Hoa */}
+                 <svg className="absolute" style={{ left: '75%', top: '75%' }}>
+                    <circle r="8" fill={colorScale(heatmapData?.find(d => normalizeName(d.province) === 'khanh hoa')?.members || 0)} fillOpacity="1" stroke="white" strokeWidth="2" />
+                 </svg>
               </div>
-              <div className={`h-1.5 w-32 rounded-full bg-gradient-to-r ${activeTab === "members" ? "from-primary/10 to-primary" : "from-accent/10 to-accent"}`} />
+           </MapContainer>
+
+           {/* LARGE, READABLE LEGEND */}
+           <div className="absolute bottom-10 left-10 right-10 z-20 p-8 bg-black/60 border border-white/10 rounded-[2.5rem] backdrop-blur-3xl shadow-2xl">
+              <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
+                <div>
+                   <div className="text-[10px] font-black text-primary uppercase tracking-[0.3em] mb-1 flex items-center gap-2">
+                     <Info className="h-3 w-3" /> Chú giải mật độ
+                   </div>
+                   <div className="text-xs font-bold text-white/60">
+                      Mức độ {activeTab === "members" ? "thành viên (người)" : "hoạt động (km)"}
+                   </div>
+                </div>
+                
+                <div className="flex items-center gap-2 flex-wrap">
+                  <div className="flex flex-col items-center gap-2 mr-4">
+                    <div className="w-10 h-3 rounded-md bg-[#1a1a1a] border border-white/10" />
+                    <span className="text-[9px] font-black text-white/30 uppercase">0/N.A</span>
+                  </div>
+                  {SCALE_RANGES.filter(v => v > 0).map((val, i) => (
+                    <div key={val} className="flex flex-col items-center gap-2">
+                      <div 
+                        className="w-12 h-3 rounded-md shadow-inner transition-transform hover:scale-110" 
+                        style={{ backgroundColor: (activeTab === "members" ? MEMBER_COLORS : ACTIVITY_COLORS)[i+1] }} 
+                      />
+                      <span className="text-[9px] font-black text-white/60">{val}{i === SCALE_RANGES.length - 2 ? '+' : `- ${SCALE_RANGES[i+2]-1}`}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
            </div>
         </div>
 
-        {/* Right: Ranked List */}
-        <div className="lg:col-span-5 flex flex-col gap-4">
-          <div className="text-xs font-black text-muted-foreground/50 uppercase tracking-[0.2em] mb-2">Thứ hạng theo địa phương</div>
+        {/* Right: Ranking Overview with Top 3 Accents */}
+        <div className="lg:col-span-5 flex flex-col gap-8">
+          <div className="flex items-center justify-between px-2">
+             <div className="text-xs font-black text-muted-foreground/40 uppercase tracking-[0.4em]">Thứ hạng địa phương</div>
+             <div className="flex items-center gap-3">
+                 <div className="flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#10b981]/10 border border-[#10b981]/20 text-[#10b981] text-[9px] font-black uppercase tracking-widest">
+                    <Zap className="h-3 w-3" /> Live
+                 </div>
+                 <div className="p-2 rounded-xl bg-white/5 border border-white/5 text-muted-foreground/40">
+                    <Maximize2 className="h-4 w-4" />
+                 </div>
+             </div>
+          </div>
           
           {isLoading ? (
             <div className="space-y-4">
               {[...Array(6)].map((_, i) => (
-                <div key={i} className="h-16 rounded-2xl bg-muted/20 animate-pulse" />
+                <div key={i} className="h-24 rounded-[2.5rem] bg-white/5 animate-pulse" />
               ))}
             </div>
           ) : (
-            <div className="space-y-3 overflow-y-auto pr-2 custom-scrollbar max-h-[450px]">
+            <div className="space-y-4 overflow-y-auto pr-2 custom-scrollbar max-h-[650px] pb-10">
               {displayData.map((item, i) => (
                 <motion.div
                   key={item.province}
@@ -172,39 +298,62 @@ const VietnamHeatmapCard = () => {
                   animate={{ opacity: 1, x: 0 }}
                   onMouseEnter={() => setHoveredProvince(item.province)}
                   onMouseLeave={() => setHoveredProvince(null)}
-                  transition={{ delay: i * 0.05 }}
-                  className={`group flex items-center gap-4 p-5 rounded-2xl border transition-all duration-300 ${
-                    hoveredProvince === item.province ? "bg-primary/10 border-primary/40 shadow-lg" : "bg-muted/10 border-white/5 hover:bg-primary/5 hover:border-primary/20"
+                  className={`group relative flex items-center gap-6 p-6 rounded-[2.5rem] border transition-all duration-500 cursor-pointer ${
+                    hoveredProvince === item.province 
+                      ? (activeTab === 'members' ? "bg-primary/20 border-primary shadow-2xl scale-[1.02] z-20" : "bg-accent/20 border-accent shadow-2xl scale-[1.02] z-20") 
+                      : (i < 3 ? "bg-white/[0.05] border-white/10" : "bg-white/[0.02] border-white/5 hover:bg-white/5")
                   }`}
                 >
-                  <div className={`w-10 h-10 rounded-xl flex items-center justify-center font-display font-black text-sm ${
-                    i === 0 ? "bg-primary text-primary-foreground shadow-lg shadow-primary/20" : "bg-muted/30 text-muted-foreground"
+                  {/* Rank Badge */}
+                  <div className={`w-12 h-12 rounded-2xl flex items-center justify-center font-display font-black text-lg ${
+                    i < 3 
+                      ? "bg-gradient-to-br from-primary to-emerald-600 text-primary-foreground shadow-2xl relative" 
+                      : "bg-muted/40 text-muted-foreground"
                   }`}>
+                    {i < 3 && <Award className="absolute -top-1.5 -right-1.5 h-4 w-4 text-yellow-400 drop-shadow-md" />}
                     {i + 1}
                   </div>
+
                   <div className="flex-1 min-w-0">
-                    <div className="font-display font-bold text-foreground group-hover:text-primary transition-colors truncate uppercase tracking-tight">
+                    <div className="font-display font-bold text-foreground group-hover:text-primary transition-colors text-lg uppercase tracking-tight leading-none mb-1">
                       {item.province}
                     </div>
-                    <div className="text-[10px] font-black text-muted-foreground/40 uppercase tracking-widest mt-0.5">
-                      {((activeTab === "members" ? item.members : item.activities) / maxVal * 100).toFixed(0)}% sức nóng
+                    <div className="flex items-center gap-2">
+                       <div className="text-[10px] font-black text-muted-foreground/30 uppercase tracking-widest">Việt Nam</div>
+                       {item.members === 0 && <span className="text-[8px] font-black text-white/20 uppercase tracking-tighter">(Chưa có dữ liệu)</span>}
                     </div>
                   </div>
+
                   <div className="text-right">
-                    <div className={`text-lg font-display font-black ${activeTab === "members" ? "text-primary" : "text-accent"}`}>
-                      {(activeTab === "members" ? item.members : item.activities).toLocaleString()}
+                    <div className={`text-2xl font-display font-black ${activeTab === "members" ? "text-primary" : "text-accent"} transition-all ${hoveredProvince === item.province ? "scale-110 origin-right" : ""}`}>
+                       {(activeTab === "members" ? item.members : item.activities).toLocaleString()}
                     </div>
-                    <div className="text-[8px] font-bold text-muted-foreground/30 uppercase tracking-widest">
-                      {activeTab === "members" ? "Thành viên" : "Hoạt động"}
+                    <div className="text-[9px] font-black text-muted-foreground/30 uppercase tracking-[0.2em] leading-none mt-1">
+                       {activeTab === "members" ? "Thành viên" : "Hoạt động (km)"}
                     </div>
                   </div>
-                  <ChevronRight className="h-4 w-4 text-muted-foreground/20 group-hover:text-primary transition-colors" />
+                  <ChevronRight className={`h-5 w-5 transition-transform ${hoveredProvince === item.province ? "translate-x-1 opacity-100" : "opacity-10 translate-x-0"}`} />
                 </motion.div>
               ))}
             </div>
           )}
         </div>
       </div>
+
+      <style>{`
+        .leaflet-container {
+          background: #0b0f19 !important;
+        }
+        .custom-leaflet-tooltip {
+          background: transparent !important;
+          border: none !important;
+          box-shadow: none !important;
+          padding: 0 !important;
+        }
+        .custom-leaflet-tooltip::before {
+          display: none !important;
+        }
+      `}</style>
     </div>
   );
 };

@@ -75,12 +75,12 @@ const ActivityFeed = () => {
               </div>
 
               <div className="flex-1 min-w-0">
-                <p className="text-sm font-bold text-foreground/90 leading-snug">
+                <p className="text-sm font-bold text-foreground/90 leading-tight">
                   <span className="group-hover:text-primary transition-colors cursor-pointer">{item.userName}</span>{" "}
-                  <span className="text-muted-foreground font-medium text-xs">vừa hoàn thành</span>{" "}
-                  <span className="text-primary font-black text-lg block">{item.distance.toLocaleString()} km</span>
+                  <span className="text-muted-foreground font-medium text-[10px] uppercase tracking-wider mx-1 italic opacity-60">vừa chạy</span>{" "}
+                  <span className="text-primary font-black text-lg whitespace-nowrap">{item.distance.toLocaleString()} <span className="text-[10px]">km</span></span>
                 </p>
-                <div className="flex items-center gap-4 mt-2">
+                <div className="flex items-center gap-4 mt-1.5 opacity-60">
                   <div className="flex items-center gap-1 text-[10px] font-black text-muted-foreground/50 uppercase tracking-widest">
                     <MapPin className="h-3 w-3 text-primary/40" />
                     {item.location}

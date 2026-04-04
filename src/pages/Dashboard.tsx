@@ -75,9 +75,9 @@ const Dashboard = () => {
           <div className="lg:col-span-4 space-y-8">
             <div className="glass-card rounded-[2.5rem] p-8 border border-white/5 shadow-xl">
               <div className="flex items-center justify-between mb-8">
-                <h3 className="font-display text-xl font-black text-foreground uppercase tracking-tight">Top Runner</h3>
+                <h3 className="font-display text-xl font-black text-foreground uppercase tracking-tight">Bảng Vàng Cá Nhân</h3>
                 <Link to="/leaderboard" className="text-xs font-bold text-primary flex items-center gap-1 hover:underline">
-                  Xem tất cả <ArrowRight className="h-3 w-3" />
+                  Xem toàn bộ <ArrowRight className="h-3 w-3" />
                 </Link>
               </div>
               
@@ -88,16 +88,18 @@ const Dashboard = () => {
                   ))}
                 </div>
               ) : (
-                <div className="space-y-4">
+                <div className="space-y-6">
                   {leaderboard?.map((runner, i) => (
                     <div key={runner.userId} className="flex items-center gap-4 group">
                       <div className="w-8 font-display font-black text-muted-foreground/30 text-lg italic tracking-widest">#{i+1}</div>
-                      <div className="w-10 h-10 rounded-xl overflow-hidden bg-muted flex-shrink-0 border border-white/5">
-                        <img src={runner.avatar} alt="" className="w-full h-full object-cover" />
+                      <div className="w-12 h-12 rounded-2xl overflow-hidden bg-muted flex-shrink-0 border border-white/5 shadow-inner">
+                        <img src={runner.avatar} alt="" className="w-full h-full object-cover transition-transform group-hover:scale-110" />
                       </div>
                       <div className="flex-1 min-w-0">
-                        <div className="text-sm font-bold truncate group-hover:text-primary transition-colors uppercase tracking-tight">{runner.name}</div>
-                        <div className="text-[10px] font-bold text-muted-foreground/50 uppercase tracking-widest">{runner.distance.toLocaleString()} km</div>
+                        <div className="text-sm font-bold truncate group-hover:text-primary transition-colors uppercase tracking-tight leading-none mb-1.5">{runner.name}</div>
+                        <div className="text-lg font-display font-black text-foreground leading-none flex items-baseline gap-1">
+                          {runner.distance.toLocaleString()} <span className="text-[10px] text-primary uppercase tracking-widest font-black">km</span>
+                        </div>
                       </div>
                     </div>
                   ))}
@@ -117,7 +119,5 @@ const Dashboard = () => {
     </AppLayout>
   );
 };
-
-export default Dashboard;
 
 export default Dashboard;
