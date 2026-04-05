@@ -64,30 +64,30 @@ const VietnamJourney = ({ currentKm }: VietnamJourneyProps) => {
         </div>
 
         {/* Big Progress Statistics */}
-        <div className="flex-1 lg:flex-none flex items-start gap-6 bg-secondary p-8 rounded-[3rem] border border-primary/20 shadow-2xl relative overflow-hidden group min-w-0">
+        <div className="flex-1 lg:flex-none flex items-center gap-6 bg-secondary p-8 rounded-[3rem] border border-primary/20 shadow-2xl relative overflow-hidden group min-w-0">
           <div className="absolute inset-0 bg-primary/5 opacity-0 group-hover:opacity-100 transition-opacity duration-1000" />
-          <div className="flex-1 flex items-start gap-5 relative z-10">
+          <div className="flex-1 flex items-center gap-5 relative z-10">
              <motion.div 
                animate={{ scale: [1, 1.1, 1], y: [0, -3, 0] }} transition={{ repeat: Infinity, duration: 3, ease: "easeInOut" }}
                className="w-16 h-16 rounded-[1.5rem] bg-primary/10 flex items-center justify-center text-primary ring-2 ring-primary/30 shadow-xl flex-shrink-0"
              >
                <Trophy className="h-8 w-8" />
              </motion.div>
-             <div className="pt-2 pr-2 min-w-0">
-               <div className="text-xs font-black text-muted-foreground uppercase tracking-widest mb-2 pr-2">Tiến độ tổng</div>
+             <div className="min-w-0">
+               <div className="text-xs font-black text-muted-foreground uppercase tracking-widest mb-2">Tiến độ tổng</div>
                <div className="font-display text-5xl lg:text-6xl font-black bg-gradient-to-t from-primary to-primary bg-clip-text text-transparent leading-none tabular-nums tracking-tighter">{(journeyProgress * 100).toFixed(0)}%</div>
              </div>
           </div>
-          <div className="w-px h-20 bg-primary/20 relative z-10 self-center" />
-          <div className="flex-1 flex items-start gap-5 relative z-10 overflow-visible">
+          <div className="w-px h-20 bg-primary/20 relative z-10" />
+          <div className="flex-1 flex items-center gap-5 relative z-10 overflow-visible">
              <motion.div 
                animate={{ rotate: [0, 10, -10, 0] }} transition={{ repeat: Infinity, duration: 4 }}
                className="w-16 h-16 rounded-[1.5rem] bg-accent/10 flex items-center justify-center text-accent ring-2 ring-accent/30 shadow-xl flex-shrink-0"
              >
                <Flag className="h-8 w-8" />
              </motion.div>
-             <div className="pt-2 pr-2 min-w-0">
-                <div className="text-xs font-black text-muted-foreground uppercase tracking-widest mb-2 pr-4">Mục tiêu</div>
+             <div className="min-w-0">
+                <div className="text-xs font-black text-muted-foreground uppercase tracking-widest mb-2">Mục tiêu</div>
                  <div className="font-display text-5xl lg:text-6xl font-black text-foreground leading-none tabular-nums uppercase italic flex items-baseline gap-2 tracking-tighter">
                    {remaining.toLocaleString()} 
                    <span className="text-xs text-primary font-black not-italic opacity-70">KM</span>
