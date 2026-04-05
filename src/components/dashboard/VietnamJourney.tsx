@@ -13,15 +13,15 @@ interface City {
 const CITIES: City[] = [
   { name: "Cà Mau", km: 0, x: 145, y: 470, icon: null },
   { name: "TP.HCM", km: 300, x: 155, y: 400, icon: null },
-  { name: "Nha Trang", km: 700, x: 190, y: 320, icon: null },
-  { name: "Đà Nẵng", km: 1200, x: 175, y: 240, icon: null },
-  { name: "Huế", km: 1400, x: 165, y: 205, icon: null },
-  { name: "Vinh", km: 1800, x: 160, y: 145, icon: null },
-  { name: "Hà Nội", km: 2200, x: 140, y: 90, icon: null },
+  { name: "Nha Trang", km: 700, x: 190, y: 310, icon: null },
+  { name: "Đà Nẵng", km: 1200, x: 175, y: 215, icon: null },
+  { name: "Huế", km: 1400, x: 165, y: 175, icon: null },
+  { name: "Vinh", km: 1800, x: 160, y: 115, icon: null },
+  { name: "Hà Nội", km: 2200, x: 140, y: 60, icon: null },
 ];
 
 const TOTAL_JOURNEY = 2200;
-const JOURNEY_PATH = "M145,470 C150,450 155,420 155,400 C160,370 180,340 190,320 C185,290 178,260 175,240 C170,225 165,215 165,205 C162,185 160,165 160,145 C155,125 148,105 140,90";
+const JOURNEY_PATH = "M145,470 C150,450 155,420 155,400 C160,360 185,330 190,310 C182,280 178,245 175,215 C170,200 165,190 165,175 C162,155 160,135 160,115 C155,95 148,75 140,60";
 
 interface VietnamJourneyProps {
   currentKm: number;
@@ -64,7 +64,7 @@ const VietnamJourney = ({ currentKm }: VietnamJourneyProps) => {
         </div>
 
         {/* Big Progress Statistics */}
-        <div className="flex items-start gap-10 bg-secondary p-10 rounded-[3rem] border border-primary/20 shadow-2xl relative overflow-hidden group">
+        <div className="flex-1 lg:flex-none flex items-start gap-6 bg-secondary p-8 rounded-[3rem] border border-primary/20 shadow-2xl relative overflow-hidden group min-w-0">
           <div className="absolute inset-0 bg-primary/5 opacity-0 group-hover:opacity-100 transition-opacity duration-1000" />
           <div className="flex-1 flex items-start gap-5 relative z-10">
              <motion.div 
@@ -73,9 +73,9 @@ const VietnamJourney = ({ currentKm }: VietnamJourneyProps) => {
              >
                <Trophy className="h-8 w-8" />
              </motion.div>
-             <div className="pt-2 pr-6">
+             <div className="pt-2 pr-2 min-w-0">
                <div className="text-xs font-black text-muted-foreground uppercase tracking-widest mb-2 pr-2">Tiến độ tổng</div>
-               <div className="font-display text-5xl lg:text-6xl font-black bg-gradient-to-t from-primary to-primary bg-clip-text text-transparent leading-none tabular-nums tracking-tighter pr-4">{(journeyProgress * 100).toFixed(0)}%</div>
+               <div className="font-display text-5xl lg:text-6xl font-black bg-gradient-to-t from-primary to-primary bg-clip-text text-transparent leading-none tabular-nums tracking-tighter">{(journeyProgress * 100).toFixed(0)}%</div>
              </div>
           </div>
           <div className="w-px h-20 bg-primary/20 relative z-10 self-center" />
@@ -86,8 +86,8 @@ const VietnamJourney = ({ currentKm }: VietnamJourneyProps) => {
              >
                <Flag className="h-8 w-8" />
              </motion.div>
-             <div className="pt-2 pr-8">
-                <div className="text-xs font-black text-muted-foreground uppercase tracking-widest mb-2 whitespace-nowrap pr-4">Mục tiêu {nextCity.name}</div>
+             <div className="pt-2 pr-2 min-w-0">
+                <div className="text-xs font-black text-muted-foreground uppercase tracking-widest mb-2 pr-4">Mục tiêu</div>
                  <div className="font-display text-5xl lg:text-6xl font-black text-foreground leading-none tabular-nums uppercase italic flex items-baseline gap-2 tracking-tighter">
                    {remaining.toLocaleString()} 
                    <span className="text-xs text-primary font-black not-italic opacity-70">KM</span>
@@ -103,22 +103,23 @@ const VietnamJourney = ({ currentKm }: VietnamJourneyProps) => {
         <div className="flex-1 bg-gradient-to-b from-secondary to-background rounded-[4.5rem] p-10 md:p-14 border border-primary/20 overflow-hidden flex items-center justify-center relative group">
           <div className="absolute inset-0 opacity-15 pointer-events-none" style={{ backgroundImage: "radial-gradient(circle at 2px 2px, hsl(var(--primary)) 1px, transparent 0)", backgroundSize: "60px 60px" }} />
           
-          <svg viewBox="60 50 180 460" className="h-[800px] w-auto transition-all duration-1000 hover:scale-[1.02]" style={{ filter: "drop-shadow(0 0 20px rgba(16,185,129,0.1))" }}>
+          <svg viewBox="40 -80 240 600" className="h-[800px] w-auto transition-all duration-1000 hover:scale-[1.02]" style={{ filter: "drop-shadow(0 0 20px rgba(16,185,129,0.1))" }}>
             <defs>
               <linearGradient id="pathGradient" x1="0%" y1="100%" x2="0%" y2="0%">
                 <stop offset="0%" stopColor="hsl(var(--primary))" />
-                <stop offset="100%" stopColor="hsl(var(--accent))" />
+                <stop offset="100%" stopColor="hsl(var(--primary))" />
               </linearGradient>
             </defs>
-            <path d={JOURNEY_PATH} fill="none" stroke="hsl(var(--primary))" strokeWidth="2.5" strokeDasharray="6 6" opacity="0.15" />
+    
+            <path d={JOURNEY_PATH} fill="none" stroke="hsl(var(--primary))" strokeWidth="1" opacity="0.1" />
 
             <motion.path 
               d={JOURNEY_PATH} 
               fill="none" 
               stroke="url(#pathGradient)" 
-              strokeWidth="4" 
+              strokeWidth="2.5" 
               strokeLinecap="round" 
-              opacity="0.6"
+              opacity="0.4"
               initial={{ pathLength: 0 }} 
               animate={{ pathLength: journeyProgress }} 
               transition={{ duration: 3, ease: "easeOut" }} 
@@ -127,7 +128,6 @@ const VietnamJourney = ({ currentKm }: VietnamJourneyProps) => {
             {CITIES.map((city, i) => {
               const reached = currentKm >= city.km;
               const isHovered = hoveredCity?.name === city.name;
-              const cityRemaining = Math.max(city.km - currentKm, 0);
 
               return (
                 <g 
@@ -151,49 +151,29 @@ const VietnamJourney = ({ currentKm }: VietnamJourneyProps) => {
                   <motion.g
                     initial={{ scale: 0 }} 
                     animate={{ 
-                      scale: isHovered ? 1.2 : 1,
+                      scale: isHovered ? 1.1 : 1,
                     }} 
                     transition={{ delay: 0.5 + i * 0.1 }}
                   >
                     <circle 
                       cx={city.x} 
                       cy={city.y} 
-                      r={city.name === "TP.HCM" ? (isHovered ? 16 : 14) : (["Hà Nội", "Cà Mau"].includes(city.name) ? (isHovered ? 12 : 10) : (isHovered ? 8 : 6))} 
-                      fill={reached ? (isHovered ? "hsl(var(--accent))" : "hsl(var(--primary))") : "hsl(var(--muted-foreground))"} 
-                      opacity={reached || isHovered ? 1 : 0.3} 
-                      style={{ filter: reached ? "drop-shadow(0 0 20px rgba(16,185,129,0.4))" : "none" }}
+                      r={city.name === "TP.HCM" ? 14 : (["Hà Nội", "Cà Mau"].includes(city.name) ? 10 : 7)} 
+                      fill={reached ? "hsl(var(--primary))" : "hsl(var(--muted-foreground))"} 
+                      opacity={city.name === "TP.HCM" ? 1 : (["Hà Nội", "Cà Mau"].includes(city.name) ? 0.7 : 0.35)} 
+                      style={{ filter: reached ? "drop-shadow(0 0 12px rgba(16,185,129,0.3))" : "none" }}
                     />
                   </motion.g>
                   
                   <text 
                     x={city.x + (city.x > 165 ? -75 : 28)} 
-                    y={city.y + 6} 
+                    y={city.y + 5} 
                     fill="hsl(var(--foreground))" 
-                    fontSize={isHovered ? "15" : "13"} 
-                    fontWeight="500"
-                    opacity={reached || isHovered ? 0.9 : 0.5} 
-                    className="font-display pointer-events-none transition-all duration-300"
+                    fontSize="13" 
+                    className={`font-display pointer-events-none transition-all duration-300 font-medium ${isHovered || city.name === currentCity.name ? 'opacity-100' : 'opacity-70'}`}
                   >
                     {city.name}
                   </text>
-
-                  <AnimatePresence>
-                    {isHovered && (
-                      <motion.g initial={{ opacity: 0, y: 15 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: 15 }} className="pointer-events-none">
-                        <foreignObject x={city.x - 100} y={city.y - 110} width="200" height="100">
-                          <div className="bg-gradient-to-br from-primary to-accent p-[3px] rounded-3xl shadow-2xl">
-                            <div className="bg-white rounded-[21px] px-6 py-5 text-center">
-                              <div className="text-[11px] font-black text-muted-foreground uppercase tracking-widest leading-none mb-2">CÒN LẠI</div>
-                              <div className="text-2xl font-display font-black text-foreground">
-                                {cityRemaining.toLocaleString()} <span className="text-sm font-black text-primary">KM</span>
-                              </div>
-                            </div>
-                            <div className="absolute bottom-[-8px] left-1/2 -translate-x-1/2 w-0 h-0 border-l-[10px] border-l-transparent border-r-[10px] border-r-transparent border-t-[10px] border-t-accent" />
-                          </div>
-                        </foreignObject>
-                      </motion.g>
-                    )}
-                  </AnimatePresence>
                 </g>
               );
             })}
@@ -208,12 +188,34 @@ const VietnamJourney = ({ currentKm }: VietnamJourneyProps) => {
               <circle cx={currentCity.x} cy={currentCity.y} r={12} fill="hsl(var(--primary))" className="shadow-2xl" />
               <circle cx={currentCity.x} cy={currentCity.y} r={7} fill="white" />
               <motion.circle 
-                cx={currentCity.x} cy={currentCity.y} r={22} 
-                fill="none" stroke="hsl(var(--primary))" strokeWidth="3" 
-                animate={{ opacity: [0.5, 0, 0.5], scale: [1, 2.2, 1] }} 
+                cx={currentCity.x} cy={currentCity.y} r={18} 
+                fill="none" stroke="hsl(var(--primary))" strokeWidth="2" 
+                animate={{ opacity: [0.4, 0, 0.4], scale: [1, 1.8, 1] }} 
                 transition={{ repeat: Infinity, duration: 3 }} 
               />
             </motion.g>
+
+            {/* Tooltip Overlay Layer */}
+            <AnimatePresence>
+              {hoveredCity && (
+                <motion.g 
+                  key={`tooltip-${hoveredCity.name}`}
+                  initial={{ opacity: 0, scale: 0.9, y: 10 }} 
+                  animate={{ opacity: 1, scale: 1, y: 0 }} 
+                  exit={{ opacity: 0, scale: 0.9, y: 10 }}
+                  className="pointer-events-none"
+                >
+                  <foreignObject x={hoveredCity.x - 90} y={hoveredCity.y - 100} width="180" height="100">
+                    <div className="bg-white border-2 border-primary/30 rounded-2xl px-5 py-4 text-center shadow-2xl flex flex-col justify-center min-h-[85px]">
+                      <div className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest leading-tight mb-2">Khoảng cách còn lại</div>
+                      <div className="text-xl font-display font-black text-foreground">
+                        {Math.max(hoveredCity.km - currentKm, 0).toLocaleString()} <span className="text-xs font-bold text-primary">KM</span>
+                      </div>
+                    </div>
+                  </foreignObject>
+                </motion.g>
+              )}
+            </AnimatePresence>
           </svg>
         </div>
 

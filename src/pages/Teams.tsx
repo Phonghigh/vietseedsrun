@@ -32,7 +32,7 @@ const Teams = () => {
           className="flex flex-col sm:flex-row sm:items-center justify-between gap-4"
         >
           <div>
-            <h1 className="font-display text-4xl font-black text-white tracking-tight">Bảng Vàng Đội Nhóm</h1>
+            <h1 className="font-display text-4xl font-black text-foreground tracking-tight">Bảng Vàng Đội Nhóm</h1>
             <p className="text-muted-foreground font-medium mt-1">Sức mạnh tập thể kiến tạo những bước chân hy vọng</p>
           </div>
           <div className="flex items-center gap-2 px-4 py-2 rounded-2xl bg-accent/10 border border-accent/20">
@@ -52,7 +52,7 @@ const Teams = () => {
               className="glass-card rounded-[2.5rem] p-8 hover:translate-y-[-6px] transition-all duration-300 relative overflow-hidden group shadow-xl"
             >
               {/* Rank Badge */}
-              <div className={`absolute top-6 right-8 w-10 h-10 rounded-full flex items-center justify-center font-black text-sm border-2 ${idx < 3 ? 'border-accent/40 bg-accent/10 text-accent' : 'border-white/5 bg-black/20 text-white/30'}`}>
+              <div className={`absolute top-6 right-8 w-10 h-10 rounded-full flex items-center justify-center font-black text-sm border-2 ${idx < 3 ? 'border-accent/40 bg-accent/10 text-accent' : 'border-black/5 bg-slate-100/50 text-slate-400'}`}>
                 {idx + 1}
               </div>
 
@@ -68,7 +68,7 @@ const Teams = () => {
                 </div>
 
                 <div>
-                  <h3 className="font-display text-xl font-black text-white group-hover:text-primary transition-colors">{team.name}</h3>
+                  <h3 className="font-display text-xl font-black text-foreground group-hover:text-primary transition-colors">{team.name}</h3>
                   <div className="flex items-center justify-center gap-2 mt-1">
                     <Star className="h-3 w-3 text-accent" />
                     <span className="text-[10px] font-bold text-muted-foreground/70 uppercase tracking-[0.2em]">{team.memberCount} thành viên</span>
@@ -78,11 +78,11 @@ const Teams = () => {
                 <div className="w-full pt-6 border-t border-white/5 grid grid-cols-2 gap-4">
                   <div className="text-center">
                     <div className="text-[10px] font-bold text-muted-foreground/80 uppercase tracking-widest mb-1">Quãng đường</div>
-                    <div className="font-display font-black text-white">{team.totalDistance?.toFixed(1) || 0} <span className="text-[8px] text-muted-foreground ml-0.5">km</span></div>
+                    <div className="font-display font-black text-foreground">{team.totalDistance?.toFixed(1) || 0} <span className="text-[8px] text-muted-foreground ml-0.5">km</span></div>
                   </div>
                   <div className="text-center">
                     <div className="text-[10px] font-bold text-muted-foreground/80 uppercase tracking-widest mb-1">Xếp hạng</div>
-                    <div className="font-display font-black text-white">#{idx + 1}</div>
+                    <div className="font-display font-black text-foreground">#{idx + 1}</div>
                   </div>
                 </div>
               </div>
@@ -97,7 +97,7 @@ const Teams = () => {
               <Users className="h-10 w-10 text-muted-foreground/20" />
             </div>
             <div className="space-y-2">
-              <h3 className="font-display text-2xl font-bold text-white">Chưa có đội nhóm nào</h3>
+              <h3 className="font-display text-2xl font-bold text-foreground">Chưa có đội nhóm nào</h3>
               <p className="text-muted-foreground max-w-sm mx-auto">Danh sách đội nhóm sẽ được cập nhật liên tục dựa trên dữ liệu từ cộng đồng.</p>
             </div>
           </div>
