@@ -1,3 +1,4 @@
+import { motion } from "framer-motion";
 import { LayoutDashboard, Trophy, Users, Target, User, Activity, Flame } from "lucide-react";
 import { NavLink } from "@/components/NavLink";
 import { useLocation } from "react-router-dom";
@@ -47,15 +48,20 @@ export function AppSidebar() {
               {navItems.map((item) => (
                 <SidebarMenuItem key={item.title}>
                   <SidebarMenuButton asChild>
-                    <NavLink
-                      to={item.url}
-                      end
-                      className="hover:bg-sidebar-accent rounded-xl px-4 py-3 text-[15px] font-bold transition-all flex items-center group"
-                      activeClassName="bg-primary text-primary-foreground shadow-xl shadow-primary/20 scale-[1.02]"
+                    <motion.div
+                      whileHover={{ scale: 1.02, x: 4 }}
+                      transition={{ type: "spring", stiffness: 400, damping: 20 }}
                     >
-                      <item.icon className="mr-3 h-5 w-5 transition-transform group-hover:scale-110" />
-                      {!collapsed && <span>{item.title}</span>}
-                    </NavLink>
+                      <NavLink
+                        to={item.url}
+                        end
+                        className="hover:bg-sidebar-accent rounded-xl px-4 py-3 text-[15px] font-bold flex items-center group transition-colors duration-200"
+                        activeClassName="bg-primary text-primary-foreground shadow-lg shadow-primary/10"
+                      >
+                        <item.icon className="mr-3 h-5 w-5 transition-transform group-hover:scale-110" />
+                        {!collapsed && <span>{item.title}</span>}
+                      </NavLink>
+                    </motion.div>
                   </SidebarMenuButton>
                 </SidebarMenuItem>
               ))}

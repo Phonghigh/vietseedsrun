@@ -24,23 +24,31 @@ const CampaignInfo = () => {
           VietSeeds Run 2026 không chỉ là một giải chạy. Đây là hành trình kết nối những tâm hồn đồng điệu, lan tỏa năng lượng tích cực và xây dựng quỹ học bổng cho các sinh viên tài năng vượt khó.
         </p>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 pt-8 border-t border-border/30">
-          <div className="flex items-center gap-3 bg-secondary/50 px-5 py-6 rounded-[2rem] border border-primary/10">
-            <div className="w-12 h-12 rounded-2xl bg-white flex items-center justify-center text-primary shadow-sm flex-shrink-0">
-              <Calendar className="h-6 w-6" />
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 pt-8 border-t border-border/30">
+          <div className="flex items-center gap-3 bg-secondary/50 px-4 py-4 rounded-[1.5rem] border border-primary/10 overflow-hidden">
+            <div className="w-10 h-10 rounded-xl bg-white flex items-center justify-center text-primary shadow-sm flex-shrink-0">
+              <Calendar className="h-5 w-5" />
             </div>
-            <div className="min-w-0">
-              <div className="text-[9px] font-black text-muted-foreground uppercase tracking-wider leading-none mb-1.5 truncate">NGÀY BẮT ĐẦU</div>
-              <div className="text-base font-black text-foreground whitespace-nowrap">01/04/2026</div>
+            <div className="min-w-0 flex-1">
+              <div className="text-[8px] font-black text-muted-foreground uppercase tracking-wider leading-none mb-1.5 truncate">
+                NGÀY BẮT ĐẦU
+              </div>
+              <div className="text-sm font-black text-foreground tabular-nums truncate">
+                01/04/2026
+              </div>
             </div>
           </div>
-          <div className="flex items-center gap-3 bg-secondary/50 px-5 py-6 rounded-[2rem] border border-primary/10">
-            <div className="w-12 h-12 rounded-2xl bg-white flex items-center justify-center text-primary shadow-sm flex-shrink-0">
-              <Calendar className="h-6 w-6" />
+          <div className="flex items-center gap-3 bg-secondary/50 px-4 py-4 rounded-[1.5rem] border border-primary/10 overflow-hidden">
+            <div className="w-10 h-10 rounded-xl bg-white flex items-center justify-center text-primary shadow-sm flex-shrink-0">
+              <Calendar className="h-5 w-5" />
             </div>
-            <div className="min-w-0">
-              <div className="text-[9px] font-black text-muted-foreground uppercase tracking-wider leading-none mb-1.5 truncate">NGÀY KẾT THÚC</div>
-              <div className="text-base font-black text-foreground whitespace-nowrap">30/04/2026</div>
+            <div className="min-w-0 flex-1">
+              <div className="text-[8px] font-black text-muted-foreground uppercase tracking-wider leading-none mb-1.5 truncate">
+                NGÀY KẾT THÚC
+              </div>
+              <div className="text-sm font-black text-foreground tabular-nums truncate">
+                30/04/2026
+              </div>
             </div>
           </div>
         </div>

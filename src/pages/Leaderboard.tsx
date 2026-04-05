@@ -39,11 +39,11 @@ const Leaderboard = () => {
         {/* Page Header */}
         <div className="flex flex-col md:flex-row md:items-end justify-between gap-8 border-b border-border/50 pb-8">
           <div>
-            <div className="text-xs font-black uppercase tracking-[0.4em] text-primary mb-3">Ranking System</div>
+            {/* <div className="text-xs font-black uppercase tracking-[0.4em] text-primary mb-3">Ranking System</div> */}
             <h1 className="font-display text-5xl md:text-6xl font-black text-foreground tracking-tight leading-none uppercase italic">
               Bảng <span className="text-primary">Xếp Hạng</span>
             </h1>
-            <p className="text-muted-foreground font-bold mt-3 text-sm uppercase tracking-wide">Đường đua bứt phá - Vinh danh những nỗ lực không ngừng</p>
+            <p className="text-muted-foreground font-bold mt-3 text-sm uppercase tracking-wide">Những đôi chân không biết mỏi - Vinh danh những nỗ lực không ngừng</p>
           </div>
           
           <div className="flex gap-2 bg-secondary p-1.5 rounded-2xl border border-border/50 shadow-sm">
