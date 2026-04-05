@@ -88,20 +88,19 @@ const CommunityHero = ({ currentKm, targetKm, totalRunners, totalActivities }: C
         <div className="hidden md:block w-px h-16 bg-border/50" />
 
         {/* Mini progress bar on the far right */}
-        <div className="w-full md:w-64 bg-secondary h-16 rounded-2xl p-3 flex items-center gap-5 border border-border shadow-inner relative overflow-hidden group/progress">
-          <div className="flex-1 bg-white h-full rounded-xl overflow-hidden flex items-center px-1 border border-border/50 shadow-sm relative">
+        <div className="w-full md:w-72 bg-secondary rounded-2xl p-4 flex items-center gap-4 border border-border shadow-inner relative overflow-hidden group/progress">
+          <div className="flex-1 h-3 bg-white rounded-full overflow-hidden border border-border/50 shadow-sm relative">
             <motion.div
               initial={{ width: 0 }}
               animate={{ width: `${progress}%` }}
-              className="h-full bg-primary rounded-lg shadow-lg relative overflow-hidden"
+              className="h-full bg-primary rounded-full shadow-lg"
               transition={{ duration: 1.5, ease: "easeOut" }}
-            >
-               <div className="absolute inset-0 bg-white/20 animate-pulse" />
-            </motion.div>
+              style={{ minWidth: progress > 0 ? '8px' : '0px' }}
+            />
           </div>
-          <div className="flex flex-col items-end pr-1">
-             <span className="text-xl font-display font-black text-primary leading-none tabular-nums">{progress}%</span>
-             <span className="text-[9px] font-black text-muted-foreground uppercase tracking-tighter mt-1 italic">TỔNG PROGRESS</span>
+          <div className="flex flex-col items-end">
+             <span className="text-lg font-display font-black text-primary leading-none tabular-nums">{progress}%</span>
+             <span className="text-[8px] font-bold text-muted-foreground uppercase tracking-wider mt-0.5">Tiến độ</span>
           </div>
         </div>
       </div>
