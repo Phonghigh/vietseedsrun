@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { MapPin, Flag, Trophy, Zap, Building2, Waves, Palmtree, Castle, Flower2, Landmark, MapPinned } from "lucide-react";
+import { MapPin, Flag, Trophy, Zap } from "lucide-react";
 
 interface City {
   name: string;
@@ -11,17 +11,17 @@ interface City {
 }
 
 const CITIES: City[] = [
-  { name: "Cà Mau", km: 0, x: 145, y: 470, icon: MapPinned },
-  { name: "TP.HCM", km: 300, x: 155, y: 400, icon: Building2 },
-  { name: "Nha Trang", km: 700, x: 190, y: 310, icon: Waves },
-  { name: "Đà Nẵng", km: 1200, x: 175, y: 220, icon: Palmtree },
-  { name: "Huế", km: 1400, x: 165, y: 195, icon: Castle },
-  { name: "Vinh", km: 1800, x: 160, y: 145, icon: Flower2 },
-  { name: "Hà Nội", km: 2200, x: 140, y: 90, icon: Landmark },
+  { name: "Cà Mau", km: 0, x: 145, y: 470, icon: null },
+  { name: "TP.HCM", km: 300, x: 155, y: 400, icon: null },
+  { name: "Nha Trang", km: 700, x: 190, y: 320, icon: null },
+  { name: "Đà Nẵng", km: 1200, x: 175, y: 240, icon: null },
+  { name: "Huế", km: 1400, x: 165, y: 205, icon: null },
+  { name: "Vinh", km: 1800, x: 160, y: 145, icon: null },
+  { name: "Hà Nội", km: 2200, x: 140, y: 90, icon: null },
 ];
 
 const TOTAL_JOURNEY = 2200;
-const JOURNEY_PATH = "M145,470 C150,450 155,420 155,400 C160,370 180,340 190,310 C185,280 178,250 175,220 C170,210 165,200 165,195 C162,175 160,160 160,145 C155,125 148,105 140,90";
+const JOURNEY_PATH = "M145,470 C150,450 155,420 155,400 C160,370 180,340 190,320 C185,290 178,260 175,240 C170,225 165,215 165,205 C162,185 160,165 160,145 C155,125 148,105 140,90";
 
 interface VietnamJourneyProps {
   currentKm: number;
@@ -103,7 +103,7 @@ const VietnamJourney = ({ currentKm }: VietnamJourneyProps) => {
         <div className="flex-1 bg-gradient-to-b from-secondary to-background rounded-[4.5rem] p-10 md:p-14 border border-primary/20 overflow-hidden flex items-center justify-center relative group">
           <div className="absolute inset-0 opacity-15 pointer-events-none" style={{ backgroundImage: "radial-gradient(circle at 2px 2px, hsl(var(--primary)) 1px, transparent 0)", backgroundSize: "60px 60px" }} />
           
-          <svg viewBox="60 50 180 460" className="h-[800px] w-auto transition-all duration-1000 hover:scale-[1.02]" style={{ filter: "drop-shadow(0 0 60px rgba(16,185,129,0.1))" }}>
+          <svg viewBox="60 50 180 460" className="h-[800px] w-auto transition-all duration-1000 hover:scale-[1.02]" style={{ filter: "drop-shadow(0 0 20px rgba(16,185,129,0.1))" }}>
             <defs>
               <linearGradient id="pathGradient" x1="0%" y1="100%" x2="0%" y2="0%">
                 <stop offset="0%" stopColor="hsl(var(--primary))" />
@@ -116,8 +116,9 @@ const VietnamJourney = ({ currentKm }: VietnamJourneyProps) => {
               d={JOURNEY_PATH} 
               fill="none" 
               stroke="url(#pathGradient)" 
-              strokeWidth="8" 
+              strokeWidth="4" 
               strokeLinecap="round" 
+              opacity="0.6"
               initial={{ pathLength: 0 }} 
               animate={{ pathLength: journeyProgress }} 
               transition={{ duration: 3, ease: "easeOut" }} 
@@ -157,17 +158,10 @@ const VietnamJourney = ({ currentKm }: VietnamJourneyProps) => {
                     <circle 
                       cx={city.x} 
                       cy={city.y} 
-                      r={reached || isHovered ? (isHovered ? 18 : 16) : 10} 
+                      r={city.name === "TP.HCM" ? (isHovered ? 16 : 14) : (["Hà Nội", "Cà Mau"].includes(city.name) ? (isHovered ? 12 : 10) : (isHovered ? 8 : 6))} 
                       fill={reached ? (isHovered ? "hsl(var(--accent))" : "hsl(var(--primary))") : "hsl(var(--muted-foreground))"} 
-                      opacity={reached || isHovered ? 1 : 0.2} 
+                      opacity={reached || isHovered ? 1 : 0.3} 
                       style={{ filter: reached ? "drop-shadow(0 0 20px rgba(16,185,129,0.4))" : "none" }}
-                    />
-                    <city.icon 
-                      x={city.x - (isHovered ? 9 : 8)} 
-                      y={city.y - (isHovered ? 9 : 8)}
-                      width={isHovered ? 18 : 16} 
-                      height={isHovered ? 18 : 16}
-                      className={reached ? "text-white" : "text-muted-foreground/40"}
                     />
                   </motion.g>
                   
@@ -176,9 +170,9 @@ const VietnamJourney = ({ currentKm }: VietnamJourneyProps) => {
                     y={city.y + 6} 
                     fill="hsl(var(--foreground))" 
                     fontSize={isHovered ? "15" : "13"} 
-                    fontWeight={reached || isHovered ? "950" : "800"} 
-                    opacity={reached || isHovered ? 1 : 0.3} 
-                    className="font-display tracking-tight pointer-events-none transition-all duration-300 uppercase italic"
+                    fontWeight="500"
+                    opacity={reached || isHovered ? 0.9 : 0.5} 
+                    className="font-display pointer-events-none transition-all duration-300"
                   >
                     {city.name}
                   </text>
