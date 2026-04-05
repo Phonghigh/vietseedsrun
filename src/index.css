@@ -6,54 +6,57 @@
 
 @layer base {
   :root {
-    /* Faint Lime/Grey-White for background to make cards pop */
-    --background: 142 20% 99.5%;
-    --foreground: 142 60% 8%;
+    /* Clean off-white background with subtle secondary warmth */
+    --background: 0 0% 99%;
+    --foreground: 222 47% 10%;
 
     --card: 0 0% 100%;
-    --card-foreground: 142 60% 12%;
+    --card-foreground: 222 47% 10%;
 
     --popover: 0 0% 100%;
-    --popover-foreground: 142 60% 8%;
+    --popover-foreground: 222 47% 10%;
 
     /* Official VietSeeds Green Tone - Emerald/Forest blend */
-    --primary: 142 60% 32%;
+    --primary: 142 72% 30%;
     --primary-foreground: 0 0% 100%;
 
-    /* Soft Lime/Grass - Lighter for web secondary elements */
-    --secondary: 85 55% 96%;
-    --secondary-foreground: 142 60% 18%;
+    /* Deep Forest Anchor - For high-impact visual grounding */
+    --primary-dark: 142 70% 18%;
 
-    --muted: 154 15% 96%;
-    --muted-foreground: 154 15% 32%;
+    /* Soft Slate/Grass - Higher contrast for readable secondary labels */
+    --secondary: 142 18% 90%;
+    --secondary-foreground: 222 47% 12%;
+
+    --muted: 142 14% 90%;
+    --muted-foreground: 215 20% 32%;
 
     /* Vibrant Sun/Seed Yellow for accents (from logo/star) */
-    --accent: 48 95% 55%;
-    --accent-foreground: 142 60% 8%;
+    --accent: 45 95% 52%;
+    --accent-foreground: 222 47% 10%;
 
     --destructive: 0 84% 60%;
     --destructive-foreground: 210 40% 98%;
 
-    --border: 142 25% 85%;
-    --input: 142 25% 85%;
-    --ring: 142 60% 35%;
+    --border: 214 20% 84%;
+    --input: 214 20% 84%;
+    --ring: 142 70% 34%;
 
-    --radius: 1rem;
+    --radius: 1.25rem;
 
-    /* Chart Palette - Refreshed for light mode */
-    --chart-green: 142 60% 40%;
+    /* Chart Palette - Refreshed for high contrast labels */
+    --chart-green: 142 70% 40%;
     --chart-orange: 28 90% 55%;
     --chart-blue: 215 90% 50%;
     --chart-lime: 85 55% 51%;
 
-    --sidebar-background: 142 60% 98%;
-    --sidebar-foreground: 142 40% 12%;
-    --sidebar-primary: 142 60% 32%;
+    --sidebar-background: 0 0% 100%;
+    --sidebar-foreground: 222 47% 11%;
+    --sidebar-primary: 142 70% 32%;
     --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 142 40% 94%;
-    --sidebar-accent-foreground: 142 60% 18%;
-    --sidebar-border: 142 20% 88%;
-    --sidebar-ring: 142 60% 35%;
+    --sidebar-accent: 210 40% 96.1%;
+    --sidebar-accent-foreground: 222 47% 11%;
+    --sidebar-border: 214 32% 91%;
+    --sidebar-ring: 142 70% 32%;
 
     --font-display: 'Space Grotesk', sans-serif;
     --font-body: 'Inter', sans-serif;
@@ -113,10 +116,10 @@
   }
 
   .glass-card {
-    background: hsla(0, 0%, 100%, 0.8);
-    backdrop-filter: blur(20px);
-    border: 1px solid hsla(142, 60%, 35%, 0.2);
-    @apply shadow-2xl shadow-primary/10;
+    background: rgba(255, 255, 255, 0.94);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(20, 83, 45, 0.14);
+    @apply shadow-xl shadow-primary/10;
   }
 
   .stat-glow {
@@ -167,12 +170,12 @@
     50% { transform: translateY(-12px) rotate(0.5deg); }
   }
 
-  /* Smooth Shimmer - Less aggressive brightness */
+  /* Refined Shimmer - Visible on Light Backgrounds */
   .shimmer-text {
     background: linear-gradient(90deg, 
-      hsla(142, 45%, 65%, 1) 25%, 
-      hsla(60, 60%, 85%, 0.8) 50%, 
-      hsla(142, 45%, 65%, 1) 75%
+      hsl(142, 60%, 35%) 25%, 
+      hsl(45, 95%, 52%) 50%, 
+      hsl(142, 60%, 35%) 75%
     );
     background-size: 200% auto;
     -webkit-background-clip: text;
@@ -183,7 +186,7 @@
 
   /* Refined Glow Blobs for Light Background */
   .bg-glow-blob {
-    @apply pointer-events-none absolute rounded-full blur-[120px] opacity-10 filter;
-    background: radial-gradient(circle, var(--primary) 0%, transparent 70%);
+    @apply pointer-events-none absolute rounded-full blur-[120px] opacity-15 filter;
+    background: radial-gradient(circle, var(--primary) 0%, transparent 75%);
   }
 }

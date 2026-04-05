@@ -58,6 +58,7 @@ export interface RecentActivity {
   distance: number;
   location: string;
   createdAt: string;
+  userId?: string;
 }
 
 export const getMyActivities = async (page = 1, limit = 10): Promise<ActivitiesResponse> => {

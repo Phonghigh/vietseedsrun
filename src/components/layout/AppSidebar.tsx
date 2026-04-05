@@ -28,30 +28,32 @@ export function AppSidebar() {
   return (
     <Sidebar collapsible="icon">
       <SidebarContent>
-        {/* ... Logo Section ... */}
-        <div className="p-5 flex items-center gap-3 border-b border-sidebar-border mb-2">
+        {/* Logo Section */}
+        <div className="p-6 flex items-center gap-4 border-b border-sidebar-border mb-4">
           {!collapsed && (
-            <span className="font-display font-bold text-xl text-sidebar-foreground tracking-tight">VietSeeds Run</span>
+            <span className="font-display font-black text-2xl text-sidebar-foreground tracking-tighter uppercase italic">
+              VietSeeds <span className="text-primary">Run</span>
+            </span>
           )}
           {collapsed && (
-            <div className="w-8 h-8 rounded-lg gradient-hero flex items-center justify-center text-[10px] font-black text-white px-2">VSR</div>
+            <div className="w-10 h-10 rounded-xl gradient-hero flex items-center justify-center text-xs font-black text-white px-2 shadow-lg ring-2 ring-primary/20">VSR</div>
           )}
         </div>
 
         <SidebarGroup>
-          <SidebarGroupLabel className="px-4 text-[10px] uppercase tracking-widest text-muted-foreground font-bold">MENU</SidebarGroupLabel>
+          <SidebarGroupLabel className="px-5 text-xs uppercase tracking-[0.3em] text-muted-foreground font-black mb-2">MENU</SidebarGroupLabel>
           <SidebarGroupContent>
-            <SidebarMenu className="px-2 gap-1">
+            <SidebarMenu className="px-3 gap-2">
               {navItems.map((item) => (
                 <SidebarMenuItem key={item.title}>
                   <SidebarMenuButton asChild>
                     <NavLink
                       to={item.url}
                       end
-                      className="hover:bg-sidebar-accent/50 rounded-lg px-3 py-2 text-sm transition-all"
-                      activeClassName="bg-primary/10 text-primary font-bold shadow-sm"
+                      className="hover:bg-sidebar-accent rounded-xl px-4 py-3 text-[15px] font-bold transition-all flex items-center group"
+                      activeClassName="bg-primary text-primary-foreground shadow-xl shadow-primary/20 scale-[1.02]"
                     >
-                      <item.icon className="mr-2 h-4 w-4" />
+                      <item.icon className="mr-3 h-5 w-5 transition-transform group-hover:scale-110" />
                       {!collapsed && <span>{item.title}</span>}
                     </NavLink>
                   </SidebarMenuButton>

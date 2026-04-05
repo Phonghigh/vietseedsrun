@@ -16,9 +16,9 @@ const Landing = () => {
     <div className="min-h-screen gradient-dark relative overflow-hidden flex flex-col font-body">
       {/* Background elements that span across tabs */}
       <div className="absolute inset-0 pointer-events-none z-0">
-        <div className="absolute top-[-80px] left-[-80px] w-[500px] h-[500px] rounded-full opacity-20 blur-[100px]" style={{ background: "hsl(142, 72%, 35%)" }} />
-        <div className="absolute bottom-0 right-[-60px] w-[450px] h-[450px] rounded-full opacity-15 blur-[120px]" style={{ background: "hsl(25, 80%, 55%)" }} />
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[300px] rounded-full opacity-8 blur-[140px]" style={{ background: "hsl(160, 55%, 40%)" }} />
+        <div className="absolute top-[-80px] left-[-80px] w-[500px] h-[500px] rounded-full opacity-10 blur-[100px]" style={{ background: "hsl(142, 72%, 35%)" }} />
+        <div className="absolute bottom-0 right-[-60px] w-[450px] h-[450px] rounded-full opacity-10 blur-[120px]" style={{ background: "hsl(25, 80%, 55%)" }} />
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[300px] rounded-full opacity-5 blur-[140px]" style={{ background: "hsl(160, 55%, 40%)" }} />
       </div>
 
       {/* Global top countdown that is part of the full screen visual */}
@@ -35,16 +35,16 @@ const Landing = () => {
               animate={{ y: 0, opacity: 1 }}
               transition={{ duration: 0.8, type: "spring", bounce: 0.5 }}
             >
-              <TabsList className="grid w-[400px] grid-cols-2 bg-black/30 backdrop-blur-xl p-1 rounded-full border border-white/20 shadow-2xl">
+              <TabsList className="grid w-[420px] grid-cols-2 bg-white/60 backdrop-blur-xl p-1.5 rounded-full border border-primary/10 shadow-2xl shadow-primary/5">
                 <TabsTrigger 
                   value="intro" 
-                  className="rounded-full data-[state=active]:bg-primary data-[state=active]:text-primary-foreground text-white/70 hover:text-white transition-all duration-500 ease-out"
+                  className="rounded-full data-[state=active]:bg-primary data-[state=active]:text-primary-foreground text-foreground/60 hover:text-foreground font-bold transition-all duration-300 uppercase tracking-tight italic"
                 >
                   Giới thiệu
                 </TabsTrigger>
                 <TabsTrigger 
                   value="dashboard"
-                  className="rounded-full data-[state=active]:bg-primary data-[state=active]:text-primary-foreground text-white/70 hover:text-white transition-all duration-500 ease-out"
+                  className="rounded-full data-[state=active]:bg-primary data-[state=active]:text-primary-foreground text-foreground/60 hover:text-foreground font-bold transition-all duration-300 uppercase tracking-tight italic"
                 >
                   Cộng đồng & Tracking
                 </TabsTrigger>

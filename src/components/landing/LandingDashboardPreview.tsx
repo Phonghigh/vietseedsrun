@@ -56,7 +56,7 @@ export const LandingDashboardPreview = () => {
                       <div className="h-12 w-32 bg-white/5 animate-pulse rounded-xl" />
                     ) : (
                       <>
-                        {campaignStats?.currentKm.toLocaleString()}<span className="text-2xl text-white/30 ml-2 font-bold">km</span>
+                        {campaignStats?.currentKm.toLocaleString()}<span className="text-primary text-xl ml-2 not-italic font-black opacity-70 uppercase tracking-widest">km</span>
                       </>
                     )}
                   </div>
@@ -97,7 +97,7 @@ export const LandingDashboardPreview = () => {
                 </div>
                 <h3 className="font-display font-bold text-xl tracking-tight">Top Runner</h3>
               </div>
-              <TrendingUp className="h-5 w-5 text-muted-foreground/40" />
+              <TrendingUp className="h-5 w-5 text-slate-400" />
             </div>
 
             <div className="space-y-4 relative z-10 flex-grow">
@@ -112,24 +112,23 @@ export const LandingDashboardPreview = () => {
                   </div>
                 ))
               ) : (
-                leaderboard?.map((user, index) => (
+                leaderboard?.map((user, idx) => (
                   <motion.div 
                     key={user.name} 
-                    whileHover={{ scale: 1.02, x: 4 }}
-                    className="flex items-center justify-between p-4 rounded-2xl bg-white/5 border border-white/5 hover:bg-white/10 transition-all duration-300 group/item hover:border-white/10"
+                    whileHover={{ scale: 1.04, y: -4, zIndex: 10 }}
+                    transition={{ type: "spring", stiffness: 400, damping: 17 }}
+                    className="flex items-center justify-between p-4 rounded-2xl bg-white/5 border border-white/5 hover:bg-white/10 transition-all duration-300 group/item hover:border-white/20 hover:shadow-2xl cursor-pointer"
                   >
                     <div className="flex items-center gap-4">
-                      <div className={`w-10 h-10 rounded-full flex items-center justify-center font-black text-sm border-2 ${index === 0 ? 'border-accent/50 bg-accent/20 text-accent' : 'border-white/10 bg-black/40 text-white/50'}`}>
-                        {index + 1}
+                      <div className={`w-10 h-10 rounded-xl flex items-center justify-center font-black text-sm border-2 ${idx === 0 ? 'border-primary/40 bg-primary/10 text-primary' : idx < 3 ? 'border-primary/20 bg-primary/5 text-primary/60' : 'border-border/30 bg-muted/20 text-slate-500'}`}>
+                        {idx + 1}
                       </div>
                       <div>
                         <div className="font-bold text-sm text-white group-hover/item:text-primary transition-colors">{user.name}</div>
                         <div className="text-[10px] uppercase font-bold text-white/20 tracking-widest">{user.activities} hoạt động</div>
                       </div>
                     </div>
-                    <div className="font-display font-black text-primary text-xl">
-                      {user.distance} <span className="text-[10px] text-white/20 ml-0.5">km</span>
-                    </div>
+                    <div className="text-2xl font-display font-black text-foreground leading-none tabular-nums uppercase italic">{user.distance} <span className="text-xs text-primary font-black ml-1 not-italic opacity-70">KM</span></div>
                   </motion.div>
                 ))
               )}

@@ -22,7 +22,7 @@ const steps = [
     step: "03",
     icon: MapPin,
     title: "Chạy & Ghi nhận",
-    desc: "Chạy với pace 4'–15'/km, GPS thực tế. Tích lũy đủ 30km trong tháng 4 để nhận E-Certificate.",
+    desc: "Chạy với pace 4'-15'/km, GPS thực tế. Tích lũy đủ 30km trong tháng 4 để nhận E-Certificate.",
     link: null,
     linkLabel: null,
   },
@@ -85,7 +85,7 @@ const community = [
 ];
 
 const FeaturesSection = () => (
-  <div className="w-full text-foreground relative z-10">
+  <div className="w-full text-foreground relative z-10 pb-20">
     {/* How to join */}
     <section className="py-24">
       <div className="container mx-auto px-6">
@@ -93,31 +93,24 @@ const FeaturesSection = () => (
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          className="text-center mb-16"
+          className="text-center mb-20"
         >
-          <div
-            className="text-sm font-semibold tracking-[0.3em] uppercase mb-3"
-            style={{ color: "hsl(142, 72%, 55%)" }}
-          >
+          <div className="text-sm font-black tracking-[0.4em] uppercase mb-4 text-primary">
             Hướng dẫn
           </div>
-          <h2
-            className="font-display text-3xl md:text-5xl font-bold mb-4"
-            style={{ color: "hsl(0, 0%, 95%)" }}
-          >
-            Cách tham gia{" "}
-            <span className="text-gradient-green">3 bước đơn giản</span>
+          <h2 className="font-display text-4xl md:text-6xl font-black mb-6 text-foreground uppercase italic tracking-tighter">
+            Cách tham gia <br />
+            <span className="text-gradient-green uppercase text-5xl md:text-7xl pr-4">3 bước đơn giản</span>
           </h2>
-          <p className="text-lg max-w-xl mx-auto" style={{ color: "hsl(150, 14%, 60%)" }}>
+          <p className="text-lg md:text-xl max-w-2xl mx-auto text-slate-800 font-bold italic">
             Bất kể bạn là runner chuyên nghiệp hay mới bắt đầu - VietSeeds Run chào đón tất cả!
           </p>
         </motion.div>
 
-        <div className="grid md:grid-cols-3 gap-8 relative">
+        <div className="grid md:grid-cols-3 gap-12 relative">
           {/* Connector line */}
           <div
-            className="hidden md:block absolute top-10 left-[17%] right-[17%] h-px"
-            style={{ background: "linear-gradient(90deg, hsl(142,72%,35%,0.5), hsl(25,80%,55%,0.5))" }}
+            className="hidden md:block absolute top-12 left-[17%] right-[17%] h-px bg-primary/20"
           />
 
           {steps.map((s, i) => (
@@ -131,26 +124,19 @@ const FeaturesSection = () => (
             >
               {/* Step circle */}
               <div
-                className="w-20 h-20 rounded-full flex items-center justify-center mb-6 relative z-10 group-hover:scale-110 transition-transform duration-300"
-                style={{
-                  background: "linear-gradient(135deg, hsl(142, 72%, 35%) 0%, hsl(160, 60%, 40%) 100%)",
-                  boxShadow: "0 0 30px hsl(142, 72%, 35%, 0.35)",
-                }}
+                className="w-24 h-24 rounded-[2rem] flex items-center justify-center mb-8 relative z-10 group-hover:scale-110 transition-transform duration-500 bg-white border-2 border-primary shadow-xl shadow-primary/10"
               >
-                <s.icon className="h-8 w-8 text-white" />
+                <s.icon className="h-10 w-10 text-primary" />
               </div>
 
-              <div
-                className="font-display text-5xl font-bold absolute top-0 right-0 md:right-auto md:left-[calc(50%+2rem)] opacity-10"
-                style={{ color: "hsl(142, 72%, 55%)" }}
-              >
+              <div className="font-display text-8xl font-black absolute top-0 right-[-1rem] md:right-auto md:left-[calc(50%+2.5rem)] opacity-[0.2] text-primary-dark italic">
                 {s.step}
               </div>
 
-              <h3 className="font-display text-xl font-bold mb-3" style={{ color: "hsl(0, 0%, 92%)" }}>
+              <h3 className="font-display text-2xl font-black mb-4 text-foreground uppercase italic tracking-tight">
                 {s.title}
               </h3>
-              <p className="text-sm leading-relaxed mb-4" style={{ color: "hsl(150, 14%, 58%)" }}>
+              <p className="text-[15px] leading-relaxed mb-6 text-slate-700 font-bold px-4">
                 {s.desc}
               </p>
               {s.link && (
@@ -158,8 +144,7 @@ const FeaturesSection = () => (
                   href={s.link}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="text-sm font-semibold hover:underline transition-colors"
-                  style={{ color: "hsl(142, 72%, 55%)" }}
+                  className="text-sm font-black uppercase tracking-widest text-primary hover:underline underline-offset-8 decoration-2 transition-all"
                 >
                   {s.linkLabel}
                 </a>
@@ -171,34 +156,28 @@ const FeaturesSection = () => (
     </section>
 
     {/* Benefits */}
-    <section className="py-24 relative">
-      <div className="absolute inset-0 bg-black/30 pointer-events-none" />
+    <section className="py-24 relative overflow-hidden">
+      <div className="absolute inset-0 bg-primary/5 pointer-events-none" />
       <div className="container mx-auto px-6 relative z-10">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          className="text-center mb-16"
+          className="text-center mb-20"
         >
-          <div
-            className="text-sm font-semibold tracking-[0.3em] uppercase mb-3"
-            style={{ color: "hsl(25, 80%, 62%)" }}
-          >
+          <div className="text-sm font-black tracking-[0.4em] uppercase mb-4 text-accent">
             Quyền lợi
           </div>
-          <h2
-            className="font-display text-3xl md:text-5xl font-bold mb-4"
-            style={{ color: "hsl(0, 0%, 95%)" }}
-          >
-            Vì sao bạn nên{" "}
-            <span className="text-gradient-warm">tham gia?</span>
+          <h2 className="font-display text-4xl md:text-6xl font-black mb-6 text-foreground uppercase italic tracking-tighter">
+            Vì sao bạn nên <br />
+            <span className="text-gradient-warm uppercase text-5xl md:text-7xl pr-4">tham gia?</span>
           </h2>
-          <p className="text-lg max-w-xl mx-auto" style={{ color: "hsl(150, 14%, 60%)" }}>
+          <p className="text-lg md:text-xl max-w-2xl mx-auto text-slate-800 font-bold italic">
             Run to Grow - Mỗi km bạn chạy là một thông điệp ý nghĩa lan tỏa khắp Việt Nam.
           </p>
         </motion.div>
 
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
           {benefits.map((b, i) => (
             <motion.div
               key={b.title}
@@ -206,22 +185,18 @@ const FeaturesSection = () => (
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ delay: i * 0.08 }}
-              className="rounded-2xl p-6 group hover:scale-[1.02] transition-all duration-300 cursor-default"
-              style={{
-                background: "hsl(150, 25%, 10%)",
-                border: "1px solid hsl(150, 20%, 16%)",
-              }}
+              className="rounded-[2.5rem] p-10 group hover:scale-[1.03] transition-all duration-500 cursor-default bg-white border border-slate-200 shadow-lg hover:border-primary/30 hover:shadow-xl"
             >
               <div
-                className="w-12 h-12 rounded-xl flex items-center justify-center mb-5 group-hover:scale-110 transition-transform duration-300"
-                style={{ background: `${b.color}22`, border: `1px solid ${b.color}44` }}
+                className="w-16 h-16 rounded-[1.25rem] flex items-center justify-center mb-8 group-hover:scale-110 transition-transform duration-500 shadow-inner"
+                style={{ background: `${b.color}15`, border: `1px solid ${b.color}30` }}
               >
-                <b.icon className="h-6 w-6" style={{ color: b.color }} />
+                <b.icon className="h-8 w-8" style={{ color: b.color }} />
               </div>
-              <h3 className="font-display text-lg font-bold mb-2" style={{ color: "hsl(0, 0%, 90%)" }}>
+              <h3 className="font-display text-2xl font-black mb-4 text-foreground uppercase italic tracking-tight">
                 {b.title}
               </h3>
-              <p className="text-sm leading-relaxed" style={{ color: "hsl(150, 14%, 55%)" }}>
+              <p className="text-[15px] leading-relaxed text-slate-700 font-bold">
                 {b.desc}
               </p>
             </motion.div>
@@ -233,57 +208,47 @@ const FeaturesSection = () => (
     {/* Community + CTA */}
     <section className="py-24">
       <div className="container mx-auto px-6">
-        <div className="grid md:grid-cols-2 gap-12 items-center max-w-5xl mx-auto">
+        <div className="grid lg:grid-cols-2 gap-20 items-center max-w-6xl mx-auto">
           {/* Left: Community */}
           <motion.div
             initial={{ opacity: 0, x: -30 }}
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true }}
           >
-            <div
-              className="text-sm font-semibold tracking-[0.3em] uppercase mb-3"
-              style={{ color: "hsl(142, 72%, 55%)" }}
-            >
+            <div className="text-sm font-black tracking-[0.4em] uppercase mb-4 text-primary">
               Cộng đồng
             </div>
-            <h2
-              className="font-display text-3xl md:text-4xl font-bold mb-6"
-              style={{ color: "hsl(0, 0%, 95%)" }}
-            >
-              Kết nối cùng{" "}
-              <span className="text-gradient-green">cộng đồng</span>
+            <h2 className="font-display text-4xl md:text-5xl font-black mb-8 text-foreground uppercase italic tracking-tighter">
+              Kết nối cùng <br />
+              <span className="text-gradient-green uppercase pr-4">cộng đồng</span>
             </h2>
-            <p className="mb-8" style={{ color: "hsl(150, 14%, 60%)" }}>
+            <p className="mb-10 text-lg text-slate-800 font-bold italic border-l-4 border-primary pl-6">
               Tham gia vào hệ sinh thái VietSeeds Run trên Facebook và Zalo để chia sẻ thành tích, kết bạn đồng hành, và nhận thông báo sự kiện mới nhất.
             </p>
-            <div className="flex flex-col gap-4">
+            <div className="flex flex-col gap-6">
               {community.map((c) => (
                 <a
                   key={c.label}
                   href={c.link}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="flex items-center gap-4 rounded-2xl px-5 py-4 group hover:scale-[1.02] transition-all duration-200"
-                  style={{
-                    background: "hsl(150, 25%, 10%)",
-                    border: "1px solid hsl(150, 20%, 16%)",
-                  }}
+                  className="flex items-center gap-6 rounded-[2rem] px-8 py-6 group hover:scale-[1.02] transition-all duration-300 bg-white border border-slate-200 shadow-md hover:border-primary/20 hover:shadow-lg"
                 >
                   <div
-                    className="w-12 h-12 rounded-xl flex items-center justify-center flex-shrink-0"
-                    style={{ background: `${c.color}20` }}
+                    className="w-14 h-14 rounded-2xl flex items-center justify-center flex-shrink-0 shadow-inner"
+                    style={{ background: `${c.color}12` }}
                   >
-                    <c.icon className="h-6 w-6" style={{ color: c.color }} />
+                    <c.icon className="h-7 w-7" style={{ color: c.color }} />
                   </div>
                   <div>
-                    <div className="font-semibold text-sm" style={{ color: "hsl(0, 0%, 88%)" }}>
+                    <div className="font-black text-lg text-foreground uppercase italic tracking-tight">
                       {c.label}
                     </div>
-                    <div className="text-xs" style={{ color: "hsl(150, 14%, 50%)" }}>
+                    <div className="text-xs font-black uppercase tracking-widest text-muted-foreground mt-1">
                       {c.sub}
                     </div>
                   </div>
-                  <div className="ml-auto" style={{ color: "hsl(150, 14%, 40%)" }}>→</div>
+                  <div className="ml-auto text-primary font-black group-hover:translate-x-2 transition-transform duration-300">→</div>
                 </a>
               ))}
             </div>
@@ -294,27 +259,24 @@ const FeaturesSection = () => (
             initial={{ opacity: 0, x: 30 }}
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true }}
-            className="rounded-3xl p-8 md:p-10 text-center"
+            className="rounded-[3.5rem] p-12 md:p-16 text-center relative overflow-hidden"
             style={{
-              background: "linear-gradient(135deg, hsl(142, 60%, 14%) 0%, hsl(150, 40%, 10%) 100%)",
-              border: "1px solid hsl(142, 50%, 22%)",
-              boxShadow: "0 0 60px hsl(142, 72%, 25%, 0.25)",
+              background: "linear-gradient(135deg, hsl(142, 60%, 15%) 0%, hsl(142, 50%, 8%) 100%)",
+              boxShadow: "0 40px 100px -20px hsla(142, 72%, 25%, 0.3)",
             }}
           >
-            <div className="text-5xl mb-4">🏃</div>
-            <h3
-              className="font-display text-2xl md:text-3xl font-bold mb-3"
-              style={{ color: "hsl(0, 0%, 95%)" }}
-            >
+            <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_0%,rgba(16,185,129,0.2),transparent_70%)] pointer-events-none" />
+            <div className="text-7xl mb-8 transform hover:scale-110 transition-transform duration-500">🏃</div>
+            <h3 className="font-display text-3xl md:text-4xl font-black mb-6 text-white uppercase italic tracking-tight">
               Đừng chờ có động lực!
             </h3>
-            <p className="mb-8 text-sm leading-relaxed" style={{ color: "hsl(150, 14%, 60%)" }}>
+            <p className="mb-10 text-[15px] leading-relaxed text-white/90 font-medium italic">
               Hãy đăng ký ngay và tạo động lực từ những bước chạy đầu tiên. Thử thách bắt đầu từ{" "}
-              <span style={{ color: "hsl(142, 72%, 60%)" }} className="font-semibold">
+              <span className="text-primary font-black">
                 00:00 ngày 01/04/2026
               </span>{" "}
               đến{" "}
-              <span style={{ color: "hsl(25, 80%, 62%)" }} className="font-semibold">
+              <span className="text-accent font-black">
                 23:59 ngày 30/04/2026
               </span>.
             </p>
@@ -326,15 +288,15 @@ const FeaturesSection = () => (
             >
               <button
                 id="features-register-btn"
-                className="w-full gradient-hero text-white font-display font-bold text-lg py-4 rounded-2xl hover:scale-105 transition-transform duration-200 green-glow"
+                className="w-full gradient-hero text-white font-display font-black text-xl py-6 rounded-2xl hover:scale-[1.03] transition-all duration-300 shadow-2xl green-glow uppercase italic"
               >
-                ĐĂNG KÝ MIỄN PHÍ →
+                Đăng ký miễn phí →
               </button>
             </a>
-            <div className="mt-6 flex justify-center gap-6 text-xs" style={{ color: "hsl(150, 14%, 45%)" }}>
-              <span>✓ Miễn phí 100%</span>
-              <span>✓ Toàn quốc</span>
-              <span>✓ Mọi trình độ</span>
+            <div className="mt-8 flex flex-wrap justify-center gap-6 text-[11px] font-black uppercase tracking-widest text-white/70">
+              <span className="flex items-center gap-2"><CheckCircle className="h-3 w-3 text-primary" /> Miễn phí 100%</span>
+              <span className="flex items-center gap-2"><CheckCircle className="h-3 w-3 text-primary" /> Toàn quốc</span>
+              <span className="flex items-center gap-2"><CheckCircle className="h-3 w-3 text-primary" /> Mọi trình độ</span>
             </div>
           </motion.div>
         </div>

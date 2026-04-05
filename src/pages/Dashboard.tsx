@@ -90,18 +90,27 @@ const Dashboard = () => {
               ) : (
                 <div className="space-y-6">
                   {leaderboard?.map((runner, i) => (
-                    <div key={runner.userId} className="flex items-center gap-4 group">
+                    <Link to={`/athlete/${runner.userId || runner._id || runner.id}`} key={runner.userId || i} className="flex items-center gap-4 group cursor-pointer">
                       <div className="w-8 font-display font-black text-muted-foreground/30 text-lg italic tracking-widest">#{i+1}</div>
-                      <div className="w-12 h-12 rounded-2xl overflow-hidden bg-muted flex-shrink-0 border border-white/5 shadow-inner">
-                        <img src={runner.avatar} alt="" className="w-full h-full object-cover transition-transform group-hover:scale-110" />
+                      <div className="w-12 h-12 rounded-2xl overflow-hidden bg-secondary flex-shrink-0 border-2 border-white shadow-md relative">
+                        <img 
+                          src={runner.avatar} 
+                          alt="" 
+                          referrerPolicy="no-referrer"
+                          className="w-full h-full object-cover transition-transform group-hover:scale-110" 
+                          onError={(e) => {
+                            (e.target as any).src = `https://ui-avatars.com/api/?name=${runner.name}&background=random`;
+                          }}
+                        />
+                        <div className="absolute inset-0 ring-1 ring-inset ring-black/5 rounded-2xl" />
                       </div>
                       <div className="flex-1 min-w-0">
-                        <div className="text-sm font-bold truncate group-hover:text-primary transition-colors uppercase tracking-tight leading-none mb-1.5">{runner.name}</div>
-                        <div className="text-lg font-display font-black text-foreground leading-none flex items-baseline gap-1">
-                          {runner.distance.toLocaleString()} <span className="text-[10px] text-primary uppercase tracking-widest font-black">km</span>
+                        <div className="text-sm font-black truncate group-hover:text-primary transition-colors uppercase tracking-tight leading-none mb-1.5">{runner.name}</div>
+                        <div className="text-lg font-display font-black text-foreground leading-none flex items-baseline gap-1 tabular-nums">
+                          {runner.distance.toLocaleString()} <span className="text-[10px] text-primary uppercase tracking-widest font-black italic">km</span>
                         </div>
                       </div>
-                    </div>
+                    </Link>
                   ))}
                 </div>
               )}

@@ -32,12 +32,21 @@ const Profile = () => {
           animate={{ opacity: 1, y: 0 }}
           className="glass-card rounded-xl p-6 flex items-center gap-6"
         >
-          <div className="w-20 h-20 rounded-2xl bg-primary/20 flex items-center justify-center text-2xl font-bold text-primary font-display overflow-hidden border border-primary/30">
+          <div className="w-20 h-20 rounded-2xl bg-secondary flex items-center justify-center text-2xl font-black text-primary font-display overflow-hidden border-2 border-white shadow-xl relative">
             {user?.avatar ? (
-              <img src={user.avatar} alt={user.name} className="w-full h-full object-cover" />
+              <img 
+                src={user.avatar} 
+                alt={user.name} 
+                referrerPolicy="no-referrer"
+                className="w-full h-full object-cover" 
+                onError={(e) => {
+                  (e.target as any).src = `https://ui-avatars.com/api/?name=${user.name}&background=random`;
+                }}
+              />
             ) : (
               user?.name.substring(0, 2).toUpperCase()
             )}
+            <div className="absolute inset-0 ring-1 ring-inset ring-black/5 rounded-2xl" />
           </div>
           <div className="flex-1">
             <h1 className="font-display text-2xl font-bold text-foreground">{user?.name}</h1>

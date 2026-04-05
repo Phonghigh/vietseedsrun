@@ -88,7 +88,7 @@ const VietnamHeatmapCard = () => {
     
     return {
       fillColor: colorScale(val),
-      weight: isHovered ? 3 : 1,
+      weight: isHovered ? 4 : 1,
       opacity: 1,
       color: isHovered ? "var(--primary)" : "white",
       fillOpacity: isHovered ? 0.95 : 0.85,
@@ -105,7 +105,7 @@ const VietnamHeatmapCard = () => {
     layer.on({
       mouseover: (e: any) => {
         setHoveredProvince(curData?.province || provinceName);
-        e.target.setStyle({ weight: 3, color: "var(--primary)", fillOpacity: 0.95 });
+        e.target.setStyle({ weight: 4, color: "var(--primary)", fillOpacity: 0.95 });
       },
       mouseout: (e: any) => {
         setHoveredProvince(null);
@@ -114,25 +114,25 @@ const VietnamHeatmapCard = () => {
     });
 
     layer.bindTooltip(`
-      <div class="bg-white/95 backdrop-blur-md border border-primary/30 rounded-2xl p-5 shadow-2xl min-w-[220px]">
-        <div class="flex items-center gap-3 mb-3 pb-3 border-b border-primary/20">
-          <div class="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center text-primary font-black uppercase text-xs">
+      <div class="bg-white/95 backdrop-blur-md border border-primary/30 rounded-[2rem] p-6 shadow-2xl min-w-[260px]">
+        <div class="flex items-center gap-4 mb-4 pb-4 border-b border-primary/20">
+          <div class="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center text-primary font-black uppercase text-sm">
              ${provinceName.substring(0, 2)}
           </div>
-          <div class="font-display font-black text-foreground uppercase tracking-tight text-base">${provinceName}</div>
+          <div class="font-display font-black text-foreground uppercase tracking-tight text-lg italic">${provinceName}</div>
         </div>
-        <div class="space-y-2.5">
+        <div class="space-y-3">
           <div class="flex items-center justify-between gap-6">
-            <span class="text-[11px] font-bold text-muted-foreground uppercase tracking-wider">${activeTab === 'members' ? 'Thành viên' : 'Hoạt động'}</span>
-            <span class="text-base font-black text-primary">${val.toLocaleString()} ${activeTab === 'members' ? 'người' : 'km'}</span>
+            <span class="text-xs font-black text-muted-foreground uppercase tracking-widest">${activeTab === 'members' ? 'Thành viên' : 'Hoạt động'}</span>
+            <span class="text-xl font-black text-primary tabular-nums">${val.toLocaleString()} ${activeTab === 'members' ? 'người' : 'km'}</span>
           </div>
-          <div class="flex items-center justify-between gap-6 pb-2 border-b border-primary/10">
-            <span class="text-[11px] font-bold text-muted-foreground uppercase tracking-wider">Tỷ lệ toàn quốc</span>
-            <span class="text-sm font-black text-primary">${percentage}%</span>
+          <div class="flex items-center justify-between gap-6 pb-3 border-b border-primary/10">
+            <span class="text-xs font-black text-muted-foreground uppercase tracking-widest">Tỷ lệ toàn quốc</span>
+            <span class="text-base font-black text-primary">${percentage}%</span>
           </div>
           <div class="flex items-center justify-between gap-6 pt-1">
-            <span class="text-[11px] font-bold text-muted-foreground uppercase tracking-wider">Thứ hạng</span>
-            <span class="text-sm font-black text-foreground">#${rank || '---'}</span>
+            <span class="text-xs font-black text-muted-foreground uppercase tracking-widest">Thứ hạng</span>
+            <span class="text-base font-black text-foreground italic"># ${rank || '---'}</span>
           </div>
         </div>
       </div>
@@ -140,50 +140,50 @@ const VietnamHeatmapCard = () => {
   };
 
   return (
-    <div className="glass-card rounded-[3rem] p-10 shadow-2xl relative overflow-hidden border border-primary/20 min-h-[900px] flex flex-col mt-4">
-      <div className="absolute top-[-10%] right-[-5%] w-[400px] h-[400px] bg-primary/5 rounded-full blur-[120px] pointer-events-none" />
+    <div className="glass-card rounded-[4rem] p-12 md:p-16 shadow-2xl relative overflow-hidden border border-primary/20 min-h-[1000px] flex flex-col mt-4">
+      <div className="absolute top-[-10%] right-[-5%] w-[500px] h-[500px] bg-primary/5 rounded-full blur-[150px] pointer-events-none" />
       
-      <div className="flex flex-col md:flex-row justify-between items-start md:items-end gap-6 mb-16 relative z-20">
-        <div>
-          <div className="text-xs font-bold uppercase tracking-[0.4em] text-primary mb-4 flex items-center gap-3">
-             <div className="w-2 h-2 rounded-full bg-primary animate-pulse" />
-             <Globe className="h-4 w-4" /> Hệ thống bản đồ thực địa
+      <div className="flex flex-col md:flex-row justify-between items-start md:items-end gap-10 mb-20 relative z-20">
+        <div className="max-w-2xl">
+          <div className="text-sm font-black uppercase tracking-[0.4em] text-primary mb-6 flex items-center gap-4">
+             <div className="w-2.5 h-2.5 rounded-full bg-primary animate-pulse" />
+             <Globe className="h-6 w-6" /> Hệ thống bản đồ thực địa
           </div>
-          <h2 className="font-display text-4xl md:text-5xl font-black text-foreground tracking-tight leading-none uppercase mb-2">Phân bổ tham gia</h2>
-          <p className="text-muted-foreground text-sm font-bold tracking-wide uppercase">
+          <h2 className="font-display text-5xl md:text-7xl font-black text-foreground tracking-tighter leading-[1.1] uppercase italic mb-6">Toàn cảnh <br /> Phân bổ tham gia</h2>
+          <p className="text-muted-foreground text-base font-bold tracking-wide uppercase border-l-4 border-primary/20 pl-6 py-2">
             {activeTab === "members" 
               ? "Bản đồ mật độ thành viên đăng ký thành công theo 63 tỉnh thành" 
               : "Bản đồ nhiệt tổng hợp hoạt động thể thao (Km) trên toàn quốc"}
           </p>
         </div>
 
-        <div className="flex bg-secondary p-2 rounded-[2rem] border border-primary/20 shadow-md overflow-hidden">
+        <div className="flex bg-secondary p-2.5 rounded-[2.5rem] border border-primary/20 shadow-2xl overflow-hidden ring-4 ring-primary/5">
           <button
             onClick={() => setActiveTab("members")}
-            className={`flex items-center gap-3 px-8 py-3.5 rounded-full transition-all duration-500 font-bold text-xs uppercase tracking-widest ${
-              activeTab === "members" ? "bg-primary text-primary-foreground shadow-lg" : "text-muted-foreground hover:bg-white/40"
+            className={`flex items-center gap-4 px-10 py-4.5 rounded-[2rem] transition-all duration-500 font-black text-sm uppercase tracking-widest ${
+              activeTab === "members" ? "bg-primary text-primary-foreground shadow-2xl ring-2 ring-white/20" : "text-muted-foreground hover:bg-white/40"
             }`}
           >
-            <Users className="h-4 w-4" /> Thành viên
+            <Users className="h-5 w-5" /> Thành viên
           </button>
           <button
             onClick={() => setActiveTab("activities")}
-            className={`flex items-center gap-3 px-8 py-3.5 rounded-full transition-all duration-500 font-bold text-xs uppercase tracking-widest ${
-              activeTab === "activities" ? "bg-accent text-accent-foreground shadow-lg" : "text-muted-foreground hover:bg-white/40"
+            className={`flex items-center gap-4 px-10 py-4.5 rounded-[2rem] transition-all duration-500 font-black text-sm uppercase tracking-widest ${
+              activeTab === "activities" ? "bg-accent text-accent-foreground shadow-2xl ring-2 ring-white/20" : "text-muted-foreground hover:bg-white/40"
             }`}
           >
-            <Activity className="h-4 w-4" /> Hoạt động
+            <Activity className="h-5 w-5" /> Hoạt động
           </button>
         </div>
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-16 flex-1 relative z-10">
-        <div className="lg:col-span-7 bg-white rounded-[4rem] border border-primary/20 relative overflow-hidden group/map flex flex-col pt-0 min-h-[650px] shadow-inner">
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-20 flex-1 relative z-10">
+        <div className="lg:col-span-12 xl:col-span-7 bg-white rounded-[5rem] border border-primary/20 relative overflow-hidden group/map flex flex-col pt-0 min-h-[750px] shadow-inner lg:shadow-2xl">
            <MapContainer 
               center={[16.0, 108.0]} 
               zoom={6} 
               zoomControl={false}
-              className="w-full h-full z-10 rounded-[4rem]"
+              className="w-full h-full z-10 rounded-[5rem]"
               style={{ background: '#ffffff' }}
            >
               <TileLayer
@@ -200,40 +200,31 @@ const VietnamHeatmapCard = () => {
                   onEachFeature={onEachFeature}
                 />
               )}
- 
-              <div className="leaflet-overlay-pane">
-                 <svg className="absolute" style={{ left: '65%', top: '35%' }}>
-                    <circle r="8" fill={colorScale(heatmapData?.find(d => normalizeName(d.province) === 'da nang')?.members || 0)} fillOpacity="1" stroke="var(--primary)" strokeWidth="2" />
-                 </svg>
-                 <svg className="absolute" style={{ left: '75%', top: '75%' }}>
-                    <circle r="8" fill={colorScale(heatmapData?.find(d => normalizeName(d.province) === 'khanh hoa')?.members || 0)} fillOpacity="1" stroke="var(--primary)" strokeWidth="2" />
-                 </svg>
-              </div>
            </MapContainer>
 
-           <div className="absolute bottom-10 left-10 right-10 z-20 p-8 bg-white/95 border border-primary/20 rounded-[2.5rem] backdrop-blur-3xl shadow-2xl">
-              <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
+           <div className="absolute bottom-12 left-12 right-12 z-20 p-10 bg-white/95 border border-primary/20 rounded-[3.5rem] backdrop-blur-3xl shadow-2xl">
+              <div className="flex flex-col md:flex-row md:items-center justify-between gap-8">
                 <div>
-                   <div className="text-[10px] font-black text-primary uppercase tracking-[0.3em] mb-1 flex items-center gap-2">
-                     <Info className="h-3 w-3" /> Chú giải mật độ
+                   <div className="text-[11px] font-black text-primary uppercase tracking-[0.4em] mb-2 flex items-center gap-2">
+                     <Info className="h-4 w-4" /> Chú giải mật độ
                    </div>
-                   <div className="text-xs font-bold text-foreground">
+                   <div className="text-sm font-black text-foreground">
                       Mức độ {activeTab === "members" ? "thành viên (người)" : "hoạt động (km)"}
                    </div>
                 </div>
                 
-                <div className="flex items-center gap-2 flex-wrap">
-                  <div className="flex flex-col items-center gap-2 mr-4">
-                    <div className="w-10 h-3 rounded-md bg-[#f8fafc] border border-primary/20" />
-                    <span className="text-[9px] font-black text-muted-foreground uppercase">0/N.A</span>
+                <div className="flex items-center gap-4 flex-wrap">
+                  <div className="flex flex-col items-center gap-3 mr-6">
+                    <div className="w-14 h-4 rounded-full bg-[#f8fafc] border border-primary/20" />
+                    <span className="text-[10px] font-black text-muted-foreground uppercase tracking-widest">0 / N.A</span>
                   </div>
                   {SCALE_RANGES.filter(v => v > 0).map((val, i) => (
-                    <div key={val} className="flex flex-col items-center gap-2">
+                    <div key={val} className="flex flex-col items-center gap-3">
                       <div 
-                        className="w-12 h-3 rounded-md shadow-inner transition-transform hover:scale-110" 
+                        className="w-16 h-4 rounded-full shadow-2xl transition-all hover:scale-125 cursor-default ring-1 ring-white/50" 
                         style={{ backgroundColor: (activeTab === "members" ? MEMBER_COLORS : ACTIVITY_COLORS)[i+1] }} 
                       />
-                      <span className="text-[9px] font-black text-muted-foreground">{val}{i === SCALE_RANGES.length - 2 ? '+' : `- ${SCALE_RANGES[i+2]-1}`}</span>
+                      <span className="text-[10px] font-black text-muted-foreground tabular-nums">{val}{i === SCALE_RANGES.length - 2 ? '+' : `- ${SCALE_RANGES[i+2]-1}`}</span>
                     </div>
                   ))}
                 </div>
@@ -241,27 +232,27 @@ const VietnamHeatmapCard = () => {
            </div>
         </div>
 
-        <div className="lg:col-span-5 flex flex-col gap-8">
-          <div className="flex items-center justify-between px-2">
-             <div className="text-xs font-black text-muted-foreground uppercase tracking-[0.4em]">Thứ hạng địa phương</div>
-             <div className="flex items-center gap-3">
-                 <div className="flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#10b981]/10 border border-[#10b981]/20 text-[#10b981] text-[9px] font-black uppercase tracking-widest">
-                    <Zap className="h-3 w-3" /> Live
+        <div className="lg:col-span-12 xl:col-span-5 flex flex-col gap-10">
+          <div className="flex items-center justify-between px-4">
+             <div className="text-sm font-black text-muted-foreground uppercase tracking-[0.4em]">Thứ hạng địa phương</div>
+             <div className="flex items-center gap-4">
+                 <div className="flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 border border-primary/20 text-primary text-xs font-black uppercase tracking-widest shadow-sm">
+                    <Zap className="h-4 w-4" /> Live
                  </div>
-                 <div className="p-2 rounded-xl bg-white border border-border text-muted-foreground shadow-sm">
-                    <Maximize2 className="h-4 w-4" />
+                 <div className="p-3 rounded-2xl bg-white border border-border text-muted-foreground shadow-2xl hover:text-primary transition-colors cursor-pointer">
+                    <Maximize2 className="h-5 w-5" />
                  </div>
              </div>
           </div>
           
           {isLoading ? (
-            <div className="space-y-4">
+            <div className="space-y-6">
               {[...Array(6)].map((_, i) => (
-                <div key={i} className="h-24 rounded-[2.5rem] bg-white border border-border animate-pulse" />
+                <div key={i} className="h-28 rounded-[3rem] bg-white border border-border animate-pulse" />
               ))}
             </div>
           ) : (
-            <div className="space-y-4 overflow-y-auto pr-2 custom-scrollbar max-h-[650px] pb-10">
+            <div className="space-y-6 overflow-y-auto pr-4 custom-scrollbar max-h-[800px] pb-10">
               {displayData.map((item, i) => (
                 <motion.div
                   key={item.province}
@@ -269,40 +260,40 @@ const VietnamHeatmapCard = () => {
                   animate={{ opacity: 1, x: 0 }}
                   onMouseEnter={() => setHoveredProvince(item.province)}
                   onMouseLeave={() => setHoveredProvince(null)}
-                  className={`group relative flex items-center gap-6 p-6 rounded-[2.5rem] border transition-all duration-500 cursor-pointer ${
+                  className={`group relative flex items-center gap-8 p-8 rounded-[3rem] border transition-all duration-500 cursor-pointer ${
                     hoveredProvince === item.province 
-                      ? (activeTab === 'members' ? "bg-primary/5 border-primary shadow-xl scale-[1.02] z-20" : "bg-accent/5 border-accent shadow-xl scale-[1.02] z-20") 
-                      : (i < 3 ? "bg-secondary border-primary/20 shadow-sm" : "bg-white border-border hover:bg-secondary/50 shadow-sm")
+                      ? (activeTab === 'members' ? "bg-primary/5 border-primary shadow-2xl scale-[1.03] z-20" : "bg-accent/5 border-accent shadow-2xl scale-[1.03] z-20") 
+                      : (i < 3 ? "bg-secondary border-primary/30 shadow-xl" : "bg-white border-border hover:bg-secondary/50 shadow-xl")
                   }`}
                 >
-                  <div className={`w-12 h-12 rounded-2xl flex items-center justify-center font-display font-black text-lg ${
+                  <div className={`w-14 h-14 rounded-2xl flex items-center justify-center font-display font-black text-xl ${
                     i < 3 
-                      ? "bg-gradient-to-br from-primary to-emerald-600 text-primary-foreground shadow-xl relative" 
-                      : "bg-muted/30 text-muted-foreground"
+                      ? "bg-gradient-to-br from-primary to-emerald-600 text-primary-foreground shadow-2xl relative ring-2 ring-white" 
+                      : "bg-muted/60 text-muted-foreground"
                   }`}>
-                    {i < 3 && <Award className="absolute -top-1.5 -right-1.5 h-4 w-4 text-yellow-400 drop-shadow-md" />}
+                    {i < 3 && <Award className="absolute -top-2 -right-2 h-6 w-6 text-yellow-400 drop-shadow-xl" />}
                     {i + 1}
                   </div>
 
                   <div className="flex-1 min-w-0">
-                    <div className="font-display font-bold text-foreground group-hover:text-primary transition-colors text-lg uppercase tracking-tight leading-none mb-1">
+                    <div className="font-display font-black text-foreground group-hover:text-primary transition-colors text-xl uppercase tracking-tighter leading-none mb-2 italic">
                       {item.province}
                     </div>
-                    <div className="flex items-center gap-2">
-                       <div className="text-[10px] font-black text-muted-foreground uppercase tracking-widest">Việt Nam</div>
-                       {item.members === 0 && <span className="text-[8px] font-black text-primary/40 uppercase tracking-tighter">(Chưa có dữ liệu)</span>}
+                    <div className="flex items-center gap-3">
+                       <div className="text-xs font-black text-muted-foreground uppercase tracking-widest">Việt Nam • Top {i + 1}</div>
+                       {item.members === 0 && <span className="text-[10px] font-black text-primary/50 uppercase tracking-tighter">(Đang cập nhật)</span>}
                     </div>
                   </div>
 
                   <div className="text-right">
-                    <div className={`text-2xl font-display font-black ${activeTab === "members" ? "text-primary" : "text-accent"} transition-all ${hoveredProvince === item.province ? "scale-110 origin-right" : ""}`}>
+                    <div className={`text-3xl font-display font-black ${activeTab === "members" ? "text-primary" : "text-accent text-shadow-sm"} transition-all ${hoveredProvince === item.province ? "scale-110 origin-right" : ""} tabular-nums`}>
                        {(activeTab === "members" ? item.members : item.activities).toLocaleString()}
                     </div>
-                    <div className="text-[9px] font-black text-muted-foreground uppercase tracking-[0.2em] leading-none mt-1">
+                    <div className="text-[11px] font-black text-muted-foreground uppercase tracking-[0.25em] leading-none mt-2">
                        {activeTab === "members" ? "Thành viên" : "Hoạt động (km)"}
                     </div>
                   </div>
-                  <ChevronRight className={`h-5 w-5 transition-transform ${hoveredProvince === item.province ? "translate-x-1 opacity-100" : "opacity-10 translate-x-0"}`} />
+                  <ChevronRight className={`h-6 w-6 transition-transform ${hoveredProvince === item.province ? "translate-x-2 opacity-100" : "opacity-10 translate-x-0"}`} />
                 </motion.div>
               ))}
             </div>
@@ -323,6 +314,9 @@ const VietnamHeatmapCard = () => {
         }
         .custom-leaflet-tooltip::before {
           display: none !important;
+        }
+        .text-shadow-sm {
+          text-shadow: 0 1px 2px rgba(0,0,0,0.05);
         }
       `}</style>
     </div>

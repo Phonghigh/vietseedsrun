@@ -23,70 +23,86 @@ const CommunityHero = ({ currentKm, targetKm, totalRunners, totalActivities }: C
     <motion.div
       initial={{ opacity: 0, y: 15 }}
       animate={{ opacity: 1, y: 0 }}
-      className="glass-card rounded-[2rem] p-6 relative overflow-hidden border border-primary/10"
+      className="bg-white rounded-[2.5rem] p-8 md:p-10 relative overflow-hidden border border-border shadow-2xl group"
     >
-      <div className="absolute top-0 right-0 w-64 h-32 bg-primary/5 rounded-full blur-[60px] pointer-events-none" />
+      <div className="absolute top-0 right-0 w-[400px] h-[200px] bg-primary/5 rounded-full blur-[100px] pointer-events-none group-hover:bg-primary/10 transition-all duration-1000" />
 
       <div className="flex flex-col md:flex-row items-center justify-between gap-6 relative z-10">
         {/* Total Distance - The Big One */}
-        <div className="flex items-center gap-6 border-r border-border/30 pr-8 last:border-0 h-full">
-           <div className="w-14 h-14 rounded-2xl bg-primary/10 flex items-center justify-center text-primary-light flex-shrink-0">
-             <Flame className="h-7 w-7" />
+        <div className="flex items-center gap-8 pr-12 h-full">
+           <div className="w-16 h-16 rounded-[1.5rem] bg-secondary flex items-center justify-center text-primary shadow-inner border border-primary/10 ring-4 ring-primary/5 group-hover:scale-110 transition-transform">
+             <Flame className="h-8 w-8" />
            </div>
            <div>
-             <div className="text-[10px] font-bold text-muted-foreground/60 uppercase tracking-widest mb-1">Tổng khoảng cách</div>
-             <div className="font-display text-4xl font-black text-foreground tracking-tighter leading-none">
+             <div className="text-xs font-black text-muted-foreground uppercase tracking-[0.2em] mb-2 leading-none">Tổng khoảng cách</div>
+             <div className="font-display text-5xl font-black text-foreground tracking-tighter leading-none tabular-nums italic">
                {currentKm.toLocaleString()}
-               <span className="text-primary text-xl ml-1">km</span>
+               <span className="text-primary text-xl ml-2 not-italic font-black opacity-70 uppercase tracking-widest">km</span>
              </div>
            </div>
         </div>
 
+        {/* Vertical Divider */}
+        <div className="hidden md:block w-px h-16 bg-border/50" />
+
         {/* Stats Grid */}
-        <div className="flex-1 grid grid-cols-2 md:grid-cols-3 gap-8">
+        <div className="flex-1 grid grid-cols-2 md:grid-cols-3 gap-10">
           {[
             {
               icon: Users,
               value: totalRunners,
-              label: "Runners",
+              label: "VẬN ĐỘNG VIÊN",
               color: "text-accent",
+              bg: "bg-accent/10"
             },
             {
               icon: ActivityIcon,
               value: totalActivities,
-              label: "Hoạt động",
-              color: "text-blue-400",
+              label: "HOẠT ĐỘNG",
+              color: "text-blue-500",
+              bg: "bg-blue-500/10"
             },
             {
               icon: Target,
               value: `${progress}%`,
-              label: "Hoàn thành",
-              color: "text-purple-400",
+              label: "HOÀN THÀNH",
+              color: "text-purple-500",
+              bg: "bg-purple-500/10"
             },
           ].map((stat, i) => (
-            <div key={stat.label} className="flex flex-col justify-center">
-              <div className="flex items-center gap-2 mb-1">
-                <stat.icon className={`h-3 w-3 ${stat.color} opacity-70`} />
-                <span className="text-[10px] font-bold text-muted-foreground/50 uppercase tracking-wider">{stat.label}</span>
+            <div key={stat.label} className="flex flex-col justify-center gap-3">
+              <div className="flex items-center gap-3">
+                <div className={`p-2 rounded-lg ${stat.bg} ${stat.color} shadow-sm ring-1 ring-inset ring-black/5`}>
+                   <stat.icon className="h-4 w-4" />
+                </div>
+                <span className="text-[11px] font-black text-muted-foreground uppercase tracking-widest leading-none">{stat.label}</span>
               </div>
-              <div className="font-display text-xl font-black text-foreground/90">
+              <div className="font-display text-2xl font-black text-foreground tabular-nums leading-none">
                 {stat.value.toLocaleString()}
               </div>
             </div>
           ))}
         </div>
 
+        {/* Vertical Divider */}
+        <div className="hidden md:block w-px h-16 bg-border/50" />
+
         {/* Mini progress bar on the far right */}
-        <div className="w-full md:w-48 bg-muted/20 h-10 rounded-xl p-1.5 flex items-center gap-3 border border-border/20">
-          <div className="flex-1 bg-background/50 h-full rounded-lg overflow-hidden flex items-center px-1">
+        <div className="w-full md:w-64 bg-secondary h-16 rounded-2xl p-3 flex items-center gap-5 border border-border shadow-inner relative overflow-hidden group/progress">
+          <div className="flex-1 bg-white h-full rounded-xl overflow-hidden flex items-center px-1 border border-border/50 shadow-sm relative">
             <motion.div
               initial={{ width: 0 }}
               animate={{ width: `${progress}%` }}
-              className="h-full bg-primary rounded-md"
+              className="h-full bg-primary rounded-lg shadow-lg relative overflow-hidden"
               transition={{ duration: 1.5, ease: "easeOut" }}
-            />
+            >
+               <div className="absolute inset-0 bg-white/20 animate-pulse" />
+            </motion.div>
           </div>
-          <span className="text-[10px] font-black text-primary pr-2">{progress}%</span>
+          <div className="flex flex-col items-end pr-1">
+             <span className="text-xl font-display font-black text-primary leading-none tabular-nums">{progress}%</span>
+             <span className="text-[9px] font-black text-muted-foreground uppercase tracking-tighter mt-1 italic">TỔNG PROGRESS</span>
+          </div>
         </div>
       </div>
     </motion.div>

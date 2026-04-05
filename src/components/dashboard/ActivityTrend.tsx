@@ -26,7 +26,7 @@ const ActivityTrend = () => {
         {isLoading && (
           <div className="ml-auto flex items-center gap-2">
             <Loader2 className="h-4 w-4 animate-spin text-primary/40" />
-            <span className="text-[10px] font-bold text-muted-foreground/40 uppercase">Đang tải dữ liệu...</span>
+            <span className="text-[10px] font-bold text-slate-400 uppercase">Đang tải dữ liệu...</span>
           </div>
         )}
       </div>
