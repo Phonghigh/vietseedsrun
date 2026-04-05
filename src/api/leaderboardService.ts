@@ -37,6 +37,7 @@ export interface AthleteDetailResponse {
     activityCount: number;
     totalDistanceKm: number;
     totalDistanceMeters: number;
+    rank: number;
   };
   activities: Array<{
     id: string;

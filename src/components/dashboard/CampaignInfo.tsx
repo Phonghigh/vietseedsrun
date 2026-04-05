@@ -25,22 +25,22 @@ const CampaignInfo = () => {
         </p>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 pt-8 border-t border-border/30">
-          <div className="flex items-center gap-4 bg-secondary/50 p-6 rounded-[2rem] border border-primary/10">
-            <div className="w-12 h-12 rounded-2xl bg-white flex items-center justify-center text-primary shadow-sm">
+          <div className="flex items-center gap-3 bg-secondary/50 px-5 py-6 rounded-[2rem] border border-primary/10">
+            <div className="w-12 h-12 rounded-2xl bg-white flex items-center justify-center text-primary shadow-sm flex-shrink-0">
               <Calendar className="h-6 w-6" />
             </div>
-            <div>
-              <div className="text-[10px] font-black text-muted-foreground uppercase tracking-widest leading-none mb-1">NGÀY BẮT ĐẦU</div>
-              <div className="text-lg font-black text-foreground">01/04/2026</div>
+            <div className="min-w-0">
+              <div className="text-[9px] font-black text-muted-foreground uppercase tracking-wider leading-none mb-1.5 truncate">NGÀY BẮT ĐẦU</div>
+              <div className="text-base font-black text-foreground whitespace-nowrap">01/04/2026</div>
             </div>
           </div>
-          <div className="flex items-center gap-4 bg-secondary/50 p-6 rounded-[2rem] border border-primary/10">
-            <div className="w-12 h-12 rounded-2xl bg-white flex items-center justify-center text-primary shadow-sm">
+          <div className="flex items-center gap-3 bg-secondary/50 px-5 py-6 rounded-[2rem] border border-primary/10">
+            <div className="w-12 h-12 rounded-2xl bg-white flex items-center justify-center text-primary shadow-sm flex-shrink-0">
               <Calendar className="h-6 w-6" />
             </div>
-            <div>
-              <div className="text-[10px] font-black text-muted-foreground uppercase tracking-widest leading-none mb-1">NGÀY KẾT THÚC</div>
-              <div className="text-lg font-black text-foreground">30/04/2026</div>
+            <div className="min-w-0">
+              <div className="text-[9px] font-black text-muted-foreground uppercase tracking-wider leading-none mb-1.5 truncate">NGÀY KẾT THÚC</div>
+              <div className="text-base font-black text-foreground whitespace-nowrap">30/04/2026</div>
             </div>
           </div>
         </div>

@@ -88,7 +88,7 @@ const ActivityFeed = () => {
                     <div className="text-[17px] font-black text-foreground group-hover:text-primary transition-colors truncate tracking-tight uppercase italic leading-none">
                       {item.userName}
                     </div>
-                    <div className="text-[11px] font-black text-muted-foreground uppercase tracking-widest mt-1">Việt Nam • Đã hoàn thành</div>
+                    <div className="text-[11px] font-black text-muted-foreground uppercase tracking-widest mt-1">Đã hoàn thành</div>
                   </div>
                   <div className="text-right flex flex-col items-end">
                     <div className="text-2xl font-display font-black text-primary whitespace-nowrap leading-none tabular-nums">
