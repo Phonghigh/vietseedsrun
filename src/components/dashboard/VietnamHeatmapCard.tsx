@@ -160,15 +160,15 @@ const VietnamHeatmapCard = () => {
         <div className="max-w-2xl">
           <div className="text-sm font-black uppercase tracking-[0.4em] text-primary mb-6 flex items-center gap-4">
             <div className="w-2.5 h-2.5 rounded-full bg-primary animate-pulse" />
-            <Globe className="h-6 w-6" /> Hệ thống bản đồ thực địa
+            <Globe className="h-6 w-6" /> Hệ thống bản đồ
           </div>
           <h2 className="font-display text-5xl md:text-7xl font-black text-foreground tracking-tighter leading-[1.1] uppercase italic mb-6">
             Toàn cảnh <br /> Phân bổ tham gia
           </h2>
           <p className="text-muted-foreground text-base font-bold tracking-wide uppercase border-l-4 border-primary/20 pl-6 py-2">
             {activeTab === "members"
-              ? "Bản đồ tổng hợp thành viên đăng ký thành công trên toàn quốc"
-              : "Bản đồ tổng hợp hoạt động thể thao (Km) trên toàn quốc"}
+              ? "Bản đồ tổng hợp thành viên đăng ký thành công"
+              : "Bản đồ tổng hợp hoạt động thể thao (Km)"}
           </p>
         </div>
 
