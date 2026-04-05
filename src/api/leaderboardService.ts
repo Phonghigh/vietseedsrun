@@ -66,7 +66,12 @@ export const getIndividualLeaderboard = async (page = 1, limit = 10, timeframe =
   });
   // Handle both raw array and paginated object structure { data: [], total: ... }
   const data = Array.isArray(response.data) ? response.data : (response.data?.data || []);
-  return data;
+  
+  // Standardize activity count field
+  return data.map((u: any) => ({
+    ...u,
+    activities: u.activitiesCount ?? u.activities ?? 0
+  }));
 };
 
 export const getTeamLeaderboard = async (page = 1, limit = 10, timeframe = 'all'): Promise<LeaderboardTeam[]> => {

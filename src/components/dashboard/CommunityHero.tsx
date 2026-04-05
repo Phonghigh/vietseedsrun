@@ -70,15 +70,15 @@ const CommunityHero = ({ currentKm, targetKm, totalRunners, totalActivities }: C
               bg: "bg-purple-500/10"
             },
           ].map((stat, i) => (
-            <div key={stat.label} className="flex flex-col justify-center gap-3">
-              <div className="flex items-center gap-3">
-                <div className={`p-2 rounded-lg ${stat.bg} ${stat.color} shadow-sm ring-1 ring-inset ring-black/5`}>
-                   <stat.icon className="h-4 w-4" />
+            <div key={stat.label} className="flex flex-col items-center justify-center gap-3 text-center">
+              <div className="flex items-center gap-2">
+                <div className={`p-1.5 rounded-lg ${stat.bg} ${stat.color} shadow-sm ring-1 ring-inset ring-black/5 flex-shrink-0`}>
+                   <stat.icon className="h-3.5 w-3.5" />
                 </div>
-                <span className="text-[11px] font-black text-muted-foreground uppercase tracking-widest leading-none">{stat.label}</span>
+                <span className="text-[10px] font-black text-muted-foreground uppercase tracking-widest leading-none whitespace-nowrap">{stat.label}</span>
               </div>
               <div className="font-display text-2xl font-black text-foreground tabular-nums leading-none">
-                {stat.value.toLocaleString()}
+                {stat.value.toString()}
               </div>
             </div>
           ))}

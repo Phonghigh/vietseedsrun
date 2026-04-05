@@ -97,7 +97,7 @@ const Leaderboard = () => {
                         <div className={`w-16 h-16 rounded-[2rem] ${medalColors[i]} flex items-center justify-center mx-auto mb-6 text-white shadow-xl relative z-10 transform group-hover:rotate-12 transition-transform duration-500`}>
                           {i === 0 ? <Trophy className="h-8 w-8" /> : <Medal className="h-8 w-8" />}
                         </div>
-                        <div className="font-display font-black text-foreground group-hover:text-primary transition-colors text-xl uppercase tracking-tight italic truncate relative z-10 mb-2">
+                        <div className="font-display font-black text-foreground group-hover:text-primary transition-colors text-xl uppercase tracking-tight italic relative z-10 mb-2 px-3 overflow-hidden text-ellipsis whitespace-nowrap">
                           {u.name.replace(/-/g, ' ').replace(/\s+/g, ' ').trim()}
                         </div>
                         <div className="text-primary font-display text-4xl font-black relative z-10 mb-4 tabular-nums">
@@ -173,13 +173,13 @@ const Leaderboard = () => {
                             animate={{ opacity: 1, y: 0 }}
                             whileHover={{ scale: 1.02, y: -4, zIndex: 10 }}
                             transition={{ duration: 0.2 }}
-                            className="flex items-center justify-between px-10 py-6 bg-white rounded-[2rem] border border-border shadow-md cursor-pointer group hover:shadow-2xl hover:border-primary/30 transition-all duration-300"
+                            className="flex items-center justify-between px-10 py-6 bg-white rounded-[2rem] border border-border shadow-md cursor-pointer group hover:shadow-2xl hover:border-primary/30 transition-all duration-300 transform-gpu will-change-transform"
                           >
-                            <div className="flex items-center gap-8">
-                              <span className="font-display font-black text-foreground/20 w-10 text-right text-xl group-hover:text-primary transition-colors italic tabular-nums">
+                            <div className="flex items-center gap-6 flex-1 min-w-0">
+                              <span className="font-display font-black text-foreground/20 w-8 text-right text-xl group-hover:text-primary transition-colors italic tabular-nums flex-shrink-0">
                                 {u.rank}
                               </span>
-                              <div className="w-16 h-16 rounded-2xl bg-secondary flex items-center justify-center text-sm font-black text-primary border-2 border-white shadow-md overflow-hidden relative">
+                              <div className="w-16 h-16 rounded-2xl bg-secondary flex items-center justify-center text-sm font-black text-primary border-2 border-white shadow-md overflow-hidden relative flex-shrink-0">
                                 {u.avatar ? (
                                   <img 
                                     src={u.avatar} 
@@ -195,35 +195,35 @@ const Leaderboard = () => {
                                 )}
                                 <div className="absolute inset-0 ring-1 ring-inset ring-black/5 rounded-2xl" />
                               </div>
-                              <div>
-                                <div className="font-black text-foreground group-hover:text-primary transition-colors text-lg uppercase italic tracking-tight mb-1">
+                              <div className="flex-1 min-w-0 pr-4">
+                                <div className="font-black text-foreground group-hover:text-primary transition-colors text-lg uppercase italic tracking-tight mb-1 truncate pr-2">
                                   {u.name.replace(/-/g, ' ').replace(/\s+/g, ' ').trim()}
                                 </div>
-                                <div className="text-[11px] font-black text-muted-foreground uppercase tracking-widest flex items-center gap-2">
-                                   VietSeeds Runner • <span className="text-primary/70">Cấp độ {Math.floor(u.distance/10) + 1}</span>
+                                <div className="text-[11px] font-black text-muted-foreground uppercase tracking-widest flex items-center gap-2 truncate opacity-70">
+                                   VietSeeds Runner
                                 </div>
                               </div>
                             </div>
 
-                            <div className="flex items-center gap-4 bg-secondary/80 px-10 py-5 rounded-[2rem] border border-border/50 w-[30rem] flex-shrink-0 justify-between transition-all group-hover:bg-white group-hover:shadow-2xl group-hover:scale-[1.03] group-hover:border-primary/10">
+                            <div className="flex items-center gap-4 bg-secondary/80 px-6 py-5 rounded-[2rem] border border-border/50 w-[28rem] lg:w-[32rem] flex-shrink-0 justify-between transition-all group-hover:bg-white group-hover:shadow-2xl group-hover:scale-[1.03] group-hover:border-primary/10 ml-auto">
                               <div className="text-center min-w-[6rem]">
                                 <div className="text-lg font-black text-foreground tabular-nums">{u.activities || 0}</div>
-                                <div className="text-[9px] font-black text-muted-foreground uppercase tracking-[0.2em] mt-1">Hoạt động</div>
+                                <div className="text-[9px] font-black text-muted-foreground uppercase tracking-[0.2em] mt-1 pr-1">Hoạt động</div>
                               </div>
                               <div className="w-px h-6 bg-border" />
                               <div className="text-center min-w-[5rem]">
                                 <div className="font-display font-black text-foreground text-2xl tabular-nums leading-none">{u.distance.toLocaleString()}</div>
-                                <div className="text-[9px] font-black text-primary uppercase tracking-[0.2em] mt-1 italic">KM</div>
+                                <div className="text-[9px] font-black text-primary uppercase tracking-[0.2em] mt-1 italic pr-1">KM</div>
                               </div>
                               <div className="w-px h-6 bg-border" />
                               <div className="text-center min-w-[5rem]">
                                 <div className="font-display font-black text-accent text-2xl tabular-nums leading-none">{u.pace || "0:00"}</div>
-                                <div className="text-[9px] font-black text-muted-foreground uppercase tracking-[0.2em] mt-1 italic">PACE</div>
+                                <div className="text-[9px] font-black text-muted-foreground uppercase tracking-[0.2em] mt-1 italic pr-1">PACE</div>
                               </div>
                               <div className="w-px h-6 bg-border" />
                               <div className="text-center min-w-[6rem] flex flex-col items-center">
                                 <TrendIcon trend={u.trend} />
-                                <div className="text-[9px] font-black text-muted-foreground uppercase tracking-[0.2em] mt-1">H.Trình 24h</div>
+                                <div className="text-[9px] font-black text-muted-foreground uppercase tracking-[0.2em] mt-1 pr-2">H.Trình 24h</div>
                               </div>
                             </div>
                           </motion.div>
@@ -286,7 +286,7 @@ const Leaderboard = () => {
                           initial={{ opacity: 0, y: 10 }}
                           animate={{ opacity: 1, y: 0 }}
                           whileHover={{ scale: 1.02, y: -4, zIndex: 10 }}
-                          className="flex items-center justify-between px-10 py-8 bg-white rounded-[2rem] border border-border shadow-md transition-all group cursor-pointer hover:shadow-2xl hover:border-primary/30"
+                          className="flex items-center justify-between px-10 py-8 bg-white rounded-[2rem] border border-border shadow-md transition-all group cursor-pointer hover:shadow-2xl hover:border-primary/30 transform-gpu will-change-transform"
                         >
                           <div className="flex items-center gap-8">
                             <span className="font-display font-black text-foreground/20 w-10 text-right text-xl group-hover:text-primary transition-colors italic tabular-nums">
@@ -295,11 +295,11 @@ const Leaderboard = () => {
                             <div className="w-16 h-16 rounded-2xl bg-secondary flex items-center justify-center text-lg font-black text-primary border-2 border-white shadow-md uppercase">
                               {t.name.substring(0, 2)}
                             </div>
-                            <div>
-                              <div className="font-black text-foreground group-hover:text-primary transition-colors text-xl uppercase italic italic leading-none mb-2">
+                            <div className="flex-1 min-w-0">
+                              <div className="font-black text-foreground group-hover:text-primary transition-colors text-xl uppercase italic leading-none mb-2 truncate pr-2">
                                 {t.name}
                               </div>
-                              <div className="text-[12px] font-black text-muted-foreground uppercase tracking-widest italic opacity-60">
+                              <div className="text-[12px] font-black text-muted-foreground uppercase tracking-widest italic opacity-60 truncate">
                                 Nhóm runner công ty • {t.memberCount} thành viên
                               </div>
                             </div>
@@ -312,7 +312,7 @@ const Leaderboard = () => {
                              <div className="w-px h-10 bg-border" />
                              <div className="text-right min-w-[8rem]">
                                <div className="font-display font-black text-primary text-3xl leading-none tabular-nums truncate max-w-[120px]">{t.totalDistance?.toFixed(1) || 0}</div>
-                               <div className="text-[10px] font-black text-muted-foreground uppercase tracking-[0.2em] mt-1 italic">TỔNG KM</div>
+                               <div className="text-[10px] font-black text-muted-foreground uppercase tracking-[0.2em] mt-1 italic pr-1">TỔNG KM</div>
                              </div>
                           </div>
                         </motion.div>
