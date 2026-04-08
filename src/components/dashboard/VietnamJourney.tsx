@@ -300,7 +300,7 @@ const VietnamJourney = ({ currentKm }: VietnamJourneyProps) => {
                    {city.km.toLocaleString()} <span className="text-[10px] ml-1 opacity-60">KM</span>
                  </div>
                  {reached ? (
-                   <div className="text-[9px] font-black mt-3 text-primary tracking-[0.2em] bg-white px-2 py-0.5 rounded-full border border-primary/20 shadow-sm">XONG ✓</div>
+                   <div className="text-[9px] font-black mt-3 text-primary tracking-[0.2em] bg-white px-2 py-0.5 rounded-full border border-primary/20 shadow-sm">HOÀN THÀNH✓</div>
                  ) : (
                    <div className="text-[9px] font-black mt-3 text-muted-foreground/30 tracking-[0.2em] uppercase">Đang đợi</div>
                  )}

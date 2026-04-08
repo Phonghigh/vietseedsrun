@@ -1,6 +1,6 @@
 import { useQuery } from '@tanstack/react-query';
-import { getIndividualLeaderboard, getTeamLeaderboard } from '@/api/leaderboardService';
-import { MOCK_LEADERBOARD } from '@/lib/mockData';
+import { getIndividualLeaderboard, getTeamLeaderboard, getTeamDetail } from '@/api/leaderboardService';
+import { MOCK_LEADERBOARD, MOCK_TEAM_DETAIL } from '@/lib/mockData';
 
 const withFallback = <T,>(fn: () => Promise<T>, fallback: T) => async (): Promise<T> => {
   try {
@@ -31,5 +31,17 @@ export const useTeamLeaderboard = (page = 1, limit = 10, timeframe = 'all') => {
     ),
     staleTime: 2 * 60 * 1000,
     retry: 1,
+  });
+};
+
+export const useTeamDetail = (teamId: string) => {
+  return useQuery({
+    queryKey: ['team-detail', teamId],
+    queryFn: withFallback(
+      () => getTeamDetail(teamId),
+      MOCK_TEAM_DETAIL
+    ),
+    enabled: !!teamId,
+    staleTime: 5 * 60 * 1000,
   });
 };

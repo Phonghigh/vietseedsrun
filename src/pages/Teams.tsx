@@ -2,8 +2,10 @@ import { motion } from "framer-motion";
 import { Users, Trophy, Loader2, Star, TrendingUp } from "lucide-react";
 import AppLayout from "@/components/layout/AppLayout";
 import { useTeamLeaderboard } from "@/hooks/useLeaderboard";
+import { useNavigate } from "react-router-dom";
 
 const Teams = () => {
+  const navigate = useNavigate();
   const { data: teamsData, isLoading: isTeamsLoading } = useTeamLeaderboard(1, 50);
 
   if (isTeamsLoading) {
@@ -49,7 +51,10 @@ const Teams = () => {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.2 + idx * 0.05 }}
-              className="glass-card rounded-[2.5rem] p-8 hover:translate-y-[-6px] transition-all duration-300 relative overflow-hidden group shadow-xl"
+              onClick={() => {
+                if (team.teamId) navigate(`/team/${team.teamId}`);
+              }}
+              className="glass-card rounded-[2.5rem] p-8 hover:translate-y-[-6px] transition-all duration-300 relative overflow-hidden group shadow-xl cursor-pointer"
             >
               {/* Rank Badge */}
               <div className={`absolute top-6 right-8 w-10 h-10 rounded-full flex items-center justify-center font-black text-sm border-2 ${idx < 3 ? 'border-accent/40 bg-accent/10 text-accent' : 'border-black/5 bg-slate-100/50 text-slate-400'}`}>

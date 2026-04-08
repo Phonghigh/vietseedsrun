@@ -45,3 +45,19 @@ export const MOCK_HEATMAP_DATA: HeatmapItem[] = [
   { province: "Hải Phòng", members: 4, activities: 10 },
   { province: "Bình Dương", members: 7, activities: 7 },
 ];
+
+export const MOCK_TEAM_DETAIL = {
+  team: {
+    id: "mock-team-1",
+    name: "VietSeeds Warriors",
+    avatar: "🌱",
+    totalDistance: 1250.8,
+    memberCount: 24,
+    rank: 1
+  },
+  members: [
+    { userId: "mock-1", name: "Nguyễn Minh Tuấn", avatar: "https://ui-avatars.com/api/?name=Minh+Tuan&background=10b981&color=fff", distance: 87.3, activitiesCount: 12, rankInTeam: 1 },
+    { userId: "mock-2", name: "Trần Thị Hương", avatar: "https://ui-avatars.com/api/?name=Thi+Huong&background=f97316&color=fff", distance: 72.1, activitiesCount: 9, rankInTeam: 2 },
+    { userId: "mock-3", name: "Lê Văn Phong", avatar: "https://ui-avatars.com/api/?name=Van+Phong&background=3b82f6&color=fff", distance: 65.8, activitiesCount: 11, rankInTeam: 3 },
+  ]
+};

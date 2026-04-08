@@ -137,13 +137,32 @@ Quản lý các bản ghi chạy bộ đồng bộ từ Strava.
 - **Endpoint:** `GET /api/v1/teams`
 - **Mô tả:** Lấy thông tin các team có sẵn để user lựa chọn (nếu chương trình cho chọn team).
 
-### 5.2 Gia nhập Đội nhóm
-- **Endpoint:** `POST /api/v1/teams/:teamId/join`
-- **Mô tả:** User chọn gia nhập một team.
-
 ### 5.3 Chi tiết Đội nhóm
 - **Endpoint:** `GET /api/v1/teams/:teamId`
 - **Mô tả:** Lấy thông tin nội bộ team (Số lượng thành viên, danh sách member xếp hạng theo quãng đường, tổng km của team do ai đóng góp).
+- **Response (200 OK):**
+  ```json
+  {
+    "team": {
+      "id": "team_123",
+      "name": "Team Chiến Binh",
+      "avatar": "⚔️",
+      "totalDistance": 1250.5,
+      "memberCount": 15,
+      "rank": 3
+    },
+    "members": [
+      {
+        "userId": "user_456",
+        "name": "Lê Văn A",
+        "avatar": "https://...",
+        "distance": 120.5,
+        "activitiesCount": 15,
+        "rankInTeam": 1
+      }
+    ]
+  }
+  ```
 
 ---
 

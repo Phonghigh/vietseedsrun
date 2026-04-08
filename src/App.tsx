@@ -10,6 +10,7 @@ import Teams from "./pages/Teams";
 import Challenges from "./pages/Challenges";
 import Profile from "./pages/Profile";
 import AthleteDetail from "./pages/AthleteDetail";
+import TeamDetail from "./pages/TeamDetail";
 import NotFound from "./pages/NotFound";
 
 import AuthCallback from "./pages/AuthCallback";
@@ -29,6 +30,7 @@ const App = () => (
           <Route path="/leaderboard" element={<Leaderboard />} />
           <Route path="/athlete/:id" element={<AthleteDetail />} />
           <Route path="/teams" element={<Teams />} />
+          <Route path="/team/:id" element={<TeamDetail />} />
           <Route path="/challenges" element={<Challenges />} />
           <Route path="/profile" element={<Profile />} />
           <Route path="*" element={<NotFound />} />

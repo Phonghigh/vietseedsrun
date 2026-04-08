@@ -51,6 +51,25 @@ export interface AthleteDetailResponse {
   }>;
 }
 
+export interface TeamDetailResponse {
+  team: {
+    id: string;
+    name: string;
+    avatar: string;
+    totalDistance: number;
+    memberCount: number;
+    rank: number;
+  };
+  members: Array<{
+    userId: string;
+    name: string;
+    avatar: string;
+    distance: number;
+    activitiesCount: number;
+    rankInTeam: number;
+  }>;
+}
+
 const CHALLENGE_START = '2026-04-01T00:00:00Z';
 const CHALLENGE_END = '2026-04-30T23:59:59Z';
 
@@ -91,5 +110,10 @@ export const getTeamLeaderboard = async (page = 1, limit = 10, timeframe = 'all'
 
 export const getAthleteDetail = async (userId: string): Promise<AthleteDetailResponse> => {
   const response = await apiClient.get<AthleteDetailResponse>(`/leaderboard/athlete/${userId}`);
+  return response.data;
+};
+
+export const getTeamDetail = async (teamId: string): Promise<TeamDetailResponse> => {
+  const response = await apiClient.get<TeamDetailResponse>(`/teams/${teamId}`);
   return response.data;
 };
