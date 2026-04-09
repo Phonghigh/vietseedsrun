@@ -28,12 +28,12 @@ const CampaignInfo = () => {
           quỹ học bổng cho các sinh viên tài năng vượt khó.
         </p>
 
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 pt-8 border-t border-border/30">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 pt-8 border-t border-border/30 text-center">
           <div className="flex items-center gap-3 bg-secondary/50 px-4 py-4 rounded-[1.5rem] border border-primary/10 overflow-hidden">
-            <div className="w-10 h-10 rounded-xl bg-white flex items-center justify-center text-primary shadow-sm flex-shrink-0">
+            {/* <div className="w-10 h-10 rounded-xl bg-white flex items-center justify-center text-primary shadow-sm flex-shrink-0">
               <Calendar className="h-5 w-5" />
-            </div>
-            <div className="min-w-0 flex-1">
+            </div> */}
+            <div className="min-w-0 flex-1 ">
               <div className="text-[10px] font-black text-muted-foreground uppercase tracking-wider mb-1.5 truncate">
                 NGÀY BẮT ĐẦU
               </div>
@@ -44,10 +44,10 @@ const CampaignInfo = () => {
               <span className="text-primary">2026</span>
             </div>
           </div>
-          <div className="flex items-center gap-3 bg-secondary/50 px-4 py-4 rounded-[1.5rem] border border-primary/10 overflow-hidden">
-            <div className="w-10 h-10 rounded-xl bg-white flex items-center justify-center text-primary shadow-sm flex-shrink-0">
+          <div className="flex items-center gap-3 bg-secondary/50 px-4 py-1 rounded-[1.5rem] border border-primary/10 overflow-hidden">
+            {/* <div className="w-10 h-10 rounded-xl bg-white flex items-center justify-center text-primary shadow-sm flex-shrink-0">
               <Calendar className="h-5 w-5" />
-            </div>
+            </div> */}
             <div className="min-w-0 flex-1">
               <div className="text-[10px] font-black text-muted-foreground uppercase tracking-wider mb-1.5 truncate">
                 NGÀY KẾT THÚC
