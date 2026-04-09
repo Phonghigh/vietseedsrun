@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import { LayoutDashboard, Trophy, Users, Target, User, Activity, Flame } from "lucide-react";
+import { LayoutDashboard, Trophy, Users, Target, User, Activity } from "lucide-react";
 import { NavLink } from "@/components/NavLink";
 import { useLocation } from "react-router-dom";
 import {
@@ -30,14 +30,22 @@ export function AppSidebar() {
     <Sidebar collapsible="icon">
       <SidebarContent>
         {/* Logo Section */}
-        <div className="p-6 flex items-center gap-4 border-b border-sidebar-border mb-4">
+        <div className="px-1 py-6 group-data-[state=expanded]:px-6 flex items-center gap-4 border-b border-sidebar-border mb-4 overflow-hidden transition-all duration-300">
+          <div className="flex-shrink-0 w-10 h-10 rounded-xl gradient-hero flex items-center justify-center shadow-lg ring-2 ring-primary/20 ml-1 group-data-[state=expanded]:ml-0 p-2 animate-pulse-glow">
+            <img 
+              src="/favicon.ico" 
+              alt="Logo" 
+              className="w-full h-full object-contain" 
+            />
+          </div>
           {!collapsed && (
-            <span className="font-display font-black text-2xl text-sidebar-foreground tracking-tighter uppercase italic">
+            <motion.span 
+              initial={{ opacity: 0, x: -10 }}
+              animate={{ opacity: 1, x: 0 }}
+              className="font-display font-black text-2xl text-sidebar-foreground tracking-tighter uppercase italic whitespace-nowrap"
+            >
               VietSeeds <span className="text-primary">Run</span>
-            </span>
-          )}
-          {collapsed && (
-            <div className="w-10 h-10 rounded-xl gradient-hero flex items-center justify-center text-xs font-black text-white px-2 shadow-lg ring-2 ring-primary/20">VSR</div>
+            </motion.span>
           )}
         </div>
 

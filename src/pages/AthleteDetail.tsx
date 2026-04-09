@@ -191,7 +191,7 @@ const AthleteDetail = () => {
                       transition: { type: "spring", stiffness: 400, damping: 25 }
                     }}
                     transition={{ delay: i * 0.05 }}
-                    onClick={() => window.open(`https://www.strava.com/activities/${activity.id}`, '_blank')}
+                    onClick={() => navigate(`/activity/${activity.id}`)}
                     className="flex items-center justify-between px-10 py-6 bg-white rounded-[2rem] border border-border shadow-md cursor-pointer group hover:shadow-2xl hover:border-primary/30 transition-all transform-gpu will-change-transform"
                   >
                     {/* Left: Info Section */}

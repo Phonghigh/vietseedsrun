@@ -60,7 +60,12 @@ const TeamDetail = () => {
           <div className="flex flex-col md:flex-row items-center gap-12 relative z-10">
             <div className="w-40 h-40 rounded-[2.5rem] overflow-hidden border-4 border-white p-1 bg-secondary shadow-2xl relative group">
               <div className="w-full h-full bg-gradient-to-br from-primary/10 to-accent/10 flex items-center justify-center text-4xl font-black text-primary uppercase italic group-hover:scale-110 transition-transform duration-500">
-                {team?.avatar || teamName.substring(0, 1)}
+                <img
+                  src="/favicon.ico"
+                  alt="Logo"
+                  // className={className}
+                  // style={{ filter: "brightness(0) invert(1)" }}
+                />
               </div>
               <div className="absolute inset-0 ring-1 ring-inset ring-black/5 rounded-[2rem]" />
             </div>
@@ -84,7 +89,7 @@ const TeamDetail = () => {
                 </p>
                 <div className="w-2 h-2 rounded-full bg-border" />
                 <p className="text-muted-foreground font-black text-sm flex items-center gap-2 uppercase tracking-widest">
-                  <TrendingUp className="h-5 w-5 text-accent/60" /> 
+                  <TrendingUp className="h-5 w-5 text-accent/60" />
                   Xếp hạng toàn đoàn
                 </p>
               </div>
@@ -102,7 +107,7 @@ const TeamDetail = () => {
               color: "text-primary",
             },
             {
-              label: "Trung bình/TV",
+              label: "Số KM Trung bình",
               value: `${((team?.totalDistance || 0) / (team?.memberCount || 1)).toFixed(1)} km`,
               icon: ActivityIcon,
               color: "text-accent",
@@ -162,10 +167,14 @@ const TeamDetail = () => {
                     key={member.userId}
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
-                    whileHover={{ 
-                      scale: 1.025, 
+                    whileHover={{
+                      scale: 1.025,
                       y: -5,
-                      transition: { type: "spring", stiffness: 400, damping: 25 }
+                      transition: {
+                        type: "spring",
+                        stiffness: 400,
+                        damping: 25,
+                      },
                     }}
                     transition={{ delay: i * 0.05 }}
                     onClick={() => navigate(`/athlete/${member.userId}`)}
@@ -176,15 +185,16 @@ const TeamDetail = () => {
                       <span className="font-display font-black text-foreground/20 w-8 text-right text-xl group-hover:text-primary transition-colors italic tabular-nums flex-shrink-0">
                         {member.rankInTeam}
                       </span>
-                      
+
                       <div className="w-16 h-16 rounded-2xl bg-secondary overflow-hidden border-2 border-white shadow-md relative flex-shrink-0">
                         {member.avatar ? (
-                          <img 
-                            src={member.avatar} 
+                          <img
+                            src={member.avatar}
                             alt={member.name}
                             className="w-full h-full object-cover"
                             onError={(e) => {
-                              (e.target as any).src = `https://ui-avatars.com/api/?name=${encodeURIComponent(member.name)}&background=random`;
+                              (e.target as any).src =
+                                `https://ui-avatars.com/api/?name=${encodeURIComponent(member.name)}&background=random`;
                             }}
                           />
                         ) : (
@@ -199,9 +209,9 @@ const TeamDetail = () => {
                         <div className="font-black text-foreground group-hover:text-primary transition-colors text-lg uppercase italic tracking-tight mb-1 truncate">
                           {member.name}
                         </div>
-                        <div className="text-[10px] font-black text-muted-foreground uppercase tracking-widest flex items-center gap-2 opacity-70">
+                        {/* <div className="text-[10px] font-black text-muted-foreground uppercase tracking-widest flex items-center gap-2 opacity-70">
                             Thành viên chính thức
-                        </div>
+                        </div> */}
                       </div>
                     </div>
 

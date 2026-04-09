@@ -61,6 +61,51 @@ export interface RecentActivity {
   userId?: string;
 }
 
+export interface DetailedActivityData {
+  activity: {
+    id: string;
+    name: string;
+    distance: number;
+    movingTime: number;
+    elapsedTime: number;
+    totalElevationGain: number;
+    type: string;
+    startDate: string;
+    map?: {
+      polyline: string;
+      summary_polyline?: string;
+    };
+    description?: string;
+    calories?: number;
+    averageSpeed?: number;
+    maxSpeed?: number;
+    averageHeartrate?: number;
+    maxHeartrate?: number;
+    device_name?: string;
+  };
+  streams?: {
+    time?: number[];
+    distance?: number[];
+    latlng?: [number, number][];
+    altitude?: number[];
+    velocity_smooth?: number[];
+    heartrate?: number[];
+    cadence?: number[];
+    watts?: number[];
+    grade_smooth?: number[];
+  };
+  laps?: {
+    id: number;
+    name: string;
+    distance: number;
+    movingTime: number;
+    elapsedTime: number;
+    averageSpeed: number;
+    maxSpeed: number;
+    split: number;
+  }[];
+}
+
 export const getMyActivities = async (page = 1, limit = 10): Promise<ActivitiesResponse> => {
   const response = await apiClient.get<ActivitiesResponse>('/activities/me', {
     params: { 
@@ -96,4 +141,9 @@ export const getRecentActivities = async (limit = 20): Promise<RecentActivity[]>
 
 export const syncActivities = async (): Promise<void> => {
   await apiClient.post('/activities/sync');
+};
+
+export const getActivityDetail = async (id: string): Promise<DetailedActivityData> => {
+  const response = await apiClient.get<DetailedActivityData>(`/activities/${id}`);
+  return response.data;
 };

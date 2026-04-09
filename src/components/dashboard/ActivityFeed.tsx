@@ -46,7 +46,7 @@ const ActivityFeed = () => {
 
       <div className="flex-1 overflow-y-auto pr-2 space-y-3">
         {activities.map((item, i) => (
-          <Link to={`/athlete/${item.userId || item.id}`} key={item.id} className="block">
+          <Link to={`/activity/${item.id}`} key={item.id} className="block">
             <motion.div
               initial={{ opacity: 0, x: -10 }}
               animate={{ opacity: 1, x: 0 }}

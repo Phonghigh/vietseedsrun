@@ -105,6 +105,78 @@ Quản lý các bản ghi chạy bộ đồng bộ từ Strava.
 
 ---
 
+### 2.3 Lấy dữ liệu Heatmap theo địa phương
+- **Endpoint:** `GET /api/v1/campaign/heatmap`
+- **Mô tả:** Trả về danh sách thống kê số lượng thành viên và số lượng hoạt động theo từng tỉnh/thành phố để vẽ bản đồ nhiệt.
+- **Response (200 OK):**
+  ```json
+  [
+    { "province": "Hồ Chí Minh", "members": 500, "activities": 1200 },
+    { "province": "Hà Nội", "members": 350, "activities": 850 },
+    { "province": "Đà Nẵng", "members": 120, "activities": 300 }
+  ]
+  ```
+
+---
+
+### 3.4 Lấy danh sách hoạt động mới nhất (Live Feed)
+- **Endpoint:** `GET /api/v1/activities/recent?limit=20`
+- **Mô tả:** Trả về các hoạt động vừa mới diễn ra của toàn bộ cộng đồng để hiển thị trong Live Feed.
+- **Response (200 OK):**
+  ```json
+  [
+    {
+      "id": "act_1",
+      "userName": "Đỗ Thanh Huyền",
+      "userAvatar": "https://...",
+      "distance": 37.49,
+      "location": "Hà Nội",
+      "createdAt": "2026-04-04T10:00:00Z"
+    }
+  ]
+  ```
+
+### 3.5 Chi tiết hoạt động bộ (Activity Detail)
+- **Endpoint:** `GET /api/v1/activities/:id`
+- **Mô tả:** Lấy thông tin chi tiết của một hoạt động chạy, bao gồm toạ độ bản đồ và các luồng dữ liệu (pace/elevation).
+- **Response (200 OK):**
+  ```json
+  {
+    "activity": {
+      "id": "strava_123",
+      "name": "Chạy bộ buổi sáng",
+      "distance": 5200.5,
+      "movingTime": 1800,
+      "elapsedTime": 1900,
+      "totalElevationGain": 45.5,
+      "type": "Run",
+      "startDate": "2026-04-02T10:00:00Z",
+      "map": {
+        "polyline": "encoded_polyline_string"
+      }
+    },
+    "streams": {
+      "time": [0, 1, 2, 3],
+      "distance": [0, 1.2, 2.5, 3.8],
+      "latlng": [[10.1, 106.1], [10.2, 106.2]],
+      "altitude": [10, 12, 11, 13],
+      "velocity_smooth": [2.5, 2.7, 2.6, 2.8],
+      "heartrate": [120, 125, 122, 128]
+    },
+    "laps": [
+      {
+        "id": 1,
+        "distance": 1000,
+        "movingTime": 300,
+        "averageSpeed": 3.33,
+        "split": 1
+      }
+    ]
+  }
+  ```
+
+---
+
 ## 4. Bảng Xếp Hạng (Leaderboard)
 
 ### 4.1 Bảng Xếp Hạng Cá Nhân
@@ -162,39 +234,6 @@ Quản lý các bản ghi chạy bộ đồng bộ từ Strava.
       }
     ]
   }
-  ```
-
----
-
-### 2.3 Lấy dữ liệu Heatmap theo địa phương
-- **Endpoint:** `GET /api/v1/campaign/heatmap`
-- **Mô tả:** Trả về danh sách thống kê số lượng thành viên và số lượng hoạt động theo từng tỉnh/thành phố để vẽ bản đồ nhiệt.
-- **Response (200 OK):**
-  ```json
-  [
-    { "province": "Hồ Chí Minh", "members": 500, "activities": 1200 },
-    { "province": "Hà Nội", "members": 350, "activities": 850 },
-    { "province": "Đà Nẵng", "members": 120, "activities": 300 }
-  ]
-  ```
-
----
-
-### 3.4 Lấy danh sách hoạt động mới nhất (Live Feed)
-- **Endpoint:** `GET /api/v1/activities/recent?limit=20`
-- **Mô tả:** Trả về các hoạt động vừa mới diễn ra của toàn bộ cộng đồng để hiển thị trong Live Feed.
-- **Response (200 OK):**
-  ```json
-  [
-    {
-      "id": "act_1",
-      "userName": "Đỗ Thanh Huyền",
-      "userAvatar": "https://...",
-      "distance": 37.49,
-      "location": "Hà Nội",
-      "createdAt": "2026-04-04T10:00:00Z"
-    }
-  ]
   ```
 
 ---

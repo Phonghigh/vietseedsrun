@@ -15,6 +15,8 @@ import NotFound from "./pages/NotFound";
 
 import AuthCallback from "./pages/AuthCallback";
 
+import ActivityDetail from "./pages/ActivityDetail";
+
 const queryClient = new QueryClient();
 
 const App = () => (
@@ -29,6 +31,7 @@ const App = () => (
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/leaderboard" element={<Leaderboard />} />
           <Route path="/athlete/:id" element={<AthleteDetail />} />
+          <Route path="/activity/:id" element={<ActivityDetail />} />
           <Route path="/teams" element={<Teams />} />
           <Route path="/team/:id" element={<TeamDetail />} />
           <Route path="/challenges" element={<Challenges />} />
