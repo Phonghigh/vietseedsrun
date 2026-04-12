@@ -37,7 +37,7 @@ const CampaignInfo = () => {
               <div className="text-[10px] font-black text-muted-foreground uppercase tracking-wider mb-1.5 truncate">
                 NGÀY BẮT ĐẦU
               </div>
-              <span className="text-muted-foreground">30</span>
+              <span className="text-muted-foreground">01</span>
               <span>/</span>
               <span className="text-muted-foreground">04</span>
               <span>/</span>
