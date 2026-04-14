@@ -22,7 +22,7 @@ const Landing = () => {
         <CountdownBar />
       </div>
       
-      <div className="flex flex-col w-full flex-grow relative z-10 pt-24 md:pt-32">
+      <div className="flex flex-col w-full flex-grow relative z-10 pt-20">
         <motion.div
            initial={{ opacity: 0, y: 10 }}
            animate={{ opacity: 1, y: 0 }}

@@ -12,7 +12,7 @@ const HeroSection = ({ stats }: HeroSectionProps) => {
   const navigate = useNavigate();
 
   return (
-    <section className="relative min-h-[calc(100vh-80px)] flex flex-col items-center justify-center overflow-hidden pt-20">
+    <section className="relative min-h-[calc(100vh-80px)] flex flex-col items-center justify-center overflow-hidden">
       {/* Deep forest gradient background */}
       <div className="absolute inset-0 gradient-dark" />
 

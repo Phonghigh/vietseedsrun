@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { Facebook, Users } from "lucide-react";
-import { motion, useScroll, useTransform } from "framer-motion";
+import { motion, useScroll, useTransform, useSpring } from "framer-motion";
 
 const TARGET_DATE = new Date("2026-04-30T23:59:59").getTime();
 
@@ -25,31 +25,38 @@ export const CountdownBar = () => {
 
   const { scrollY } = useScroll();
   
-  // Extending scroll range to 300px for a much smoother, professional transition
+  // Transition range
   const scrollRange = [0, 300];
   
-  // Continuous numeric transforms for precise control
-  const widthVal = useTransform(scrollY, scrollRange, [100, 95.5]); 
-  const maxWidthVal = useTransform(scrollY, scrollRange, [3000, 1240]); 
-  const marginTopVal = useTransform(scrollY, scrollRange, [0, 20]);
-  const borderRadiusVal = useTransform(scrollY, scrollRange, [0, 60]);
-  const paddingYVal = useTransform(scrollY, scrollRange, [18, 12]);
+  // Spring configuration for aggressive, high-performance tracking
+  const springConfig = { stiffness: 500, damping: 50, mass: 1, restDelta: 0.001 };
   
-  // Position transforms to move from pinned-edges (100%) to centered-pill
-  const leftPos = useTransform(scrollY, scrollRange, ["0%", "50%"]);
-  const xTranslate = useTransform(scrollY, scrollRange, ["0%", "-50%"]);
-
+  // Raw numeric transforms
+  const borderRadiusRaw = useTransform(scrollY, scrollRange, [0, 60]);
+  const marginTopRaw = useTransform(scrollY, scrollRange, [0, 16]);
+  const widthRaw = useTransform(scrollY, scrollRange, [100, 95.5]);
+  const maxWidthRaw = useTransform(scrollY, scrollRange, [3000, 1240]);
+  const paddingYRaw = useTransform(scrollY, scrollRange, [18, 12]);
+  const leftRaw = useTransform(scrollY, scrollRange, [0, 50]);
+  const xRaw = useTransform(scrollY, scrollRange, [0, -50]);
+  const opacityRaw = useTransform(scrollY, [0, 100], [1, 0.95]);
+  
+  // Smooth spring-based values
+  const borderRadius = useSpring(borderRadiusRaw, springConfig);
+  const marginTop = useSpring(marginTopRaw, springConfig);
+  const width = useSpring(widthRaw, springConfig);
+  const maxWidth = useSpring(maxWidthRaw, springConfig);
+  const paddingY = useSpring(paddingYRaw, springConfig);
+  const left = useSpring(leftRaw, springConfig);
+  const x = useSpring(xRaw, springConfig);
+  
   const backgroundColor = useTransform(scrollY, scrollRange, [
     "rgba(10, 48, 28, 1)", 
-    "rgba(10, 40, 25, 0.94)"
-  ]);
-  const boxShadow = useTransform(scrollY, scrollRange, [
-    "0 0px 0px rgba(0,0,0,0)",
-    "0 25px 60px rgba(0,0,0,0.6)"
+    "rgba(15, 60, 35, 0.95)"
   ]);
   
-  const iconScale = useTransform(scrollY, scrollRange, [1, 0.92]);
-  const timerScale = useTransform(scrollY, scrollRange, [1, 0.88]);
+  const iconScale = useSpring(useTransform(scrollY, scrollRange, [1, 0.9]), springConfig);
+  const timerScale = useSpring(useTransform(scrollY, scrollRange, [1, 0.85]), springConfig);
 
   const socialLinks = [
     { name: "Facebook", icon: Facebook, url: "https://www.facebook.com/profile.php?id=61578496514473", color: "hover:text-[#1877F2]" },
@@ -83,39 +90,41 @@ export const CountdownBar = () => {
     <div className="fixed top-0 left-0 w-full z-[100] pointer-events-none">
       <motion.div 
         style={{
-          width: useTransform(widthVal, v => `${v}%`),
-          maxWidth: useTransform(maxWidthVal, v => `${v}px`),
-          marginTop: useTransform(marginTopVal, v => `${v}px`),
-          borderRadius: useTransform(borderRadiusVal, v => `${v}px`),
-          paddingTop: useTransform(paddingYVal, v => `${v}px`),
-          paddingBottom: useTransform(paddingYVal, v => `${v}px`),
+          width: useTransform(width, v => `${v}%`),
+          maxWidth: useTransform(maxWidth, v => `${v}px`),
+          marginTop: useTransform(marginTop, v => `${v}px`),
+          borderRadius: useTransform(borderRadius, v => `${v}px`),
+          paddingTop: useTransform(paddingY, v => `${v}px`),
+          paddingBottom: useTransform(paddingY, v => `${v}px`),
           backgroundColor,
-          boxShadow,
-          left: leftPos,
-          x: xTranslate,
+          left: useTransform(left, v => `${v}%`),
+          x: useTransform(x, v => `${v}%`),
+          boxShadow: "0 20px 50px rgba(0,0,0,0.3)"
         }}
         className="pointer-events-auto absolute top-0 overflow-hidden backdrop-blur-3xl border-b border-white/10 group bg-gradient-to-r from-[hsl(142,55%,18%)] to-[hsl(142,60%,24%)] px-6"
       >
-        <div className="mx-auto flex flex-col sm:flex-row items-center justify-between gap-3 sm:gap-8 text-white font-black tracking-tight px-4 sm:px-0">
+        <div className="mx-auto flex flex-col sm:flex-row items-center justify-between gap-3 sm:gap-4 md:gap-8 text-white font-black tracking-tight px-4 sm:px-0 h-full">
           
-          {/* Left: Challenge Title - Fully hidden on mobile */}
-          <motion.div 
-            style={{ scale: iconScale }}
-            className="flex items-center gap-2"
-          >
-            <span className="hidden sm:inline-block h-2 w-2 rounded-full bg-accent animate-pulse shadow-[0_0_15px_rgba(251,191,36,0.6)]" />
-            <span className="hidden sm:inline uppercase italic tracking-wider whitespace-nowrap text-sm md:text-base leading-none">
-              Thử thách kết thúc sau:
-            </span>
-          </motion.div>
+          {/* Left Slot: flex-1 to push timer to center */}
+          <div className="hidden sm:flex flex-1 items-center justify-start">
+            <motion.div 
+              style={{ scale: iconScale }}
+              className="flex items-center gap-2"
+            >
+              <span className="hidden sm:inline-block h-2 w-2 rounded-full bg-accent animate-pulse shadow-[0_0_15px_rgba(251,191,36,0.6)]" />
+              <span className="hidden sm:inline uppercase italic tracking-wider whitespace-nowrap text-sm md:text-base leading-none">
+                Thử thách kết thúc sau:
+              </span>
+            </motion.div>
+          </div>
           
-          {/* Center: Countdown Timer - Responsive Font Sizes */}
+          {/* Center Slot: Fixed center */}
           <motion.div 
             style={{ scale: timerScale }}
-            className="flex items-center justify-center gap-4 sm:gap-6 md:gap-10 font-display font-black"
+            className="flex items-center justify-center gap-4 sm:gap-6 md:gap-10 font-display font-black flex-shrink-0"
           >
             <div className="flex flex-col items-center">
-              <span className="text-3xl xs:text-4xl md:text-5xl leading-none italic text-accent font-display">
+              <span className="text-3xl xs:text-4xl md:text-5xl leading-none italic text-accent">
                 {String(timeLeft.days).padStart(2, "0")}
               </span>
               <span className="text-[8px] sm:text-[9px] uppercase font-bold mt-1 tracking-[0.2em] text-white/40">Ngày</span>
@@ -123,7 +132,7 @@ export const CountdownBar = () => {
             <span className="text-2xl sm:text-3xl md:text-4xl leading-none opacity-40 text-accent pb-4 sm:pb-5">:</span>
             
             <div className="flex flex-col items-center">
-              <span className="text-3xl xs:text-4xl md:text-5xl leading-none italic text-accent font-display">
+              <span className="text-3xl xs:text-4xl md:text-5xl leading-none italic text-accent">
                 {String(timeLeft.hours).padStart(2, "0")}
               </span>
               <span className="text-[8px] sm:text-[9px] uppercase font-bold mt-1 tracking-[0.2em] text-white/40">Giờ</span>
@@ -131,7 +140,7 @@ export const CountdownBar = () => {
             <span className="text-2xl sm:text-3xl md:text-4xl leading-none opacity-40 text-accent pb-4 sm:pb-5">:</span>
 
             <div className="flex flex-col items-center">
-              <span className="text-3xl xs:text-4xl md:text-5xl leading-none italic text-accent font-display">
+              <span className="text-3xl xs:text-4xl md:text-5xl leading-none italic text-accent">
                 {String(timeLeft.minutes).padStart(2, "0")}
               </span>
               <span className="text-[8px] sm:text-[9px] uppercase font-bold mt-1 tracking-[0.2em] text-white/40">Phút</span>
@@ -139,15 +148,15 @@ export const CountdownBar = () => {
             <span className="text-2xl sm:text-3xl md:text-4xl leading-none opacity-40 text-accent pb-4 sm:pb-5">:</span>
 
             <div className="flex flex-col items-center">
-              <span className="text-3xl xs:text-4xl md:text-5xl leading-none italic text-accent font-display">
+              <span className="text-3xl xs:text-4xl md:text-5xl leading-none italic text-accent">
                 {String(timeLeft.seconds).padStart(2, "0")}
               </span>
               <span className="text-[8px] sm:text-[9px] uppercase font-bold mt-1 tracking-[0.2em] text-white/40">Giây</span>
             </div>
           </motion.div>
 
-          {/* Right: Social Links Dock */}
-          <div className="flex items-center justify-center sm:justify-end">
+          {/* Right Slot: flex-1 to push timer to center */}
+          <div className="flex flex-1 items-center justify-center sm:justify-end">
              <motion.div 
                style={{ scale: iconScale }}
                className="flex items-center gap-1 p-0.5 rounded-full bg-white/10 backdrop-blur-md border border-white/10"
@@ -162,8 +171,8 @@ export const CountdownBar = () => {
                   whileHover={{ scale: 1.05, y: -1 }}
                   whileTap={{ scale: 0.95 }}
                 >
-                  <social.icon className="h-3 w-3 sm:h-3.5 sm:w-3.5" />
-                  <span className="hidden xl:inline text-[8px] sm:text-[9px] uppercase tracking-[0.15em] font-black">
+                  <social.icon className="h-3.5 w-3.5 sm:h-4 md:h-5 sm:w-4 md:w-5" />
+                  <span className="hidden xl:inline text-[8px] sm:text-[10px] uppercase tracking-[0.15em] font-black">
                     {social.name}
                   </span>
                 </motion.a>
@@ -172,9 +181,8 @@ export const CountdownBar = () => {
           </div>
         </div>
         
-        {/* Decorative Glossy Shimmer for the cocoon - Only active when somewhat scrolled */}
         <motion.div 
-          style={{ opacity: useTransform(scrollY, [150, 300], [0, 1]) }}
+          style={{ opacity: useScroll().scrollY > 100 ? 1 : 0 }}
           className="absolute inset-0 pointer-events-none"
         >
           <motion.div 
