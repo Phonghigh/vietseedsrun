@@ -72,7 +72,7 @@ const community = [
     icon: Facebook,
     label: "Facebook Group",
     sub: "VietSeeds Run",
-    link: "https://www.facebook.com/groups/833728424159423?locale=vi_VN",
+    link: "https://www.facebook.com/profile.php?id=61578496514473",
     color: "hsl(215, 75%, 55%)",
   },
   {

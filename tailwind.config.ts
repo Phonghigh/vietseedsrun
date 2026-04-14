@@ -8,7 +8,8 @@ export default {
     container: {
       center: true,
       padding: "2rem",
-      screens: {
+    screens: {
+        "xs": "480px",
         "2xl": "1400px",
       },
     },
@@ -26,6 +27,7 @@ export default {
         primary: {
           DEFAULT: "hsl(var(--primary))",
           foreground: "hsl(var(--primary-foreground))",
+          dark: "hsl(var(--primary-dark))",
         },
         secondary: {
           DEFAULT: "hsl(var(--secondary))",
