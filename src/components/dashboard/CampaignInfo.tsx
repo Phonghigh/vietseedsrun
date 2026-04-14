@@ -24,8 +24,7 @@ const CampaignInfo = () => {
 
         <p className="text-[17px] text-foreground/90 leading-relaxed font-bold mb-10 border-l-4 border-primary pl-6 py-2">
           VietSeeds Run 2026 không chỉ là một giải chạy. Đây là hành trình kết
-          nối những tâm hồn đồng điệu, lan tỏa năng lượng tích cực và xây dựng
-          quỹ học bổng cho các sinh viên tài năng vượt khó.
+          nối những tâm hồn đồng điệu, lan tỏa năng lượng tích cực.
         </p>
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 pt-8 border-t border-border/30 text-center">
