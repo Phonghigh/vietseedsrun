@@ -10,11 +10,11 @@ const withFallback = <T,>(fn: () => Promise<T>, fallback: T) => async (): Promis
   }
 };
 
-export const useIndividualLeaderboard = (page = 1, limit = 10, timeframe = 'all') => {
+export const useIndividualLeaderboard = (page = 1, limit = 10, timeframe = 'all', search = '') => {
   return useQuery({
-    queryKey: ['leaderboard', 'individual', page, limit, timeframe],
+    queryKey: ['leaderboard', 'individual', page, limit, timeframe, search],
     queryFn: withFallback(
-      () => getIndividualLeaderboard(page, limit, timeframe),
+      () => getIndividualLeaderboard(page, limit, timeframe, search),
       MOCK_LEADERBOARD.slice(0, limit)
     ),
     staleTime: 2 * 60 * 1000,

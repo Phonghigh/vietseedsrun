@@ -5,14 +5,33 @@ import { motion, useScroll, useTransform, useSpring } from "framer-motion";
 const TARGET_DATE = new Date("2026-04-30T23:59:59").getTime();
 
 const ZaloIcon = ({ className }: { className?: string }) => (
-  <svg
-    viewBox="0 0 24 24"
-    fill="currentColor"
-    className={className}
-    xmlns="http://www.w3.org/2000/svg"
-  >
-    <path d="M12 0C5.373 0 0 4.672 0 10.435c0 3.328 1.837 6.273 4.707 8.163l-1.07 3.535 4.316-2.316c1.339.387 2.766.596 4.249.596 6.627 0 12-4.673 12-10.435C24 4.673 18.627 0 12 0zm5.345 11.233c-.235.485-.565.914-.98 1.272-.375.32-.782.55-1.205.676-.462.138-1.056.208-1.782.208h-2.18c-.28 0-.462-.187-.462-.486V8.65c0-.306.182-.486.462-.486h2.246c.725 0 1.25.07 1.666.207.416.136.78.36 1.08.665.318.322.54.71.656 1.15.117.44.175.92.175 1.44 0 .52-.06.998-.18 1.437zM8.14 8.164c.28 0 .462.187.462.486v4.247c0 .298-.182.486-.462.486H5.97c-.28 0-.462-.187-.462-.486V8.65c0-.306.182-.486.462-.486H8.14z" />
-  </svg>
+  <div className="flex items-center justify-center w-5 h-5 sm:w-6 sm:h-6 flex-shrink-0">
+    <img 
+      src="https://upload.wikimedia.org/wikipedia/commons/9/91/Icon_of_Zalo.svg" 
+      alt="Zalo" 
+      className="w-full h-full object-contain" 
+    />
+  </div>
+);
+
+const FacebookIcon = ({ className }: { className?: string }) => (
+  <div className="flex items-center justify-center w-5 h-5 sm:w-6 sm:h-6 flex-shrink-0">
+    <img
+      src="https://upload.wikimedia.org/wikipedia/commons/0/05/Facebook_Logo_%282019%29.png"
+      alt="Facebook"
+      className="w-full h-full object-contain"
+    />
+  </div>
+);
+
+const StravaIcon = ({ className }: { className?: string }) => (
+  <div className="flex items-center justify-center h-5 sm:h-6 px-1 flex-shrink-0">
+    <img 
+      src="https://upload.wikimedia.org/wikipedia/commons/c/cb/Strava_Logo.svg" 
+      alt="Strava" 
+      className="h-2.5 sm:h-3.5 w-auto object-contain" 
+    />
+  </div>
 );
 
 export const CountdownBar = () => {
@@ -45,6 +64,20 @@ export const CountdownBar = () => {
   const borderRadius = useSpring(borderRadiusRaw, springConfig);
   const marginTop = useSpring(marginTopRaw, springConfig);
   const width = useSpring(widthRaw, springConfig);
+  const textOpacity = useTransform(scrollY, [0, 150], [1, 0]);
+  const linkPaddingX = useTransform(scrollY, [0, 150], ["12px", "6px"]);
+  const linkGap = useTransform(scrollY, [0, 150], ["8px", "0px"]);
+  const textWidth = useTransform(textOpacity, [0, 1], ["0px", "auto"]);
+  const textDisplay = useTransform(textOpacity, (v: number) => v === 0 ? "none" : "inline");
+
+  // Detect mobile for explicit hiding
+  const [isMobile, setIsMobile] = useState(false);
+  useEffect(() => {
+    const checkMobile = () => setIsMobile(window.innerWidth < 1024);
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
   const maxWidth = useSpring(maxWidthRaw, springConfig);
   const paddingY = useSpring(paddingYRaw, springConfig);
   const left = useSpring(leftRaw, springConfig);
@@ -59,9 +92,9 @@ export const CountdownBar = () => {
   const timerScale = useSpring(useTransform(scrollY, scrollRange, [1, 0.85]), springConfig);
 
   const socialLinks = [
-    { name: "Facebook", icon: Facebook, url: "https://www.facebook.com/profile.php?id=61578496514473", color: "hover:text-[#1877F2]" },
+    { name: "Facebook", icon: FacebookIcon, url: "https://www.facebook.com/profile.php?id=61578496514473", color: "hover:text-[#1877F2]" },
     { name: "Zalo", icon: ZaloIcon, url: "https://zalo.me/g/cmlszefn0z1aeodabrgc", color: "hover:text-[#0068FF]" },
-    { name: "Cộng đồng", icon: Users, url: "https://strava.app.link/zWjox1bNO1b", color: "hover:text-accent" },
+    { name: "Cộng đồng", icon: StravaIcon, url: "https://strava.app.link/zWjox1bNO1b", color: "hover:text-[#FC4C02]" },
   ];
 
   useEffect(() => {
@@ -167,14 +200,26 @@ export const CountdownBar = () => {
                   href={social.url}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className={`flex items-center gap-1.5 px-2.5 py-1 rounded-full transition-all duration-300 bg-white/5 border border-transparent ${social.color} hover:bg-white/15 hover:border-white/20`}
+                  className={`flex items-center rounded-full transition-all duration-300 bg-white/5 border border-transparent ${social.color} hover:bg-white/15 hover:border-white/20 whitespace-nowrap`}
+                  style={{ 
+                    paddingLeft: linkPaddingX, 
+                    paddingRight: linkPaddingX,
+                    gap: linkGap 
+                  }}
                   whileHover={{ scale: 1.05, y: -1 }}
                   whileTap={{ scale: 0.95 }}
                 >
-                  <social.icon className="h-3.5 w-3.5 sm:h-4 md:h-5 sm:w-4 md:w-5" />
-                  <span className="hidden xl:inline text-[8px] sm:text-[10px] uppercase tracking-[0.15em] font-black">
+                  <social.icon />
+                  <motion.span 
+                    style={{ 
+                      opacity: isMobile ? 0 : textOpacity,
+                      width: isMobile ? "0px" : textWidth,
+                      display: isMobile ? "none" : textDisplay
+                    }}
+                    className="hidden xl:inline text-[8px] sm:text-[10px] uppercase tracking-[0.15em] font-black whitespace-nowrap overflow-hidden"
+                  >
                     {social.name}
-                  </span>
+                  </motion.span>
                 </motion.a>
               ))}
             </motion.div>

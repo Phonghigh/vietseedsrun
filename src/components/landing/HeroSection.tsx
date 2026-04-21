@@ -12,7 +12,7 @@ const HeroSection = ({ stats }: HeroSectionProps) => {
   const navigate = useNavigate();
 
   return (
-    <section className="relative min-h-[calc(100vh-80px)] flex flex-col items-center justify-center overflow-hidden">
+    <section className="relative min-h-screen py-24 md:py-0 flex flex-col items-center justify-center overflow-hidden">
       {/* Deep forest gradient background */}
       <div className="absolute inset-0 gradient-dark" />
 
@@ -57,7 +57,7 @@ const HeroSection = ({ stats }: HeroSectionProps) => {
           transition={{ duration: 0.8 }}
           className="inline-flex items-center gap-2 rounded-full border-2 border-primary/20 bg-primary/5 px-5 py-2 mb-8 backdrop-blur-md"
         >
-          <span className="h-2 w-2 rounded-full animate-pulse-glow bg-primary" />
+          {/* <span className="h-2 w-2 rounded-full animate-pulse-glow bg-primary" /> */}
           <span className="text-sm font-black tracking-wide text-primary">
             🏃 {stats ? `Đã có ${stats.totalRunners.toLocaleString()} người tham gia` : "Thử thách đang diễn ra"} · 01/04 – 30/04/2026
           </span>
@@ -183,7 +183,7 @@ const HeroSection = ({ stats }: HeroSectionProps) => {
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ delay: 1.5 }}
-        className="absolute bottom-10 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 text-slate-400"
+        className="mt-20 md:absolute md:bottom-10 md:left-1/2 md:-translate-x-1/2 flex flex-col items-center gap-2 text-slate-400 pb-10 md:pb-0"
       >
         <span className="text-[10px] font-bold tracking-[0.3em] uppercase">Khám phá</span>
         <motion.div

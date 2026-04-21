@@ -1,21 +1,11 @@
-import { Bell, Search, LogOut, Facebook, Users } from "lucide-react";
+import { Bell } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { SidebarTrigger } from "@/components/ui/sidebar";
 import { useState } from "react";
 import { getStravaAuthUrl, useAuth } from "@/hooks/useAuth";
 import { useMyProfile } from "@/hooks/useUser";
 import { motion } from "framer-motion";
+import { Link } from "react-router-dom";
 
-const ZaloIcon = ({ className }: { className?: string }) => (
-  <svg
-    viewBox="0 0 24 24"
-    fill="currentColor"
-    className={className}
-    xmlns="http://www.w3.org/2000/svg"
-  >
-    <path d="M12 0C5.373 0 0 4.672 0 10.435c0 3.328 1.837 6.273 4.707 8.163l-1.07 3.535 4.316-2.316c1.339.387 2.766.596 4.249.596 6.627 0 12-4.673 12-10.435C24 4.673 18.627 0 12 0zm5.345 11.233c-.235.485-.565.914-.98 1.272-.375.32-.782.55-1.205.676-.462.138-1.056.208-1.782.208h-2.18c-.28 0-.462-.187-.462-.486V8.65c0-.306.182-.486.462-.486h2.246c.725 0 1.25.07 1.666.207.416.136.78.36 1.08.665.318.322.54.71.656 1.15.117.44.175.92.175 1.44 0 .52-.06.998-.18 1.437zM8.14 8.164c.28 0 .462.187.462.486v4.247c0 .298-.182.486-.462.486H5.97c-.28 0-.462-.187-.462-.486V8.65c0-.306.182-.486.462-.486H8.14z" />
-  </svg>
-);
 
 const TopBar = () => {
   const [showNotifs, setShowNotifs] = useState(false);
@@ -23,62 +13,57 @@ const TopBar = () => {
   const { logout } = useAuth();
   const { data: user } = useMyProfile();
 
-  const socialLinks = [
-    { name: "FB", icon: Facebook, url: "https://www.facebook.com/profile.php?id=61578496514473", color: "hover:text-[#1877F2]" },
-    { name: "Zalo", icon: ZaloIcon, url: "https://zalo.me/g/cmlszefn0z1aeodabrgc", color: "hover:text-[#0068FF]" },
-    { name: "Strava", icon: Users, url: "https://strava.app.link/zWjox1bNO1b", color: "hover:text-primary" },
-  ];
-
   const handleLogin = () => {
     window.location.href = getStravaAuthUrl();
   };
 
   return (
-    <header className="h-14 flex items-center justify-between border-b border-border px-4 bg-card">
-      <div className="flex items-center gap-3">
-        <SidebarTrigger />
-        <div className="hidden sm:flex items-center gap-2 bg-muted rounded-lg px-3 py-1.5">
-          <Search className="h-4 w-4 text-muted-foreground" />
-          <input
-            type="text"
-            placeholder="Tìm kiếm..."
-            className="bg-transparent text-sm outline-none w-48 text-foreground placeholder:text-muted-foreground"
-          />
+    <header className="h-24 flex items-center justify-between border-b border-border px-10 bg-card/80 backdrop-blur-md sticky top-0 z-50">
+      <div className="flex items-center gap-10">
+        <div className="flex items-center gap-4">
+          <Link to="/" className="flex items-center gap-5 group transition-all duration-300 hover:opacity-90">
+            <div className="flex-shrink-0 w-16 h-16 rounded-[2rem] gradient-hero flex items-center justify-center shadow-2xl shadow-primary/20 ring-4 ring-primary/10 p-4 animate-pulse-glow">
+              <img 
+                src="/favicon.ico" 
+                alt="Logo" 
+                className="w-full h-full object-contain" 
+              />
+            </div>
+            <span className="font-display font-black text-3xl text-foreground tracking-tighter uppercase italic whitespace-nowrap hidden sm:block">
+              VietSeeds <span className="text-primary">Run</span>
+            </span>
+          </Link>
         </div>
       </div>
 
-      <div className="flex items-center gap-3">
-        <div className="hidden lg:flex items-center gap-1.5 mr-4 p-1 rounded-full bg-muted/50 border border-border/50">
-          {socialLinks.map((social) => (
-            <motion.a
-              key={social.name}
-              href={social.url}
-              target="_blank"
-              rel="noopener noreferrer"
-              title={social.name}
-              className={`flex items-center gap-2 px-3 py-1 rounded-full text-xs font-bold transition-all duration-300 ${social.color} hover:bg-background shadow-sm`}
-              whileHover={{ scale: 1.05, y: -1 }}
-              whileTap={{ scale: 0.95 }}
-            >
-              <social.icon className="h-3.5 w-3.5" />
-              <span className="opacity-70 group-hover:opacity-100">{social.name}</span>
-            </motion.a>
-          ))}
-        </div>
+      <div className="flex items-center gap-8">
+        <a 
+          href="https://zalo.me/0969562768" 
+          target="_blank" 
+          rel="noopener noreferrer"
+          className="h-16 w-16 bg-white hover:bg-secondary rounded-2xl flex items-center justify-center transition-all shadow-sm hover:shadow-md border border-border/50 group"
+        >
+          <img 
+            src="https://upload.wikimedia.org/wikipedia/commons/9/91/Icon_of_Zalo.svg" 
+            alt="Zalo" 
+            className="w-8 h-8 group-hover:scale-110 transition-transform" 
+          />
+        </a>
 
         <div className="relative">
           <Button
             variant="ghost"
             size="icon"
-            className="relative"
+            className="relative h-16 w-16 hover:bg-secondary rounded-2xl transition-all shadow-sm hover:shadow-md"
             onClick={() => setShowNotifs(!showNotifs)}
           >
-            <Bell className="h-5 w-5 text-muted-foreground" />
+            <Bell className="h-8 w-8 text-muted-foreground" />
+            <div className="absolute top-4 right-4 w-3 h-3 bg-primary rounded-full border-2 border-white animate-pulse" />
           </Button>
 
           {showNotifs && (
-            <div className="absolute right-0 top-12 w-80 bg-card border border-border rounded-xl shadow-lg z-50 p-2">
-              <div className="font-display font-semibold text-sm px-3 py-2 text-foreground border-b border-border mb-2">Thông báo</div>
+            <div className="absolute right-0 top-18 w-80 bg-card border border-border rounded-[2rem] shadow-2xl z-50 p-2 overflow-hidden animate-slide-up">
+              <div className="font-display font-bold text-sm px-5 py-4 text-foreground border-b border-border mb-2 bg-muted/30">Thông báo</div>
               <div className="px-3 py-10 text-center text-xs text-muted-foreground italic">
                 Bạn chưa có thông báo nào mới.
               </div>

@@ -8,7 +8,6 @@ import Dashboard from "./pages/Dashboard";
 import Leaderboard from "./pages/Leaderboard";
 import Teams from "./pages/Teams";
 import Challenges from "./pages/Challenges";
-import Profile from "./pages/Profile";
 import AthleteDetail from "./pages/AthleteDetail";
 import TeamDetail from "./pages/TeamDetail";
 import NotFound from "./pages/NotFound";
@@ -35,7 +34,6 @@ const App = () => (
           <Route path="/teams" element={<Teams />} />
           <Route path="/team/:id" element={<TeamDetail />} />
           <Route path="/challenges" element={<Challenges />} />
-          <Route path="/profile" element={<Profile />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </BrowserRouter>

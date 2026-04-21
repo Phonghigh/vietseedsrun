@@ -73,8 +73,12 @@ export interface TeamDetailResponse {
 const CHALLENGE_START = '2026-04-01T00:00:00Z';
 const CHALLENGE_END = '2026-04-30T23:59:59Z';
 
-export const getIndividualLeaderboard = async (page = 1, limit = 10, timeframe = 'all'): Promise<LeaderboardUser[]> => {
+export const getIndividualLeaderboard = async (page = 1, limit = 10, timeframe = 'all', search = ''): Promise<LeaderboardUser[]> => {
   const params: any = { page, limit, timeframe };
+  
+  if (search) {
+    params.search = search;
+  }
   
   if (timeframe === 'all') {
     params.startDate = CHALLENGE_START;

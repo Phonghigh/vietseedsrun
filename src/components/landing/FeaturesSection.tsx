@@ -98,9 +98,9 @@ const FeaturesSection = () => (
           <div className="text-sm font-black tracking-[0.4em] uppercase mb-4 text-primary">
             Hướng dẫn
           </div>
-          <h2 className="font-display text-4xl md:text-6xl font-black mb-6 text-foreground uppercase italic tracking-tighter">
+          <h2 className="font-display text-4xl md:text-6xl font-black mb-6 text-foreground uppercase italic tracking-tighter leading-[1.1]">
             Cách tham gia <br />
-            <span className="text-gradient-green uppercase text-5xl md:text-7xl pr-4">3 bước đơn giản</span>
+            <span className="text-gradient-green uppercase text-4xl md:text-7xl pr-4 leading-[1.1]">3 bước đơn giản</span>
           </h2>
           <p className="text-lg md:text-xl max-w-2xl mx-auto text-slate-800 font-bold italic">
             Bất kể bạn là runner chuyên nghiệp hay mới bắt đầu - VietSeeds Run chào đón tất cả!
@@ -122,6 +122,15 @@ const FeaturesSection = () => (
               transition={{ delay: i * 0.15 }}
               className="relative flex flex-col items-center text-center group"
             >
+              {/* Step number on mobile (Explicit and clear) */}
+              <div className="md:hidden flex items-center gap-4 mb-6">
+                <div className="h-[2px] w-8 bg-primary/10" />
+                <span className="font-display text-sm font-black text-primary uppercase tracking-[0.3em] italic">
+                  Bước {s.step}
+                </span>
+                <div className="h-[2px] w-8 bg-primary/10" />
+              </div>
+
               {/* Step circle */}
               <div
                 className="w-24 h-24 rounded-[2rem] flex items-center justify-center mb-8 relative z-10 group-hover:scale-110 transition-transform duration-500 bg-white border-2 border-primary shadow-xl shadow-primary/10"
@@ -129,7 +138,8 @@ const FeaturesSection = () => (
                 <s.icon className="h-10 w-10 text-primary" />
               </div>
 
-              <div className="font-display text-8xl font-black absolute top-0 right-[-1rem] md:right-auto md:left-[calc(50%+2.5rem)] opacity-[0.2] text-primary-dark italic">
+              {/* Step number on desktop (Background) */}
+              <div className="hidden md:block font-display text-8xl font-black absolute top-[-1.5rem] left-[calc(50%+2.5rem)] opacity-[0.2] text-primary-dark italic pointer-events-none">
                 {s.step}
               </div>
 
@@ -168,9 +178,9 @@ const FeaturesSection = () => (
           <div className="text-sm font-black tracking-[0.4em] uppercase mb-4 text-accent">
             Quyền lợi
           </div>
-          <h2 className="font-display text-4xl md:text-6xl font-black mb-6 text-foreground uppercase italic tracking-tighter">
+          <h2 className="font-display text-4xl md:text-6xl font-black mb-6 text-foreground uppercase italic tracking-tighter leading-[1.1]">
             Vì sao bạn nên <br />
-            <span className="text-gradient-warm uppercase text-5xl md:text-7xl pr-4">tham gia?</span>
+            <span className="text-gradient-warm uppercase text-4xl md:text-7xl pr-4 leading-[1.1]">tham gia?</span>
           </h2>
           <p className="text-lg md:text-xl max-w-2xl mx-auto text-slate-800 font-bold italic">
             Run to Grow - Mỗi km bạn chạy là một thông điệp ý nghĩa lan tỏa khắp Việt Nam.
@@ -185,7 +195,7 @@ const FeaturesSection = () => (
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ delay: i * 0.08 }}
-              className="rounded-[2.5rem] p-10 group hover:scale-[1.03] transition-all duration-500 cursor-default bg-white border border-slate-200 shadow-lg hover:border-primary/30 hover:shadow-xl"
+              className="rounded-[2.5rem] p-8 md:p-10 group hover:scale-[1.03] transition-all duration-500 cursor-default bg-white border border-slate-200 shadow-lg hover:border-primary/30 hover:shadow-xl"
             >
               <div
                 className="w-16 h-16 rounded-[1.25rem] flex items-center justify-center mb-8 group-hover:scale-110 transition-transform duration-500 shadow-inner"

@@ -31,13 +31,13 @@ const Teams = () => {
         <motion.div
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
-          className="flex flex-col sm:flex-row sm:items-center justify-between gap-4"
+          className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 px-4 md:px-0"
         >
-          <div>
-            <h1 className="font-display text-4xl font-black text-foreground tracking-tight">Bảng Vàng Đội Nhóm</h1>
-            <p className="text-muted-foreground font-medium mt-1">Sức mạnh tập thể kiến tạo những bước chân hy vọng</p>
+          <div className="text-center sm:text-left">
+            <h1 className="font-display text-3xl md:text-4xl font-black text-foreground tracking-tight">Bảng Vàng Đội Nhóm</h1>
+            <p className="text-muted-foreground font-medium mt-1 text-sm md:text-base">Sức mạnh tập thể kiến tạo những bước chân hy vọng</p>
           </div>
-          <div className="flex items-center gap-2 px-4 py-2 rounded-2xl bg-accent/10 border border-accent/20">
+          <div className="flex items-center justify-center gap-2 px-4 py-2 rounded-2xl bg-accent/10 border border-accent/20 w-fit mx-auto sm:mx-0">
              <Trophy className="h-4 w-4 text-accent" />
              <span className="text-[10px] font-bold uppercase tracking-widest text-accent">{totalTeams} Đội tham gia</span>
           </div>
@@ -54,29 +54,29 @@ const Teams = () => {
               onClick={() => {
                 if (team.teamId) navigate(`/team/${team.teamId}`);
               }}
-              className="glass-card rounded-[2.5rem] p-8 hover:translate-y-[-6px] transition-all duration-300 relative overflow-hidden group shadow-xl cursor-pointer"
+              className="glass-card rounded-[2rem] md:rounded-[2.5rem] p-6 md:p-8 hover:translate-y-[-6px] transition-all duration-300 relative overflow-hidden group shadow-xl cursor-pointer"
             >
               {/* Rank Badge */}
-              <div className={`absolute top-6 right-8 w-10 h-10 rounded-full flex items-center justify-center font-black text-sm border-2 ${idx < 3 ? 'border-accent/40 bg-accent/10 text-accent' : 'border-black/5 bg-slate-100/50 text-slate-400'}`}>
+              <div className={`absolute top-4 right-6 md:top-6 md:right-8 w-8 h-8 md:w-10 md:h-10 rounded-full flex items-center justify-center font-black text-xs md:text-sm border-2 ${idx < 3 ? 'border-accent/40 bg-accent/10 text-accent' : 'border-black/5 bg-slate-100/50 text-slate-400'}`}>
                 {idx + 1}
               </div>
 
-              <div className="flex flex-col items-center text-center space-y-4">
-                <div className="w-20 h-20 rounded-[2rem] gradient-hero p-1 shadow-lg group-hover:rotate-6 transition-transform duration-500">
-                  <div className="w-full h-full bg-background rounded-[1.8rem] flex items-center justify-center overflow-hidden">
+              <div className="flex flex-col items-center text-center space-y-3 md:space-y-4">
+                <div className="w-16 h-16 md:w-20 md:h-20 rounded-[1.5rem] md:rounded-[2rem] gradient-hero p-1 shadow-lg group-hover:rotate-6 transition-transform duration-500">
+                  <div className="w-full h-full bg-background rounded-[1.3rem] md:rounded-[1.8rem] flex items-center justify-center overflow-hidden">
                     {team.avatar ? (
-                      <span className="text-3xl uppercase font-black text-primary">{team.avatar}</span>
+                      <span className="text-2xl md:text-3xl uppercase font-black text-primary">{team.avatar}</span>
                     ) : (
-                      <Users className="h-10 w-10 text-primary/40" />
+                      <Users className="h-8 w-8 md:h-10 md:w-10 text-primary/40" />
                     )}
                   </div>
                 </div>
 
                 <div>
-                  <h3 className="font-display text-xl font-black text-foreground group-hover:text-primary transition-colors">{team.name}</h3>
+                  <h3 className="font-display text-lg md:text-xl font-black text-foreground group-hover:text-primary transition-colors">{team.name}</h3>
                   <div className="flex items-center justify-center gap-2 mt-1">
-                    <Star className="h-3 w-3 text-accent" />
-                    <span className="text-[10px] font-bold text-muted-foreground/70 uppercase tracking-[0.2em]">{team.memberCount} thành viên</span>
+                    <Star className="h-2.5 w-2.5 md:h-3 md:w-3 text-accent" />
+                    <span className="text-[9px] md:text-[10px] font-bold text-muted-foreground/70 uppercase tracking-[0.2em]">{team.memberCount} thành viên</span>
                   </div>
                 </div>
 

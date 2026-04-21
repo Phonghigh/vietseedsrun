@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { MapPin, Flag, Trophy, Zap } from "lucide-react";
 
@@ -18,10 +18,15 @@ const CITIES: City[] = [
   { name: "Huế", km: 1400, x: 165, y: 210, image: "/images/hue.jpg" },
   { name: "Vinh", km: 1800, x: 160, y: 138, image: "/images/Nghe_An.webp" },
   { name: "Hà Nội", km: 2200, x: 140, y: 72, image: "/images/Ha_Noi.jpg" },
+  { name: "Lạng Sơn", km: 2400, x: 225, y: 45, image: "/images/Lang_Son.jpg" },
+  { name: "Cao Bằng", km: 2650, x: 195, y: -15, image: "/images/Cao_Bang.jpg" },
+  { name: "Hà Giang", km: 2950, x: 110, y: -35, image: "/images/Ha_Giang.webp" },
+  { name: "Lào Cai", km: 3250, x: 40, y: -10, image: "/images/Lao_Cai.jpg" },
+  { name: "Sapa", km: 3500, x: -10, y: 40, image: "/images/sa_pa.jpg" },
 ];
 
-const TOTAL_JOURNEY = 2200;
-const JOURNEY_PATH = "M145,564 C150,540 155,504 155,480 C160,432 185,396 190,372 C182,336 178,294 175,258 C170,240 165,228 165,210 C162,186 160,162 160,138 C155,114 148,90 140,72";
+const TOTAL_JOURNEY = 3500;
+const JOURNEY_PATH = "M145,564 C150,540 155,504 155,480 C160,432 185,396 190,372 C182,336 178,294 175,258 C170,240 165,228 165,210 C162,186 160,162 160,138 C155,114 148,90 140,72 L225,45 C215,10 205,-5 195,-15 C160,-30 140,-45 110,-35 C70,-25 55,-15 40,-10 C15,10 0,25 -10,40";
 
 interface VietnamJourneyProps {
   currentKm: number;
@@ -42,14 +47,28 @@ const VietnamJourney = ({ currentKm }: VietnamJourneyProps) => {
     : 100;
   
   const remaining = Math.round(Math.max(nextKm - currentKm, 0));
+  
+  // Dynamic viewBox for mobile focus
+  const [isMobile, setIsMobile] = useState(false);
+  useEffect(() => {
+    const checkMobile = () => setIsMobile(window.innerWidth < 768);
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
+
+  // On mobile, focus the viewBox around the current city to make it larger/readable
+  const activeViewBox = isMobile 
+    ? `${currentCity.x - 120} ${currentCity.y - 150} 240 300`
+    : "-130 -40 600 680";
 
   return (
     <div className="relative w-full">
-      <div className="glass-card rounded-[3rem] p-10 md:p-14 shadow-2xl relative flex flex-col min-h-[900px]">
+      <div className="glass-card rounded-[2.5rem] md:rounded-[3rem] p-4 md:p-14 shadow-2xl relative flex flex-col min-h-[500px] md:min-h-[900px]">
         <div className="absolute top-[-30%] left-[-10%] w-[600px] h-[600px] bg-primary/5 rounded-full blur-[100px] pointer-events-none" />
 
         {/* 2. Header (Title + Journey Narrative) */}
-        <div className="flex flex-col md:flex-row md:items-end justify-between gap-16 mb-28 relative z-10 font-bold">
+        <div className="flex flex-col md:flex-row md:items-end justify-between gap-8 md:gap-16 mb-12 md:mb-28 relative z-10 font-bold">
           <div className="max-w-3xl">
             <div className="text-sm font-black uppercase tracking-[0.4em] text-primary mb-6 flex items-center gap-4">
               <motion.div
@@ -60,13 +79,13 @@ const VietnamJourney = ({ currentKm }: VietnamJourneyProps) => {
               </motion.div>
               Hành trình xuyên Việt
             </div>
-            <h2 className="font-display text-5xl md:text-6xl font-black text-foreground tracking-tight leading-[1.15] mb-8 italic">
-              <span className="block leading-[1.1]">Cộng đồng đang ở</span>
-              <span className="block leading-[1.1] mt-2 bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
+            <h2 className="font-display text-3xl md:text-6xl font-black text-foreground tracking-tight leading-[1.1] md:leading-[1.15] mb-8 italic">
+              <span className="block">Cộng đồng đang ở</span>
+              <span className="block mt-2 bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
                 {currentCity.name}
               </span>
             </h2>
-            <p className="text-foreground font-black leading-relaxed text-xl md:text-2xl max-w-3xl border-l-[6px] border-primary pl-8 py-2 italic">
+            <p className="text-foreground font-black leading-relaxed text-lg md:text-2xl max-w-3xl border-l-[6px] border-primary pl-6 md:pl-8 py-2 italic">
               {Math.round(currentKm).toLocaleString()} km đã được chinh phục -
               tương đương hành trình từ{" "}
               <span className="text-primary font-black underline decoration-primary/30 decoration-4 underline-offset-8">
@@ -81,47 +100,48 @@ const VietnamJourney = ({ currentKm }: VietnamJourneyProps) => {
           </div>
 
           {/* Big Progress Statistics */}
-          <div className="flex-1 lg:flex-none flex items-center gap-6 bg-secondary p-8 rounded-[3rem] border border-primary/20 shadow-2xl relative overflow-hidden group min-w-0">
+          <div className="flex-1 lg:flex-none flex items-center gap-4 md:gap-8 bg-secondary p-6 md:p-8 rounded-[2.5rem] md:rounded-[3rem] border border-primary/20 shadow-2xl relative overflow-hidden group min-w-0">
             <div className="absolute inset-0 bg-primary/5 opacity-0 group-hover:opacity-100 transition-opacity duration-1000" />
-            <div className="flex-1 flex items-center gap-5 relative z-10">
+            
+            {/* Left Stat: Progress */}
+            <div className="flex-1 flex flex-col items-center justify-center relative z-10 min-w-0">
               <motion.div
                 animate={{ scale: [1, 1.1, 1], y: [0, -3, 0] }}
-                transition={{
-                  repeat: Infinity,
-                  duration: 3,
-                  ease: "easeInOut",
-                }}
-                className="w-16 h-16 rounded-[1.5rem] bg-primary/10 flex items-center justify-center text-primary ring-2 ring-primary/30 shadow-xl flex-shrink-0"
+                transition={{ repeat: Infinity, duration: 3, ease: "easeInOut" }}
+                className="w-12 h-12 md:w-16 md:h-16 rounded-2xl md:rounded-[1.5rem] bg-primary/10 flex items-center justify-center text-primary ring-2 ring-primary/30 shadow-xl mb-3 flex-shrink-0"
               >
-                <Trophy className="h-8 w-8" />
+                <Trophy className="h-6 w-6 md:h-8 md:w-8" />
               </motion.div>
-              <div className="min-w-0">
-                <div className="text-xs font-black text-muted-foreground text-center tracking-widest mb-2">
-                  Tiến độ tổng
+              <div className="text-center min-w-0">
+                <div className="text-[9px] md:text-xs font-black text-muted-foreground uppercase tracking-widest mb-1 leading-none">
+                  Tiến độ
                 </div>
-                <div className="font-display text-5xl lg:text-6xl font-black bg-gradient-to-t from-primary to-primary bg-clip-text text-transparent leading-none tabular-nums tracking-tighter">
+                <div className="font-display text-2xl md:text-5xl lg:text-6xl font-black bg-gradient-to-t from-primary to-primary bg-clip-text text-transparent leading-none tabular-nums tracking-tighter">
                   {(journeyProgress * 100).toFixed(0)}%
                 </div>
               </div>
             </div>
-            <div className="w-px h-20 bg-primary/20 relative z-10" />
-            <div className="flex-1 flex items-center gap-5 relative z-10 overflow-visible">
+
+            <div className="w-px h-16 md:h-20 bg-primary/20 relative z-10 flex-shrink-0" />
+            
+            {/* Right Stat: Remaining */}
+            <div className="flex-1 flex flex-col items-center justify-center relative z-10 min-w-0">
               <motion.div
-                animate={{ rotate: [0, 10, -10, 0] }}
-                transition={{ repeat: Infinity, duration: 4 }}
-                className="w-16 h-16 rounded-[1.5rem] bg-accent/10 flex items-center justify-center text-accent ring-2 ring-accent/30 shadow-xl flex-shrink-0"
+                animate={{ scale: [1, 1.2, 1], rotate: [0, 10, -10, 0] }}
+                transition={{ repeat: Infinity, duration: 2 }}
+                className="w-12 h-12 md:w-16 md:h-16 rounded-2xl md:rounded-[1.5rem] bg-accent/10 flex items-center justify-center text-accent ring-2 ring-accent/30 shadow-xl mb-3 flex-shrink-0"
               >
-                <Flag className="h-8 w-8" />
+                <Zap className="h-6 w-6 md:h-8 md:w-8" />
               </motion.div>
-              <div className="min-w-0">
-                <div className="text-xs font-black text-muted-foreground text-center tracking-widest mb-2">
+              <div className="text-center min-w-0">
+                <div className="text-[9px] md:text-xs font-black text-muted-foreground uppercase tracking-widest mb-1 leading-none">
                   Mục tiêu
                 </div>
-                <div className="font-display text-5xl lg:text-6xl font-black text-foreground leading-none tabular-nums uppercase italic flex items-baseline gap-2 tracking-tighter">
+                <div className="font-display text-2xl md:text-5xl lg:text-6xl font-black bg-gradient-to-t from-accent to-accent bg-clip-text text-transparent leading-none tabular-nums tracking-tighter">
                   {remaining.toLocaleString()}
-                  <span className="text-xs text-primary font-black not-italic opacity-70">
-                    KM
-                  </span>
+                </div>
+                <div className="text-[8px] md:text-[10px] font-black text-accent uppercase tracking-widest mt-1 leading-none">
+                  KM CÒN LẠI
                 </div>
               </div>
             </div>
@@ -129,9 +149,9 @@ const VietnamJourney = ({ currentKm }: VietnamJourneyProps) => {
         </div>
 
         {/* 2. Main 2-Column Layout (Map & Milestone details) */}
-        <div className="flex flex-col lg:flex-row gap-28 items-stretch min-h-[900px]">
-          {/* Left: THE MAP */}
-          <div className="flex-1 bg-gradient-to-b from-secondary to-background rounded-[4.5rem] p-10 md:p-14 border border-primary/20 flex items-center justify-center relative group z-20">
+        <div className="flex flex-col lg:flex-row gap-16 md:gap-28 items-stretch">
+          {/* Left: THE MAP - Hidden on mobile */}
+          <div className="hidden lg:flex flex-1 bg-gradient-to-b from-secondary to-background rounded-[4.5rem] p-10 md:p-14 border border-primary/20 items-center justify-center relative group z-20">
             <div
               className="absolute inset-0 opacity-15 pointer-events-none"
               style={{
@@ -142,8 +162,9 @@ const VietnamJourney = ({ currentKm }: VietnamJourneyProps) => {
             />
 
             <svg
-              viewBox="-130 -40 600 680"
-              className="h-[800px] w-auto transition-all duration-1000 hover:scale-[1.02] overflow-visible"
+              viewBox={activeViewBox}
+              className={`w-full h-auto max-h-[500px] md:max-h-[800px] transition-all duration-1000 hover:scale-[1.02] ${isMobile ? 'overflow-hidden rounded-[3rem]' : 'overflow-visible'}`}
+              preserveAspectRatio="xMidYMid meet"
               style={{ filter: "drop-shadow(0 0 20px rgba(16,185,129,0.1))" }}
             >
               <defs>
@@ -189,6 +210,10 @@ const VietnamJourney = ({ currentKm }: VietnamJourneyProps) => {
                     className="cursor-pointer"
                     onMouseEnter={() => setHoveredCity(city)}
                     onMouseLeave={() => setHoveredCity(null)}
+                    style={{
+                      opacity: isMobile && Math.abs(CITIES.indexOf(city) - CITIES.indexOf(currentCity)) > 2 ? 0 : 1,
+                      pointerEvents: isMobile && Math.abs(CITIES.indexOf(city) - CITIES.indexOf(currentCity)) > 2 ? 'none' : 'auto'
+                    }}
                   >
                     {(isHovered || city.name === nextCity.name) && (
                       <motion.circle
@@ -307,8 +332,7 @@ const VietnamJourney = ({ currentKm }: VietnamJourneyProps) => {
                           transform: `translate(${hoveredCity.x < 155 ? "30px" : "-370px"}, -50%)`,
                         }}
                       >
-                        <div className="bg-white/95 backdrop-blur-3xl border-2 border-emerald-100/50 rounded-[40px] shadow-[0_50px_100px_-20px_rgba(0,0,0,0.45)] flex items-stretch overflow-hidden ring-1 ring-black/5 w-max max-w-[340px] min-h-[160px] pointer-events-auto">
-                          {/* Image Section */}
+                        <div className="bg-white/95 backdrop-blur-3xl border-2 border-emerald-100/50 rounded-[30px] sm:rounded-[40px] shadow-[0_50px_100px_-20px_rgba(0,0,0,0.45)] flex items-stretch overflow-hidden ring-1 ring-black/5 w-[280px] sm:w-max sm:max-w-[340px] min-h-[120px] sm:min-h-[160px] pointer-events-auto">
                           <div className="w-[140px] sm:w-[160px] relative flex-shrink-0">
                             <img
                               src={hoveredCity.image}
@@ -399,25 +423,28 @@ const VietnamJourney = ({ currentKm }: VietnamJourneyProps) => {
                   initial={{ opacity: 0, y: 30 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: 0.7 }}
-                  className="bg-white border-2 border-primary/20 rounded-[2.5rem] p-10 text-center shadow-2xl group/zap relative overflow-hidden"
+                  className="bg-white border-2 border-primary/20 rounded-[2rem] md:rounded-[2.5rem] p-6 md:p-10 text-center shadow-2xl group/zap relative overflow-hidden"
                 >
                   <div className="absolute inset-0 bg-gradient-to-r from-primary/5 to-accent/5" />
-                  <div className="flex items-center justify-center gap-6 text-primary mb-5 relative">
+                  <div className="flex items-center justify-center gap-4 md:gap-6 text-primary mb-4 relative">
                     <motion.div
-                      animate={{ scale: [1, 1.4, 1], rotate: [0, 15, -15, 0] }}
+                      animate={{ scale: [1, 1.2, 1], rotate: [0, 15, -15, 0] }}
                       transition={{ repeat: Infinity, duration: 1.5 }}
+                      className="flex-shrink-0"
                     >
-                      <Zap className="h-12 w-12 text-yellow-500 drop-shadow-md" />
+                      <Zap className="h-8 w-8 md:h-12 md:w-12 text-yellow-500 drop-shadow-md" />
                     </motion.div>
-                    <span className="font-display text-5xl font-black tracking-tight text-foreground tabular-nums">
-                      {remaining.toLocaleString()}{" "}
-                      <span className="text-xs text-primary font-black not-italic opacity-70">
-                        KM
+                    <div className="flex flex-col items-start">
+                      <span className="font-display text-3xl md:text-5xl font-black tracking-tight text-foreground tabular-nums leading-none">
+                        {remaining.toLocaleString()}
                       </span>
-                    </span>
+                      <span className="text-[10px] md:text-xs text-primary font-black uppercase tracking-widest opacity-70 mt-1">
+                        KM CÒN LẠI
+                      </span>
+                    </div>
                   </div>
-                  <p className="text-[11px] font-black text-muted-foreground uppercase tracking-[0.2em] relative leading-none">
-                    Đoạn đường cuối đến {nextCity.name}
+                  <p className="text-[9px] md:text-[11px] font-black text-muted-foreground uppercase tracking-[0.2em] relative leading-tight border-t border-primary/10 pt-4 mt-2">
+                    Hành trình đến {nextCity.name}
                   </p>
                 </motion.div>
               </div>
@@ -425,14 +452,15 @@ const VietnamJourney = ({ currentKm }: VietnamJourneyProps) => {
           </div>
         </div>
 
-        {/* 4. Footer Steps - Clean & Premium */}
-        <div className="mt-20 flex justify-between items-center gap-8 relative z-10 px-4">
-          {CITIES.map((city, i) => {
+        {/* 4. Footer Steps - Scrollable for many milestones */}
+        <div className="mt-12 md:mt-20 overflow-x-auto custom-scrollbar pb-8 relative z-10 snap-x snap-mandatory">
+          <div className="flex justify-between items-start gap-8 md:gap-12 min-w-max px-6 md:px-10">
+            {CITIES.map((city, i) => {
             const isReached = currentKm >= city.km;
             return (
               <div
                 key={city.name}
-                className="flex-1 flex flex-col items-center gap-4 group/step"
+                className="flex flex-col items-center gap-4 group/step snap-center min-w-[100px] md:min-w-0"
               >
                 <div
                   className={`w-14 h-14 rounded-2xl flex items-center justify-center transition-all duration-500 shadow-lg ${
@@ -462,6 +490,7 @@ const VietnamJourney = ({ currentKm }: VietnamJourneyProps) => {
               </div>
             );
           })}
+          </div>
         </div>
       </div>
     </div>

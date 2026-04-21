@@ -10,6 +10,7 @@ import VietnamHeatmapCard from "@/components/dashboard/VietnamHeatmapCard";
 import ActivityFeed from "@/components/dashboard/ActivityFeed";
 import CampaignInfo from "@/components/dashboard/CampaignInfo";
 import ActivityTrend from "@/components/dashboard/ActivityTrend";
+import TopRunnersPreview from "@/components/dashboard/TopRunnersPreview";
 
 const Dashboard = () => {
   const { data: campaignStats, isLoading: isCampaignLoading } = useCampaignStats();
@@ -33,7 +34,7 @@ const Dashboard = () => {
 
   return (
     <AppLayout>
-      <div className="max-w-[1400px] mx-auto space-y-20 pb-24">
+      <div className="max-w-[1400px] mx-auto space-y-12 md:space-y-20 pb-32">
         {/* Page Title */}
         <motion.div
           initial={{ opacity: 0, y: 10 }}
@@ -45,14 +46,12 @@ const Dashboard = () => {
         </motion.div>
 
         {/* 1. HERO - Stat Bar */}
-        <div className="px-4 xl:px-0">
-          <CommunityHero
-            currentKm={currentKm}
-            targetKm={targetKm}
-            totalRunners={totalRunners}
-            totalActivities={totalActivities}
-          />
-        </div>
+        <CommunityHero
+          currentKm={currentKm}
+          targetKm={targetKm}
+          totalRunners={totalRunners}
+          totalActivities={totalActivities}
+        />
 
         {/* 2. JOURNEY MAP (Progress Focus) */}
         <div className="px-4 xl:px-0">
@@ -73,48 +72,7 @@ const Dashboard = () => {
 
           {/* RIGHT: Compact Leaderboard (4/12) */}
           <div className="lg:col-span-4 space-y-8">
-            <div className="glass-card rounded-[2.5rem] p-8 border border-white/5 shadow-xl">
-              <div className="flex items-center justify-between mb-8">
-                <h3 className="font-display text-xl font-black text-foreground uppercase tracking-tight">Bảng Vàng Cá Nhân</h3>
-                <Link to="/leaderboard" className="text-xs font-bold text-primary flex items-center gap-1 hover:underline">
-                  Xem toàn bộ <ArrowRight className="h-3 w-3" />
-                </Link>
-              </div>
-              
-              {isLeaderboardLoading ? (
-                <div className="space-y-4">
-                  {[...Array(5)].map((_, i) => (
-                    <div key={i} className="h-14 rounded-2xl bg-muted/20 animate-pulse" />
-                  ))}
-                </div>
-              ) : (
-                <div className="space-y-6">
-                  {leaderboard?.map((runner, i) => (
-                    <Link to={`/athlete/${runner.userId || runner._id || runner.id}`} key={runner.userId || i} className="flex items-center gap-4 group cursor-pointer">
-                      <div className="w-8 font-display font-black text-muted-foreground/30 text-lg italic tracking-widest">#{i+1}</div>
-                      <div className="w-12 h-12 rounded-2xl overflow-hidden bg-secondary flex-shrink-0 border-2 border-white shadow-md relative">
-                        <img 
-                          src={runner.avatar} 
-                          alt="" 
-                          referrerPolicy="no-referrer"
-                          className="w-full h-full object-cover transition-transform group-hover:scale-110" 
-                          onError={(e) => {
-                            (e.target as any).src = `https://ui-avatars.com/api/?name=${runner.name}&background=random`;
-                          }}
-                        />
-                        <div className="absolute inset-0 ring-1 ring-inset ring-black/5 rounded-2xl" />
-                      </div>
-                      <div className="flex-1 min-w-0">
-                        <div className="text-sm font-black truncate group-hover:text-primary transition-colors uppercase tracking-tight leading-none mb-1.5">{runner.name}</div>
-                        <div className="text-lg font-display font-black text-foreground leading-none flex items-baseline gap-1 tabular-nums">
-                          {runner.distance.toLocaleString()} <span className="text-[10px] text-primary uppercase tracking-widest font-black italic">km</span>
-                        </div>
-                      </div>
-                    </Link>
-                  ))}
-                </div>
-              )}
-            </div>
+            <TopRunnersPreview runners={leaderboard || []} isLoading={isLeaderboardLoading} />
             
             <CampaignInfo />
           </div>

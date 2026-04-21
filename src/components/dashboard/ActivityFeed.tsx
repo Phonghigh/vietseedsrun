@@ -51,10 +51,10 @@ const ActivityFeed = () => {
               initial={{ opacity: 0, x: -10 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ delay: i * 0.03 }}
-              className="group flex items-center gap-4 p-4 rounded-2xl border border-border/30 hover:border-primary/30 hover:bg-secondary/50 transition-all duration-300 cursor-pointer"
+              className="group flex items-center gap-3 md:gap-4 p-2.5 md:p-4 rounded-xl md:rounded-2xl border border-border/30 hover:border-primary/30 hover:bg-secondary/50 transition-all duration-300 cursor-pointer"
             >
               <div className="relative flex-shrink-0">
-                <div className="w-12 h-12 rounded-xl overflow-hidden bg-secondary border border-border">
+                <div className="w-10 h-10 md:w-12 md:h-12 rounded-lg md:rounded-xl overflow-hidden bg-secondary border border-border">
                   {item.userAvatar ? (
                     <img 
                       src={item.userAvatar} 
@@ -66,7 +66,7 @@ const ActivityFeed = () => {
                       }}
                     />
                   ) : (
-                    <div className="w-full h-full flex items-center justify-center text-sm font-bold text-primary">
+                    <div className="w-full h-full flex items-center justify-center text-[10px] md:text-sm font-bold text-primary">
                       {item.userName.substring(0, 2)}
                     </div>
                   )}
@@ -74,21 +74,21 @@ const ActivityFeed = () => {
               </div>
 
               <div className="flex-1 min-w-0">
-                <div className="flex items-center justify-between gap-2 mb-1">
-                  <span className="text-sm font-bold text-foreground group-hover:text-primary transition-colors truncate">
+                <div className="flex items-center justify-between gap-2 mb-0.5 md:mb-1">
+                  <span className="text-[10px] md:text-sm font-bold text-foreground group-hover:text-primary transition-colors md:truncate">
                     {item.userName}
                   </span>
-                  <span className="text-lg font-display font-black text-primary whitespace-nowrap tabular-nums">
-                    {item.distance.toLocaleString()} <span className="text-[10px] font-bold">km</span>
+                  <span className="text-base md:text-lg font-display font-black text-primary whitespace-nowrap tabular-nums">
+                    {item.distance.toLocaleString()} <span className="text-[8px] md:text-[10px] font-bold">km</span>
                   </span>
                 </div>
-                <div className="flex items-center gap-4 text-xs text-muted-foreground">
-                  <span className="flex items-center gap-1 truncate">
-                    <MapPin className="h-3 w-3" />
-                    {item.location}
+                <div className="flex flex-col sm:flex-row sm:items-center gap-0.5 sm:gap-4 text-[9px] md:text-xs text-muted-foreground">
+                  <span className="flex items-center gap-1 min-w-0">
+                    <MapPin className="h-2.5 w-2.5 md:h-3 md:w-3 flex-shrink-0" />
+                    <span className="truncate md:whitespace-normal">{item.location}</span>
                   </span>
-                  <span className="flex items-center gap-1 ml-auto whitespace-nowrap">
-                    <Clock className="h-3 w-3" />
+                  <span className="flex items-center gap-1 sm:ml-auto whitespace-nowrap">
+                    <Clock className="h-2.5 w-2.5 md:h-3 md:w-3 flex-shrink-0" />
                     {formatDistanceToNow(new Date(item.createdAt), { addSuffix: true, locale: vi })}
                   </span>
                 </div>
