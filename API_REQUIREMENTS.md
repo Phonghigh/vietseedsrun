@@ -181,7 +181,12 @@ Quản lý các bản ghi chạy bộ đồng bộ từ Strava.
 
 ### 4.1 Bảng Xếp Hạng Cá Nhân
 - **Endpoint:** `GET /api/v1/leaderboard/individuals`
-- **Query Params:** `?gender=male|female` (Tuỳ chọn), `?page=1&limit=50`
+- **Query Params:** 
+  - `?gender=male|female` (Tuỳ chọn)
+  - `?region=all|bac|trung|nam` (Tuỳ chọn - Lọc theo khu vực)
+  - `?timeframe=all|week|month` (Tuỳ chọn - Mặc định all)
+  - `?search=name` (Tuỳ chọn - Tìm kiếm theo tên)
+  - `?page=1&limit=50`
 - **Response (200 OK):**
   ```json
   [
@@ -198,7 +203,10 @@ Quản lý các bản ghi chạy bộ đồng bộ từ Strava.
 
 ### 4.2 Bảng Xếp Hạng Đội Nhóm
 - **Endpoint:** `GET /api/v1/leaderboard/teams`
-- **Query Params:** `?page=1&limit=20`
+- **Query Params:** 
+  - `?region=all|bac|trung|nam` (Tuỳ chọn - Lọc theo khu vực)
+  - `?timeframe=all|week|month` (Tuỳ chọn - Mặc định all)
+  - `?page=1&limit=20`
 - **Mô tả:** Sắp xếp các Team dựa trên tổng quãng đường của các thành viên.
 
 ---

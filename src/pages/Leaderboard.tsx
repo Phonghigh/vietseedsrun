@@ -33,8 +33,8 @@ const Leaderboard = () => {
   
   const debouncedSearch = useDebounce(searchQuery, 500);
   
-  const { data: leaderboardIndividual, isLoading: isIndLoading } = useIndividualLeaderboard(page, limit === -1 ? 1000 : limit, filter, debouncedSearch);
-  const { data: leaderboardTeams, isLoading: isTeamLoading } = useTeamLeaderboard(page, limit === -1 ? 1000 : limit, filter);
+  const { data: leaderboardIndividual, isLoading: isIndLoading } = useIndividualLeaderboard(page, limit === -1 ? 1000 : limit, filter, debouncedSearch, teamRegion);
+  const { data: leaderboardTeams, isLoading: isTeamLoading } = useTeamLeaderboard(page, limit === -1 ? 1000 : limit, filter, teamRegion);
 
   const handleLimitChange = (newLimit: number) => {
     setLimit(newLimit);
@@ -358,14 +358,6 @@ const Leaderboard = () => {
                     <>
                       {(Array.isArray(leaderboardTeams) ? leaderboardTeams : [])
                     .filter(t => t.name !== "No Team")
-                    .filter(t => {
-                      if (teamRegion === "all") return true;
-                      const name = t.name.toLowerCase();
-                      if (teamRegion === "bac") return name.includes("bac") || name.includes("hanoi") || name.includes("ha noi");
-                      if (teamRegion === "trung") return name.includes("trung") || name.includes("da nang") || name.includes("hue");
-                      if (teamRegion === "nam") return name.includes("nam") || name.includes("hcm") || name.includes("sai gon");
-                      return true;
-                    })
                     .map((t, i) => (
                         <motion.div
                           key={t.name}

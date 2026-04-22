@@ -10,11 +10,11 @@ const withFallback = <T,>(fn: () => Promise<T>, fallback: T) => async (): Promis
   }
 };
 
-export const useIndividualLeaderboard = (page = 1, limit = 10, timeframe = 'all', search = '') => {
+export const useIndividualLeaderboard = (page = 1, limit = 10, timeframe = 'all', search = '', region = 'all') => {
   return useQuery({
-    queryKey: ['leaderboard', 'individual', page, limit, timeframe, search],
+    queryKey: ['leaderboard', 'individual', page, limit, timeframe, search, region],
     queryFn: withFallback(
-      () => getIndividualLeaderboard(page, limit, timeframe, search),
+      () => getIndividualLeaderboard(page, limit, timeframe, search, region),
       MOCK_LEADERBOARD.slice(0, limit)
     ),
     staleTime: 2 * 60 * 1000,
@@ -22,11 +22,11 @@ export const useIndividualLeaderboard = (page = 1, limit = 10, timeframe = 'all'
   });
 };
 
-export const useTeamLeaderboard = (page = 1, limit = 10, timeframe = 'all') => {
+export const useTeamLeaderboard = (page = 1, limit = 10, timeframe = 'all', region = 'all') => {
   return useQuery({
-    queryKey: ['leaderboard', 'team', page, limit, timeframe],
+    queryKey: ['leaderboard', 'team', page, limit, timeframe, region],
     queryFn: withFallback(
-      () => getTeamLeaderboard(page, limit, timeframe),
+      () => getTeamLeaderboard(page, limit, timeframe, region),
       []
     ),
     staleTime: 2 * 60 * 1000,

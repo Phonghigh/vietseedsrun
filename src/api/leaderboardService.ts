@@ -73,11 +73,15 @@ export interface TeamDetailResponse {
 const CHALLENGE_START = '2026-04-01T00:00:00Z';
 const CHALLENGE_END = '2026-04-30T23:59:59Z';
 
-export const getIndividualLeaderboard = async (page = 1, limit = 10, timeframe = 'all', search = ''): Promise<LeaderboardUser[]> => {
+export const getIndividualLeaderboard = async (page = 1, limit = 10, timeframe = 'all', search = '', region = 'all'): Promise<LeaderboardUser[]> => {
   const params: any = { page, limit, timeframe };
   
   if (search) {
     params.search = search;
+  }
+
+  if (region && region !== 'all') {
+    params.region = region;
   }
   
   if (timeframe === 'all') {
@@ -98,8 +102,12 @@ export const getIndividualLeaderboard = async (page = 1, limit = 10, timeframe =
   }));
 };
 
-export const getTeamLeaderboard = async (page = 1, limit = 10, timeframe = 'all'): Promise<LeaderboardTeam[]> => {
+export const getTeamLeaderboard = async (page = 1, limit = 10, timeframe = 'all', region = 'all'): Promise<LeaderboardTeam[]> => {
   const params: any = { page, limit, timeframe };
+
+  if (region && region !== 'all') {
+    params.region = region;
+  }
   
   if (timeframe === 'all') {
     params.startDate = CHALLENGE_START;
