@@ -124,7 +124,7 @@ export const CountdownBar = () => {
       <motion.div 
         style={{
           width: useTransform(width, v => `${v}%`),
-          maxWidth: useTransform(maxWidth, v => `${v}px`),
+          // maxWidth: useTransform(maxWidth, v => `${v}px`),
           marginTop: useTransform(marginTop, v => `${v}px`),
           borderRadius: useTransform(borderRadius, v => `${v}px`),
           paddingTop: useTransform(paddingY, v => `${v}px`),
