@@ -90,6 +90,7 @@ const Leaderboard = () => {
               <>
                 {/* Individual Top 3 Podium */}
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+                  {(Array.isArray(leaderboardIndividual) ? leaderboardIndividual : []).slice(0, 3).map((u, i) => (
                     <Link to={`/athlete/${u.userId || u._id || u.id}`} key={u.userId || u._id || u.id} className="h-full px-4 md:px-0">
                       <motion.div
                         initial={{ opacity: 0, y: 20 }}
